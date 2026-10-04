@@ -529,3 +529,9 @@ Rails・Devise・Render・Neonには学習または利用経験があります�
 特に不安の大きいOpenAI APIとの連携については、まず「Railsから短い入力を送り、応答を画面に表示する」という最小構成を検証します。その際に、応答内容・応答時間・トークン使用量を確認し、、モデルやプロンプト、利用上限を検討します。
 
 Hotwireも必要な画面操作から小さく試します。実装の見通しを立てたうえで、調査が必要な作業と実装する作業を分け、Issueを作成・見積もります。
+
+---
+
+## 画面遷移図
+
+Figma：<https://www.figma.com/design/oCeCm6t6rZElTG3j0STd3B/%E3%82%8F%E3%81%9F%E3%81%97%E3%82%92%E8%BE%BF%E3%82%8B%EF%BD%9C%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=0-1&t=gAGteNWZ8N8XtjxR-1>
