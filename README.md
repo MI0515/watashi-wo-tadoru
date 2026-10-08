@@ -349,6 +349,7 @@ APIの利用費用を管理するため、利用回数・入力文字数・応�
 - 振り返り内容の保存
 - 保存した記録の一覧・詳細表示
 - 不要な記録の削除
+- 振り返り時に選択していたミツメイト情報の保存・表示
 
 カテゴリ分け、検索、感情の集計、AIによる長期的な傾向分析は含めません。
 
@@ -535,3 +536,9 @@ Hotwireも必要な画面操作から小さく試します。実装の見通し�
 ### 画面遷移図
 
 Figma：<https://www.figma.com/design/oCeCm6t6rZElTG3j0STd3B/%E3%82%8F%E3%81%9F%E3%81%97%E3%82%92%E8%BE%BF%E3%82%8B%EF%BD%9C%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=0-1&t=gAGteNWZ8N8XtjxR-1>
+
+---
+
+### ER図
+
+dbdiagram.io：<https://dbdiagram.io/d/わたしを辿る-ER図-6ac60e0ca5ab2804190a8b3f>
