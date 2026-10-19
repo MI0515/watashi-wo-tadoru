@@ -1,0 +1,18 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /myapp
+    volumes:
+      - .:/myapp
+      - bundle_data:/usr/local/bundle
+    ports:
+      - "3000:3000"
+    environment:
+      TZ: Asia/Tokyo
+    tty: true
+    stdin_open: true
+
+volumes:
+  bundle_data:
