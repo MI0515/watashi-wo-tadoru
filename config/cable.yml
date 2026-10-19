@@ -9,11 +9,6 @@ test:
   adapter: test
 
 production:
-  adapter: solid_cable
-  connects_to:
-    database:
-      writing: cable
-  polling_interval: 0.1.seconds
-  message_retention: 1.day
-  writer_batch_size: 4
-  writer_batch_delay: 0.001.seconds
+  # 初回公開ではリアルタイム配信を使わないため、専用DBへ接続しない
+  # この方式は複数プロセス間の配信には対応しない
+  adapter: async
