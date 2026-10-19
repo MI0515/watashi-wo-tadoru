@@ -567,3 +567,26 @@ Docker ComposeでRailsとPostgreSQLを別々のコンテナで動作させてい
 ```bash
 docker compose up web
 ```
+
+## 公開URL
+
+https://watashi-wo-tadoru.onrender.com
+
+## デプロイ環境
+
+- Web：Render Free（Docker）
+- DB：Neon Free／PostgreSQL 17
+- リージョン：両サービスともSingapore
+
+GitHubのmainブランチへの変更をRenderが自動デプロイします。
+起動時に `db:prepare` を実行し、DBの準備を行います。
+接続情報などの秘密情報はRenderの環境変数で管理しています。
+
+### 無料プランの休止と起動時間
+
+Render Freeは無通信が15分続くと休止するため、
+次のアクセス時は起動まで待ち時間が発生します。
+
+50分間アクセスしなかった後の再アクセスでは、
+TOPの文章とメイン画像が表示されるまで約34.4秒かかりました。（2026年10月19日計測）
+所要時間は状況により変動します。
