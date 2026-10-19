@@ -1,46 +1,82 @@
-<%# このページのブラウザタブに表示するタイトル %>
 <% content_for :title, "わたしを辿る" %>
 
-<div>
-  <p>わたしを辿る</p>
-  <p>16タイプから始める、やさしい自己理解</p>
+<%# 承認済み01ランディングページの構成・クラス名を維持する %>
+<div id="wt-compact" aria-label="わたしを辿る">
+  <div class="wtc-shell">
+    <header class="wtc-header">
+      <div class="wtc-brand">
+        <span class="wtc-mark" aria-hidden="true"></span>
+        <span>わたしを辿る</span>
+      </div>
 
-  <h1>まだ言葉にならない気持ちを、ミツメイトと辿る。</h1>
+      <%# 認証機能の実装時に、本来のリンクと文言へ戻す %>
+      <nav class="wtc-nav" aria-label="未ログイン時のナビゲーション">
+        <button class="wtc-link" type="button" disabled>
+          ログイン（準備中）
+        </button>
+        <button class="wtc-button" type="button" disabled>
+          はじめてみる（準備中）
+        </button>
+      </nav>
+    </header>
 
-  <%# TOPページのメインビジュアルを表示する %>
-  <%= image_tag "main-visual.png",
-        alt: "雪原に光の道が続く、静かな冬の風景",
-        class: "w-full h-auto" %>
+    <section class="wtc-hero">
+      <%# 高画質画像を使用。背景としての配置調整はデザイン適用時に行う %>
+      <%= image_tag "main-visual.png",
+            alt: "雪原に光の道が続く、静かな冬の風景",
+            class: "wtc-sky w-full h-auto" %>
 
-  <p>
-    16タイプを入口に、用意された問いかけと短い対話から、
-    自分の感じ方や大切にしていたことを見つけていく自己理解アプリです。
-  </p>
+      <div class="wtc-hero-card">
+        <span class="wtc-kicker">16タイプから始める、やさしい自己理解</span>
+        <h1>まだ言葉にならない気持ちを、<br>ミツメイトと辿る。</h1>
+        <p class="wtc-lead">16タイプを入口に、用意された問いかけと短い対話から、自分の感じ方や大切にしていたことを見つけていく自己理解アプリです。</p>
 
-  <%# 認証機能の実装時にリンクへ置き換える。今は遷移させない %>
-  <div>
-    <button type="button" disabled>無料ではじめる（準備中）</button>
-    <button type="button" disabled>ログイン（準備中）</button>
+        <div class="wtc-actions">
+          <button id="wtc-signup" class="wtc-button" type="button" disabled>
+            無料ではじめる →（準備中）
+          </button>
+          <button id="wtc-login" class="wtc-link" type="button" disabled>
+            ログイン（準備中）
+          </button>
+        </div>
+
+        <p class="wtc-note">長い日記は不要 ・ 短い言葉から振り返れます</p>
+      </div>
+    </section>
   </div>
 
-  <p>長い日記は不要・短い言葉から振り返れます</p>
+  <section class="wtc-value-section">
+    <div class="wtc-shell">
+      <span class="wtc-section-label">ミツメイトとの振り返り</span>
+      <h2>何を話せばいいか分からない日も、<br>小さく始められます。</h2>
 
-  <section>
-    <h2>利用の流れ</h2>
+      <div class="wtc-values">
+        <article class="wtc-value">
+          <span class="wtc-number">01</span>
+          <h3>最初の手がかりをもらう</h3>
+          <p>ミツメイトの言葉や用意された問いかけから、考えるテーマを見つけます。</p>
+        </article>
 
-    <ol>
-      <li>
-        <h3>最初の手がかりをもらう</h3>
-        <p>ミツメイトの言葉や用意された問いかけから、考えるテーマを見つけます。</p>
-      </li>
-      <li>
-        <h3>短い言葉から振り返る</h3>
-        <p>感情は選んでも選ばなくても大丈夫。出来事を一言伝えて、短い対話を始めます。</p>
-      </li>
-      <li>
-        <h3>気づきを自分の言葉にする</h3>
-        <p>対話で見えてきた気持ちや大切にしていたことをまとめて残します。</p>
-      </li>
-    </ol>
+        <article class="wtc-value">
+          <span class="wtc-number">02</span>
+          <h3>短い言葉から振り返る</h3>
+          <%# 確定仕様に合わせ、感情選択が任意であることを明記する %>
+          <p>感情は選んでも選ばなくても大丈夫。出来事を一言だけ伝えて、短い対話を始めます。</p>
+        </article>
+
+        <article class="wtc-value">
+          <span class="wtc-number">03</span>
+          <h3>気づきを自分の言葉にする</h3>
+          <p>対話で見えてきた気持ちや大切にしていたことをまとめて残します。</p>
+        </article>
+      </div>
+    </div>
   </section>
+
+  <footer class="wtc-footer">
+    <span>© わたしを辿る</span>
+    <%# #13で規約ページを実装したら、本来のリンクへ戻す %>
+    <button type="button" disabled>利用規約（準備中）</button>
+    <button type="button" disabled>プライバシーポリシー（準備中）</button>
+  </footer>
 </div>
