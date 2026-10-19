@@ -1,0 +1,45 @@
+services:
+  db:
+    # 本番でもPostgreSQL 17系を選ぶ方針
+    image: postgres:17
+    environment:
+      TZ: Asia/Tokyo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:? .envに設定してください}
+    volumes:
+      # コンテナを作り直してもDBデータを保持する
+      - postgresql_data:/var/lib/postgresql/data
+    healthcheck:
+      # PostgreSQLが接続を受け付ける状態か確認する
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /myapp
+    # RailsとTailwindの監視プロセスを一緒に起動する
+    command: bin/dev
+    volumes:
+      - .:/myapp
+      - bundle_data:/usr/local/bundle
+    ports:
+      - "3000:3000"
+    environment:
+      TZ: Asia/Tokyo
+      DB_HOST: db
+      DB_USERNAME: postgres
+      DB_PASSWORD: ${POSTGRES_PASSWORD:? .envに設定してください}
+    depends_on:
+      db:
+        # DBが接続可能になってからRailsを起動する
+        condition: service_healthy
+    tty: true
+    stdin_open: true
+
+volumes:
+  bundle_data:
+  postgresql_data:

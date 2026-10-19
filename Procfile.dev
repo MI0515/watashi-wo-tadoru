@@ -1,0 +1,5 @@
+# Dockerのポート経由でMacのブラウザからアクセスできるようにする
+web: bin/rails server -b 0.0.0.0 -p 3000
+
+# Tailwindの変更を監視し、CSSを更新する
+css: bin/rails tailwindcss:watch

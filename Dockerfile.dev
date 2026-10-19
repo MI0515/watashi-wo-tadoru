@@ -1,0 +1,13 @@
+FROM ruby:3.4.11
+
+ENV LANG=C.UTF-8
+ENV TZ=Asia/Tokyo
+
+RUN apt-get update -qq \
+    && apt-get install --no-install-recommends -y \
+       build-essential \
+       libpq-dev \
+       git \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /myapp
