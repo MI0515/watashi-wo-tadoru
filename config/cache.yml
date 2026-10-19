@@ -12,5 +12,5 @@ test:
   <<: *default
 
 production:
-  database: cache
+  # 専用のcache用DBは使わないため、接続先の指定を外す
   <<: *default
