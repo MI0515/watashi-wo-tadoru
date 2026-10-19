@@ -548,3 +548,22 @@ Figma：<https://www.figma.com/design/oCeCm6t6rZElTG3j0STd3B/%E3%82%8F%E3%81%9F%
 ### ER図
 
 dbdiagram.io：<https://dbdiagram.io/d/わたしを辿る-ER図-6ac60e0ca5ab2804190a8b3f>
+
+## 開発環境
+
+- Ruby 3.4.11
+- Ruby on Rails 8.1.4
+- PostgreSQL 17系
+- Docker / Docker Compose
+- Tailwind CSS
+
+RUNTEQで学んだDockerによる環境構築を採用し、
+Docker ComposeでRailsとPostgreSQLを別々のコンテナで動作させています。
+
+### 起動方法
+
+初回セットアップ完了後、以下のコマンドで起動します。
+
+```bash
+docker compose up web
+```
