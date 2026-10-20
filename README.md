@@ -568,6 +568,16 @@ Docker ComposeでRailsとPostgreSQLを別々のコンテナで動作させてい
 docker compose up web
 ```
 
+### テスト
+
+RSpecを使用し、テスト用データの作成にはFactoryBotを使用します。
+
+Docker Desktopを起動した状態で、以下を実行してください。
+
+```bash
+docker compose run --rm web bundle exec rspec
+```
+
 ## 公開URL
 
 https://watashi-wo-tadoru.onrender.com
