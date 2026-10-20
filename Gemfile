@@ -43,6 +43,12 @@ gem "thruster", require: false
 gem "image_processing", "~> 1.2"
 
 group :development, :test do
+  # Railsの動作を自動で確認するテストフレームワーク
+  gem "rspec-rails", "~> 8.0"
+
+  # テスト用データの定義・作成を支援する
+  gem "factory_bot_rails", "~> 6.0"
+
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
