@@ -568,6 +568,15 @@ Docker ComposeでRailsとPostgreSQLを別々のコンテナで動作させてい
 docker compose up web
 ```
 
+### コードの静的解析
+
+Railsが生成した `rubocop-rails-omakase` のルールを使用しています。
+以下のコマンドで、Rubyコードの書式などを確認できます。
+
+```bash
+docker compose run --rm web bin/rubocop
+```
+
 ### テスト
 
 RSpecを使用し、テスト用データの作成にはFactoryBotを使用します。
