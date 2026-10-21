@@ -66,3 +66,8 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 end
+
+group :test do
+  # テスト時だけ使い、計測開始のタイミングは自分で指定する
+  gem "simplecov", require: false
+end
