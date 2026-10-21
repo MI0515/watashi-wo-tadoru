@@ -578,6 +578,18 @@ Docker Desktopを起動した状態で、以下を実行してください。
 docker compose run --rm web bundle exec rspec
 ```
 
+#### カバレッジレポート
+
+RSpec実行時に、SimpleCovがカバレッジレポートを生成します。
+Macでは以下のコマンドで確認できます。
+
+```bash
+open coverage/index.html
+```
+
+レポートは `coverage/` に出力され、Git管理対象から除外しています。
+カバレッジはテスト中に実行されたRubyコードの範囲を示すもので、テストの品質や仕様の網羅性を保証するものではありません。
+
 ## 公開URL
 
 https://watashi-wo-tadoru.onrender.com
