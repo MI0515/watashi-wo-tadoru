@@ -1,0 +1,106 @@
+/* TOP全体と、背景のはみ出し処理 */
+#wt-compact {
+  width: 100%;
+  overflow: hidden;
+}
+
+#wt-compact .wtc-shell {
+  margin-inline: auto;
+}
+
+/* メイン画像と紹介パネルの配置 */
+#wt-compact .wtc-hero {
+  position: relative;
+}
+
+#wt-compact .wtc-hero-card {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+/* 小見出し */
+#wt-compact .wtc-kicker,
+#wt-compact .wtc-section-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .1em;
+}
+
+/* 見出し・説明文の余白 */
+#wt-compact h1 {
+  margin-inline: 0;
+  margin-bottom: 0;
+  letter-spacing: .025em;
+  text-wrap: balance;
+}
+
+#wt-compact .wtc-lead {
+  max-width: 720px;
+  margin-inline: auto;
+  margin-bottom: 0;
+}
+
+/* TOPの操作ボタンの並べ方 */
+#wt-compact .wtc-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#wt-compact .wtc-note {
+  margin: 12px 0 0;
+}
+
+/* サービス紹介部分 */
+#wt-compact .wtc-value-section {
+  text-align: center;
+}
+
+#wt-compact .wtc-value-section h2 {
+  margin: 10px 0 0;
+  letter-spacing: .035em;
+}
+
+#wt-compact .wtc-values {
+  display: grid;
+}
+
+#wt-compact .wtc-value {
+  position: relative;
+  text-align: left;
+}
+
+#wt-compact .wtc-number {
+  font-weight: 500;
+  letter-spacing: .08em;
+}
+
+#wt-compact .wtc-value p {
+  margin-inline: 0;
+  margin-bottom: 0;
+  line-height: 1.75;
+}
+
+/* モックのスマートフォン幅での配置 */
+@media (max-width: 700px) {
+  #wt-compact .wtc-nav .wtc-link {
+    display: none;
+  }
+
+  #wt-compact .wtc-actions {
+    align-items: stretch;
+  }
+
+  #wt-compact .wtc-actions .wtc-link {
+    width: 100%;
+  }
+}
+
+/* 見出しは意味のまとまりを保って折り返す */
+#wt-compact .wtc-phrase {
+  display: inline-block;
+  white-space: nowrap;
+}

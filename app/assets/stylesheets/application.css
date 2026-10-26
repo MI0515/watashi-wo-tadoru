@@ -8,3 +8,102 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+/* モックの共通テーマから、既存の高画質画像を参照する */
+:root {
+  --wt-main-visual: url("main-visual.png");
+}
+
+/* パディングや枠線を、指定した幅・高さに含める */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 共通ヘッダーの基本配置 */
+.wtc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.wtc-brand,
+.wtc-nav {
+  display: flex;
+  align-items: center;
+}
+
+.wtc-brand {
+  gap: 11px;
+}
+
+.wtc-nav {
+  gap: 8px;
+}
+
+/* ボタン・ボタン型リンクの基本形 */
+.wtc-button,
+.wtc-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 20px;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    transform .18s ease,
+    background .18s ease,
+    box-shadow .18s ease;
+}
+
+/* ヘッダー内のリンク文字 */
+.wtc-header .wtc-link {
+  color: #fff;
+}
+
+.wtc-link:not(:disabled):hover {
+  background: rgba(255, 255, 255, .1);
+}
+
+.wtc-button:not(:disabled):hover {
+  transform: translateY(-2px);
+}
+
+/* 押している間は、モックのボタンと同じく少し下へ動かす */
+.wtc-button:not(:disabled):active,
+.wtc-link:not(:disabled):active {
+  transform: translateY(1px);
+}
+
+/* 操作できる状態・できない状態をカーソルで区別する */
+button:not(:disabled),
+a.wtc-button,
+a.wtc-link {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* フッターの準備中ボタンを、リンクと同じ基本形にする */
+.wtc-footer button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+}
+
+/* 動きを減らす設定を利用している場合 */
+@media (prefers-reduced-motion: reduce) {
+  .wtc-button,
+  .wtc-link {
+    transition: none;
+  }
+}

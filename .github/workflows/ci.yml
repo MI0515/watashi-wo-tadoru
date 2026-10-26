@@ -103,5 +103,9 @@ jobs:
       - name: Prepare test database
         run: bin/rails db:prepare
 
+      # リクエストテストで読み込むTailwindのCSSを生成する
+      - name: Build Tailwind CSS
+        run: bin/rails tailwindcss:build
+
       - name: Run RSpec
         run: bundle exec rspec
