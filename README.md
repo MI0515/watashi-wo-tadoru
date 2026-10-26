@@ -599,6 +599,20 @@ open coverage/index.html
 レポートは `coverage/` に出力され、Git管理対象から除外しています。
 カバレッジはテスト中に実行されたRubyコードの範囲を示すもので、テストの品質や仕様の網羅性を保証するものではありません。
 
+### GitHub Actionsによる自動チェック
+
+PRの作成・更新時と、mainへのpush時に、以下を自動実行します。
+
+- RSpecによるテスト
+- RuboCopによるコードスタイルの確認
+- Brakeman・bundler-audit・importmap auditによるセキュリティチェック
+
+RSpecでは、GitHub Actions内でテスト専用のPostgreSQL 17を起動し、
+テストDBを準備してから実行します。
+
+結果はPRのChecks、またはリポジトリのActionsタブで確認できます。
+失敗した場合は、該当ジョブのログからエラー内容を確認します。
+
 ## 公開URL
 
 https://watashi-wo-tadoru.onrender.com
