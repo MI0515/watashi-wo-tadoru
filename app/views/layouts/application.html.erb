@@ -19,8 +19,8 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%# Tailwind → 共通テーマ → 共通の補足指定 → TOP固有の配置 %>
-    <%= stylesheet_link_tag "tailwind", "shared-theme", "application", "landing", "data-turbo-track": "reload" %>
+    <%# 共通スタイルの後に、各画面の配置指定を読み込む %>
+    <%= stylesheet_link_tag "tailwind", "shared-theme", "application", "landing", "policies", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 

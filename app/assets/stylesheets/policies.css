@@ -1,0 +1,104 @@
+/* 規約ページの背景 */
+#watashi-dialogue-response-states:is(
+  [data-screen="terms"],
+  [data-screen="privacy"]
+) {
+  position: relative;
+  isolation: isolate;
+  min-height: 640px;
+  background: #66585a url("home-winter-v2.webp") center / cover no-repeat;
+  font-size: 14px;
+}
+
+/* 規約ページの本文配置 */
+#watashi-dialogue-response-states .stage {
+  position: relative;
+  display: block;
+  min-height: 550px;
+  padding: 22px;
+}
+
+#watashi-dialogue-response-states .policy-panel {
+  min-width: 0;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 25px 30px;
+  border-radius: 22px;
+}
+
+#watashi-dialogue-response-states .policy-panel h1 {
+  margin: 0 0 12px;
+  font-size: 25px;
+  font-weight: 500;
+}
+
+/* 背景色はshared-theme.cssの不透明な白を使用する */
+#watashi-dialogue-response-states .policy-body {
+  min-height: 300px;
+  margin: 18px 0;
+  padding: 22px 24px;
+  border-radius: 12px;
+}
+
+#watashi-dialogue-response-states .policy-body h2 {
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+#watashi-dialogue-response-states .policy-body p {
+  margin: 0 0 22px;
+  line-height: 1.8;
+}
+
+/* 戻るリンクをモックのボタン型にする */
+#watashi-dialogue-response-states .policy-panel .actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#watashi-dialogue-response-states .policy-panel .secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 10px 16px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 11px;
+  text-decoration: none;
+}
+
+/* 本文の箇条書き */
+#watashi-dialogue-response-states .policy-body ul {
+  margin: 0 0 22px;
+  padding-left: 1.5em;
+  list-style: disc;
+  line-height: 1.8;
+}
+
+/* 本文中のリンク */
+#watashi-dialogue-response-states .policy-body a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 600px) {
+  #watashi-dialogue-response-states .stage {
+    padding: 12px;
+  }
+
+  #watashi-dialogue-response-states .policy-panel {
+    padding: 20px 16px;
+  }
+
+  #watashi-dialogue-response-states .policy-panel h1 {
+    font-size: 21px;
+  }
+
+  #watashi-dialogue-response-states .policy-body {
+    padding: 18px;
+  }
+}
