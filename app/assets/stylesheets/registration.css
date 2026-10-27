@@ -1,0 +1,158 @@
+/* 登録画面の高さと配置 */
+#watashi-wo-tadoru-signup .page {
+  min-height: 820px;
+  display: flex;
+  flex-direction: column;
+}
+
+#watashi-wo-tadoru-signup .back-link {
+  color: #fff;
+  font-size: 13px;
+  text-decoration: none;
+  letter-spacing: .04em;
+}
+
+#watashi-wo-tadoru-signup .main {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 38px 24px 46px;
+}
+
+#watashi-wo-tadoru-signup .card {
+  width: min(500px, 100%);
+  min-width: 0;
+  padding: 38px 42px 34px;
+  border-radius: 22px;
+}
+
+/* 見出しと説明 */
+#watashi-wo-tadoru-signup .eyebrow {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-align: center;
+}
+
+#watashi-wo-tadoru-signup h1 {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: center;
+}
+
+#watashi-wo-tadoru-signup .lead {
+  margin: 10px 0 28px;
+  font-size: 14px;
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* 入力欄 */
+#watashi-wo-tadoru-signup .field {
+  margin: 0 0 18px;
+}
+
+#watashi-wo-tadoru-signup .field label {
+  display: block;
+  margin: 0 0 7px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#watashi-wo-tadoru-signup input[type="email"],
+#watashi-wo-tadoru-signup input[type="password"] {
+  width: 100%;
+  height: 47px;
+  padding: 0 14px;
+  border: 1px solid;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .82);
+  font: inherit;
+  font-size: 14px;
+  box-shadow: inset 0 1px 2px rgba(62, 47, 63, .08);
+}
+
+#watashi-wo-tadoru-signup .hint {
+  margin: 6px 0 0;
+  font-size: 11px;
+}
+
+/* 同意チェック */
+#watashi-wo-tadoru-signup .agreement {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin: 4px 0 22px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+#watashi-wo-tadoru-signup .agreement input[type="checkbox"] {
+  flex: 0 0 auto;
+  margin-top: 4px;
+}
+
+#watashi-wo-tadoru-signup .agreement label {
+  cursor: pointer;
+}
+
+#watashi-wo-tadoru-signup .agreement a,
+#watashi-wo-tadoru-signup .login-link a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* 登録ボタンとログインへの案内 */
+#watashi-wo-tadoru-signup .submit {
+  width: 100%;
+  height: 50px;
+  border-radius: 999px;
+  font-size: 15px;
+  letter-spacing: .06em;
+  cursor: pointer;
+}
+
+#watashi-wo-tadoru-signup .login-link {
+  margin: 19px 0 0;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* 登録できなかった理由を、フォームの上部で目立たせる */
+#watashi-wo-tadoru-signup #error_explanation {
+  margin: 0 0 24px;
+  padding: 16px;
+  border: 1px solid #eda4b8;
+  border-radius: 10px;
+  background: #fceef2;
+  color: #cf4469;
+}
+
+#watashi-wo-tadoru-signup #error_explanation h2 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+#watashi-wo-tadoru-signup #error_explanation ul {
+  margin: 0;
+  padding-left: 1.5em;
+  list-style: disc;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* スマートフォン */
+@media (max-width: 620px) {
+  #watashi-wo-tadoru-signup .card {
+    padding: 30px 22px 28px;
+  }
+
+  #watashi-wo-tadoru-signup h1 {
+    font-size: 24px;
+  }
+}

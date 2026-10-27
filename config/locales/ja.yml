@@ -1,0 +1,31 @@
+ja:
+  activerecord:
+    models:
+      user: "ユーザー"
+    attributes:
+      user:
+        email: "メールアドレス"
+        password: "パスワード"
+        password_confirmation: "パスワード（確認）"
+        terms_accepted: "利用規約・プライバシーポリシー"
+
+  errors:
+    format: "%{attribute}%{message}"
+    messages:
+      blank: "を入力してください"
+      taken: "はすでに使用されています"
+      invalid: "が正しくありません"
+      confirmation: "が%{attribute}と一致しません"
+      too_short: "は%{count}文字以上で入力してください"
+      too_long: "は%{count}文字以内で入力してください"
+      accepted: "に同意してください"
+      not_saved: "%{count}件のエラーにより、%{resource}を登録できませんでした。"
+
+  devise:
+    registrations:
+      signed_up: "アカウントを登録しました。"
+    failure:
+      already_authenticated: "すでにログインしています。"
+      unauthenticated: "ログインまたは新規登録が必要です。"
+      invalid: "メールアドレスまたはパスワードが正しくありません。"
+      not_found_in_database: "メールアドレスまたはパスワードが正しくありません。"

@@ -20,12 +20,26 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%# 共通スタイルの後に、各画面の配置指定を読み込む %>
-    <%= stylesheet_link_tag "tailwind", "shared-theme", "application", "landing", "policies", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "shared-theme", "application", "landing", "policies", "registration", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
     <main>
+      <%# 登録成功などのお知らせ %>
+      <% if notice.present? %>
+        <p class="notice" role="status" data-turbo-temporary>
+          <%= notice %>
+        </p>
+      <% end %>
+
+      <%# ログインが必要な場合などの警告 %>
+      <% if alert.present? %>
+        <p class="alert" role="alert" data-turbo-temporary>
+          <%= alert %>
+        </p>
+      <% end %>
+
       <%= yield %>
     </main>
   </body>
