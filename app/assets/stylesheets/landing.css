@@ -99,8 +99,8 @@
   }
 }
 
-/* 見出しは意味のまとまりを保って折り返す */
-#wt-compact .wtc-phrase {
+/* 意味のまとまりを保って折り返す */
+.wtc-phrase {
   display: inline-block;
   white-space: nowrap;
 }

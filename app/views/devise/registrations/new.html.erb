@@ -2,7 +2,7 @@
 
 <div id="watashi-wo-tadoru-signup">
   <div class="page">
-    <header class="header">
+    <header class="header wtc-header">
       <%= link_to "わたしを辿る", root_path, class: "brand" %>
       <%= link_to "← トップへ戻る", root_path, class: "back-link" %>
     </header>
@@ -12,7 +12,7 @@
         <p class="eyebrow">はじめの準備</p>
         <h1 id="signup-title">アカウントを作成</h1>
         <p class="lead">
-          わたしを辿るための、最初の準備を始めましょう。
+          <span class="wtc-phrase">わたしを辿るための、</span><span class="wtc-phrase">最初の準備を始めましょう。</span>
         </p>
 
         <%= form_for(resource, as: resource_name,

@@ -17,9 +17,7 @@
         <p class="wtc-lead">16タイプを入口に、用意された問いかけと短い対話から、自分の感じ方や大切にしていたことを見つけていく自己理解アプリです。</p>
 
         <div class="wtc-actions">
-          <button id="wtc-signup" class="wtc-button" type="button" disabled>
-            無料ではじめる →（準備中）
-          </button>
+          <%= link_to "無料ではじめる →", new_user_registration_path, id: "wtc-signup", class: "wtc-button" %>
           <button id="wtc-login" class="wtc-link" type="button" disabled>
             ログイン（準備中）
           </button>

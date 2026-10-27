@@ -107,3 +107,16 @@ button:disabled {
     transition: none;
   }
 }
+
+/* 登録成功などのお知らせ */
+.notice {
+  margin: 0;
+  padding: 16px 24px;
+  border: 1px solid #a4cdb5;
+  border-radius: 10px;
+  background: #eef7f1;
+  color: #397653;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.7;
+}
