@@ -1,0 +1,21 @@
+<% content_for :title, "利用規約 | わたしを辿る" %>
+
+<div id="watashi-dialogue-response-states" data-screen="terms">
+  <%= render "shared/header" %>
+
+  <div class="stage">
+    <section class="panel policy-panel" aria-labelledby="terms-title">
+      <h1 id="terms-title">利用規約</h1>
+
+      <article class="policy-body">
+        <%# 本文は、情報の取り扱い・実装方針を確認して追加する %>
+      </article>
+
+      <div class="actions">
+        <%= link_to "元の画面に戻る", root_path, class: "secondary" %>
+      </div>
+    </section>
+  </div>
+
+  <%= render "shared/footer" %>
+</div>
