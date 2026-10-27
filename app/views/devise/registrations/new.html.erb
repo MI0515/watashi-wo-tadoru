@@ -1,0 +1,74 @@
+<% content_for :title, "新規登録 | わたしを辿る" %>
+
+<div id="watashi-wo-tadoru-signup">
+  <div class="page">
+    <header class="header">
+      <%= link_to "わたしを辿る", root_path, class: "brand" %>
+      <%= link_to "← トップへ戻る", root_path, class: "back-link" %>
+    </header>
+
+    <div class="main">
+      <section class="card" aria-labelledby="signup-title">
+        <p class="eyebrow">はじめの準備</p>
+        <h1 id="signup-title">アカウントを作成</h1>
+        <p class="lead">
+          わたしを辿るための、最初の準備を始めましょう。
+        </p>
+
+        <%= form_for(resource, as: resource_name,
+                     url: registration_path(resource_name)) do |f| %>
+          <%= render "devise/shared/error_messages", resource: resource %>
+
+          <div class="field">
+            <%= f.label :email, "メールアドレス" %>
+            <%= f.email_field :email,
+                  autofocus: true,
+                  autocomplete: "email",
+                  placeholder: "example@email.com",
+                  required: true %>
+          </div>
+
+          <div class="field">
+            <%= f.label :password, "パスワード" %>
+            <%= f.password_field :password,
+                  autocomplete: "new-password",
+                  placeholder: "パスワードを入力",
+                  required: true %>
+            <% if @minimum_password_length %>
+              <p class="hint">
+                <%= @minimum_password_length %>文字以上で入力してください
+              </p>
+            <% end %>
+          </div>
+
+          <div class="field">
+            <%= f.label :password_confirmation, "パスワード（確認）" %>
+            <%= f.password_field :password_confirmation,
+                  autocomplete: "new-password",
+                  placeholder: "もう一度入力",
+                  required: true %>
+          </div>
+
+          <div class="agreement">
+            <%= f.check_box :terms_accepted, required: true %>
+            <span>
+              <%= link_to "利用規約", terms_path %>と
+              <%= link_to "プライバシーポリシー", privacy_path %>に
+              <%= f.label :terms_accepted, "同意します" %>
+            </span>
+          </div>
+
+          <%= f.submit "登録して次へ", class: "submit" %>
+        <% end %>
+
+        <%# ログイン画面は後続Issueで整える %>
+        <p class="login-link">
+          すでにアカウントをお持ちの方
+          <%= link_to "ログイン", new_user_session_path %>
+        </p>
+      </section>
+    </div>
+
+    <%= render "shared/footer" %>
+  </div>
+</div>
