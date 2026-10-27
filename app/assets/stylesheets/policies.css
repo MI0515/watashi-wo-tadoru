@@ -71,6 +71,20 @@
   text-decoration: none;
 }
 
+/* 本文の箇条書き */
+#watashi-dialogue-response-states .policy-body ul {
+  margin: 0 0 22px;
+  padding-left: 1.5em;
+  list-style: disc;
+  line-height: 1.8;
+}
+
+/* 本文中のリンク */
+#watashi-dialogue-response-states .policy-body a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 @media (max-width: 600px) {
   #watashi-dialogue-response-states .stage {
     padding: 12px;
