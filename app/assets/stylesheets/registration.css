@@ -146,6 +146,23 @@
   line-height: 1.8;
 }
 
+/* ログイン画面のパスワード再設定案内 */
+#watashi-wo-tadoru-signup .forgot-link {
+  margin: -4px 0 22px;
+  font-size: 12px;
+  text-align: right;
+}
+
+#watashi-wo-tadoru-signup .forgot-link button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--wt-sub);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* スマートフォン */
 @media (max-width: 620px) {
   #watashi-wo-tadoru-signup .card {
