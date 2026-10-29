@@ -100,8 +100,9 @@ jobs:
         with:
           bundler-cache: true
 
+      # 初期データは投入せず、テスト用DBとテーブルを作成する
       - name: Prepare test database
-        run: bin/rails db:prepare
+        run: bin/rails db:create db:schema:load
 
       # リクエストテストで読み込むTailwindのCSSを生成する
       - name: Build Tailwind CSS
