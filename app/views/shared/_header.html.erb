@@ -4,11 +4,19 @@
     <span>わたしを辿る</span>
   </div>
 
-  <%# 認証機能の実装時に、本来のリンクと文言へ戻す %>
-  <nav class="wtc-nav" aria-label="未ログイン時のナビゲーション">
-    <button class="wtc-link" type="button" disabled>
-      ログイン（準備中）
-    </button>
-    <%= link_to "はじめてみる", new_user_registration_path, class: "wtc-button" %>
+  <nav class="wtc-nav" aria-label="メインナビゲーション">
+    <% if user_signed_in? %>
+      <%= button_to "ログアウト",
+            destroy_user_session_path,
+            method: :delete,
+            class: "wtc-link" %>
+    <% else %>
+      <%= link_to "ログイン",
+            new_user_session_path,
+            class: "wtc-link" %>
+      <%= link_to "はじめてみる",
+            new_user_registration_path,
+            class: "wtc-button" %>
+    <% end %>
   </nav>
 </header>

@@ -18,9 +18,7 @@
 
         <div class="wtc-actions">
           <%= link_to "無料ではじめる →", new_user_registration_path, id: "wtc-signup", class: "wtc-button" %>
-          <button id="wtc-login" class="wtc-link" type="button" disabled>
-            ログイン（準備中）
-          </button>
+          <%= link_to "ログイン", new_user_session_path, id: "wtc-login", class: "wtc-link" %>
         </div>
 
         <p class="wtc-note">長い日記は不要 ・ 短い言葉から振り返れます</p>

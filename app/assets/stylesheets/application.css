@@ -120,3 +120,16 @@ button:disabled {
   font-weight: 700;
   line-height: 1.7;
 }
+
+/* ログイン失敗などの警告 */
+.alert {
+  margin: 0;
+  padding: 16px 24px;
+  border: 1px solid #eda4b8;
+  border-radius: 10px;
+  background: #fceef2;
+  color: #cf4469;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.7;
+}
