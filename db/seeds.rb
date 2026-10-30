@@ -26,3 +26,45 @@ personality_type_groups.each do |group_code, codes|
     personality_type.update!(group_code: group_code)
   end
 end
+
+# 敬語で話すミツメイトのタイプ
+polite_type_codes = %w[ISTJ ISFJ INFJ INTJ]
+
+# 各タイプに動物のミツメイトを1件ずつ登録する
+personality_type_groups.each do |group_code, codes|
+  codes.each do |code|
+    personality_type = PersonalityType.find_by!(code: code)
+
+    # 動物画像はグループ単位で共有する
+    image_prefix = group_code.downcase
+
+    speaking_style = polite_type_codes.include?(code) ? "polite" : "casual"
+
+    companion = Companion.find_or_initialize_by(
+      personality_type: personality_type,
+      appearance_type: "animal"
+    )
+
+    companion.update!(
+      sd_image_path: "companions/#{image_prefix}-animal-sd.png",
+      full_image_path: "companions/#{image_prefix}-animal-full.png",
+      speaking_style: speaking_style
+    )
+  end
+end
+
+# INTPには男の子・女の子も追加する
+intp = PersonalityType.find_by!(code: "INTP")
+
+%w[male female].each do |appearance_type|
+  companion = Companion.find_or_initialize_by(
+    personality_type: intp,
+    appearance_type: appearance_type
+  )
+
+  companion.update!(
+    sd_image_path: "companions/intp-#{appearance_type}-sd.png",
+    full_image_path: "companions/intp-#{appearance_type}-full.png",
+    speaking_style: "casual"
+  )
+end
