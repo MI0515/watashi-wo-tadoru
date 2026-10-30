@@ -7,6 +7,9 @@ class User < ApplicationRecord
   # 初期設定前は、タイプを選んでいなくても登録できる
   belongs_to :personality_type, optional: true
 
+  # 初期設定前は、ミツメイトを選んでいなくても登録できる
+  belongs_to :companion, optional: true
+
   # 同意チェックの値を一時的に保持する。DBには保存しない
   attr_accessor :terms_accepted
 
