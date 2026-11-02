@@ -58,9 +58,12 @@ Rails.application.configure do
   # 再起動すると未完了ジョブが失われるため、重要な処理には使わない
   config.active_job.queue_adapter = :async
 
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
+  # 本番メールはBrevo API経由で送信する
+  config.action_mailer.delivery_method = :brevo
+  config.action_mailer.perform_deliveries = true
+
+  # 送信に失敗した場合は、エラーとして検知できるようにする
+  config.action_mailer.raise_delivery_errors = true
 
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = {
