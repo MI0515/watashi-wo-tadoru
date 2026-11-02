@@ -562,61 +562,37 @@ dbdiagram.io：<https://dbdiagram.io/d/わたしを辿る-ER図-6ac60e0ca5ab2804
 - Docker / Docker Compose
 - Tailwind CSS
 
-RUNTEQで学んだDockerによる環境構築を採用し、
-Docker ComposeでRailsとPostgreSQLを別々のコンテナで動作させています。
+Docker Composeを使用し、RailsとPostgreSQLをそれぞれのコンテナで実行しています。
 
 ### 起動方法
-
-初回セットアップ完了後、以下のコマンドで起動します。
 
 ```bash
 docker compose up web
 ```
 
-### コードの静的解析
+### コード品質・テスト
 
-Railsが生成した `rubocop-rails-omakase` のルールを使用しています。
-以下のコマンドで、Rubyコードの書式などを確認できます。
+静的解析にはrubocop-rails-omakase、テストにはRSpec、テストデータの作成にはFactoryBotを使用しています。
 
 ```bash
 docker compose run --rm web bin/rubocop
-```
-
-### テスト
-
-RSpecを使用し、テスト用データの作成にはFactoryBotを使用します。
-
-Docker Desktopを起動した状態で、以下を実行してください。
-
-```bash
 docker compose run --rm web bundle exec rspec
 ```
 
-#### カバレッジレポート
+RSpec実行時にはSimpleCovでカバレッジを計測しています。
+カバレッジレポートはcoverage/へ生成し、Git管理対象から除外しています。
 
-RSpec実行時に、SimpleCovがカバレッジレポートを生成します。
-Macでは以下のコマンドで確認できます。
+### CI
 
-```bash
-open coverage/index.html
-```
+GitHub Actionsを利用し、PRの作成・更新時およびmainブランチへのpush時に、以下を自動実行しています。
 
-レポートは `coverage/` に出力され、Git管理対象から除外しています。
-カバレッジはテスト中に実行されたRubyコードの範囲を示すもので、テストの品質や仕様の網羅性を保証するものではありません。
+- RSpec
+- RuboCop
+- Brakeman
+- bundler-audit
+- importmap audit
 
-### GitHub Actionsによる自動チェック
-
-PRの作成・更新時と、mainへのpush時に、以下を自動実行します。
-
-- RSpecによるテスト
-- RuboCopによるコードスタイルの確認
-- Brakeman・bundler-audit・importmap auditによるセキュリティチェック
-
-RSpecでは、GitHub Actions内でテスト専用のPostgreSQL 17を起動し、
-テストDBを準備してから実行します。
-
-結果はPRのChecks、またはリポジトリのActionsタブで確認できます。
-失敗した場合は、該当ジョブのログからエラー内容を確認します。
+変更をmainへ取り込む前に、テスト・静的解析・セキュリティチェックを自動で確認できる構成にしています。
 
 ## 公開URL
 
@@ -626,17 +602,20 @@ https://watashi-wo-tadoru.onrender.com
 
 - Web：Render Free（Docker）
 - DB：Neon Free／PostgreSQL 17
-- リージョン：両サービスともSingapore
+- Region：Singapore
 
-GitHubのmainブランチへの変更をRenderが自動デプロイします。
-起動時に `db:prepare` を実行し、DBの準備を行います。
-接続情報などの秘密情報はRenderの環境変数で管理しています。
+GitHubのmainブランチへの変更をRenderへ自動デプロイします。
+データベース接続情報やAPIキーなどの秘密情報は、環境変数で管理しています。
 
-### 無料プランの休止と起動時間
+Renderの無料プランでは一定時間アクセスがない場合にサービスが休止するため、再アクセス時に起動まで時間がかかる場合があります。
 
-Render Freeは無通信が15分続くと休止するため、
-次のアクセス時は起動まで待ち時間が発生します。
+### 本番メール送信
 
-50分間アクセスしなかった後の再アクセスでは、
-TOPの文章とメイン画像が表示されるまで約34.4秒かかりました。（2026年10月19日計測）
-所要時間は状況により変動します。
+本番環境のメール送信にはBrevoのTransactional Email APIと公式Ruby SDKを使用します。
+
+Render FreeではSMTPポート（25 / 465 / 587）への外向き通信が制限されているため、
+Action Mailerで作成したメールをBrevo API経由で送信します。
+
+- Brevo APIキーは環境変数 `BREVO_API_KEY` で管理
+- 送信者名：わたしを辿る
+- 返信先：アプリ用問い合わせメールアドレス
