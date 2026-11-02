@@ -22,6 +22,9 @@ gem "jbuilder"
 # OpenAI APIとの通信に使用する公式Ruby SDK
 gem "openai"
 
+# Brevo APIによるメール送信に使用する公式Ruby SDK
+gem "brevo"
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 
