@@ -18,4 +18,15 @@ class User < ApplicationRecord
             acceptance: { accept: "1" },
             allow_nil: false,
             on: :create
+
+  # 呼ばれ方の初期設定を保存するときだけ検証する
+  validates :nickname,
+            presence: true,
+            length: { maximum: 20 },
+            on: :nickname_setup
+
+  validates :honorific,
+            length: { maximum: 10 },
+            allow_blank: true,
+            on: :nickname_setup
 end

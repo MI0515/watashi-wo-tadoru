@@ -1,0 +1,26 @@
+<% content_for :title, "16タイプの設定 | わたしを辿る" %>
+
+<div id="watashi-wo-tadoru-signup">
+  <div class="page">
+    <header class="header wtc-header">
+      <%= link_to "わたしを辿る", root_path, class: "brand" %>
+      <%= button_to "ログアウト", destroy_user_session_path,
+                    method: :delete, class: "back-link" %>
+    </header>
+
+    <div class="main">
+      <section class="card" aria-labelledby="type-title">
+        <p class="eyebrow">初期設定 2 / 3</p>
+        <h1 id="type-title">
+          <span class="wtc-phrase">あなたの16タイプを</span><span class="wtc-phrase">教えてね</span>
+        </h1>
+
+        <p class="login-link">
+          <%= link_to "呼ばれ方の設定へ戻る", edit_onboarding_nickname_path %>
+        </p>
+      </section>
+    </div>
+
+    <%= render "shared/footer" %>
+  </div>
+</div>

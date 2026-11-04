@@ -8,6 +8,8 @@ ja:
         password: "パスワード"
         password_confirmation: "パスワード（確認）"
         terms_accepted: "利用規約・プライバシーポリシー"
+        nickname: "ニックネーム"
+        honorific: "呼び方（敬称など）"
 
   errors:
     format: "%{attribute}%{message}"
