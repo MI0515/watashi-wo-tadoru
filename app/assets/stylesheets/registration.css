@@ -63,7 +63,8 @@
 }
 
 #watashi-wo-tadoru-signup input[type="email"],
-#watashi-wo-tadoru-signup input[type="password"] {
+#watashi-wo-tadoru-signup input[type="password"],
+#watashi-wo-tadoru-signup input[type="text"] {
   width: 100%;
   height: 47px;
   padding: 0 14px;
@@ -172,4 +173,39 @@
   #watashi-wo-tadoru-signup h1 {
     font-size: 24px;
   }
+}
+
+/* 呼ばれ方の見本。色と背景は共通テーマを使用する */
+#watashi-wo-tadoru-signup .preview-box {
+  margin: 3px 0 17px;
+  padding: 15px 16px;
+  border: 1px solid;
+  border-radius: 12px;
+  text-align: center;
+}
+
+#watashi-wo-tadoru-signup .preview-label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 11px;
+}
+
+#watashi-wo-tadoru-signup .preview-name {
+  font-size: 17px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+#watashi-wo-tadoru-signup .setup-note {
+  margin: 0 0 20px;
+  line-height: 1.75;
+}
+
+/* ログアウトをリンクと同じ見た目にする */
+#watashi-wo-tadoru-signup button.back-link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
 }
