@@ -87,3 +87,16 @@ Monologue.transaction do
     end
   end
 end
+
+# モックと同じ順番で、感情の選択肢を用意する
+emotion_names = %w[
+  うれしい 楽しい 安心 満足 モヤモヤ イライラ 不安 心配 こわい 不愉快
+  悲しい 寂しい 疲れた 憂鬱 退屈 焦っている 悔しい 何も感じない よく分からない
+]
+
+Emotion.transaction do
+  emotion_names.each.with_index(1) do |name, display_order|
+    emotion = Emotion.find_or_initialize_by(name: name)
+    emotion.update!(display_order: display_order)
+  end
+end
