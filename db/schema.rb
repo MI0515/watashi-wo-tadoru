@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_30_051127) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_02_102554) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -24,6 +24,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_051127) do
     t.datetime "updated_at", null: false
     t.index ["personality_type_id", "appearance_type"], name: "index_companions_on_personality_type_id_and_appearance_type", unique: true
     t.index ["personality_type_id"], name: "index_companions_on_personality_type_id"
+  end
+
+  create_table "monologues", force: :cascade do |t|
+    t.bigint "personality_type_id", null: false
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["personality_type_id"], name: "index_monologues_on_personality_type_id"
   end
 
   create_table "personality_types", force: :cascade do |t|
@@ -53,6 +61,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_051127) do
   end
 
   add_foreign_key "companions", "personality_types"
+  add_foreign_key "monologues", "personality_types"
   add_foreign_key "users", "companions"
   add_foreign_key "users", "personality_types"
 end
