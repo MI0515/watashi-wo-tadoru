@@ -10,4 +10,9 @@ class PersonalityType < ApplicationRecord
   validates :group_code,
             presence: true,
             inclusion: { in: %w[NT NF SP SJ] }
+
+  # このタイプの独り言から、ランダムに1件取り出す
+  def random_monologue
+    monologues.order(Arel.sql("RANDOM()")).first
+  end
 end

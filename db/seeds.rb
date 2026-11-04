@@ -68,3 +68,22 @@ intp = PersonalityType.find_by!(code: "INTP")
     speaking_style: "casual"
   )
 end
+
+# タイプごとの独り言をYAMLファイルから読み込む
+require "yaml"
+
+monologue_data = YAML.safe_load_file(
+  Rails.root.join("db/seeds/monologues.yml")
+)
+
+# 途中で失敗した場合は、独り言の登録をまとめて取り消す
+Monologue.transaction do
+  monologue_data.each do |code, contents|
+    personality_type = PersonalityType.find_by!(code: code)
+
+    contents.each do |content|
+      # 同じタイプ・本文が登録済みなら再利用する
+      personality_type.monologues.find_or_create_by!(content: content)
+    end
+  end
+end
