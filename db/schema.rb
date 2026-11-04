@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_02_102554) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_04_054152) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -24,6 +24,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_02_102554) do
     t.datetime "updated_at", null: false
     t.index ["personality_type_id", "appearance_type"], name: "index_companions_on_personality_type_id_and_appearance_type", unique: true
     t.index ["personality_type_id"], name: "index_companions_on_personality_type_id"
+  end
+
+  create_table "emotions", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "display_order", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_emotions_on_name", unique: true
   end
 
   create_table "monologues", force: :cascade do |t|
