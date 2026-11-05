@@ -1,6 +1,6 @@
 <% content_for :title, "16タイプの設定 | わたしを辿る" %>
 
-<div id="watashi-wo-tadoru-signup">
+<div id="watashi-wo-tadoru-signup" data-screen="personality-type">
   <div class="page">
     <header class="header wtc-header">
       <%= link_to "わたしを辿る", root_path, class: "brand" %>
@@ -14,10 +14,76 @@
         <h1 id="type-title">
           <span class="wtc-phrase">あなたの16タイプを</span><span class="wtc-phrase">教えてね</span>
         </h1>
-
-        <p class="login-link">
-          <%= link_to "呼ばれ方の設定へ戻る", edit_onboarding_nickname_path %>
+        <p class="lead">
+          <span class="wtc-phrase">自分に当てはまるタイプを</span><span class="wtc-phrase">ひとつ選んでください。</span><br>
+          あとから設定画面で変更できます。
         </p>
+
+        <%= link_to "↗ タイプが分からない・診断し直したい方はこちら（外部サイト）",
+                    "https://mentuzzle.com/shindan/report/16type",
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                    class: "type-help" %>
+
+        <%= form_with model: @user,
+                      url: onboarding_personality_type_path,
+                      method: :patch,
+                      data: { controller: "type-selection" } do |f| %>
+          <% if @user.errors.any? %>
+            <div id="error_explanation" role="alert">
+              <h2>入力内容を確認してください</h2>
+              <ul>
+                <% @user.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <%# 未選択の場合も、空のタイプIDを送って検証する %>
+          <%= f.hidden_field :personality_type_id, value: "" %>
+
+          <fieldset class="type-groups">
+            <legend class="visually-hidden">16タイプを選択</legend>
+
+            <% %w[NT NF SJ SP].each do |group_code| %>
+              <section class="type-group <%= group_code.downcase %>">
+                <h2 class="group-name"><%= group_code %>グループ</h2>
+
+                <div class="type-grid">
+                  <% @personality_type_groups.fetch(group_code, []).each do |personality_type| %>
+                    <label
+                      class="type-option<%= " selected" if @user.personality_type_id == personality_type.id %>"
+                      data-type-selection-target="option">
+                      <%= f.radio_button :personality_type_id,
+                            personality_type.id,
+                            data: {
+                              type_selection_target: "radio",
+                              type_code: personality_type.code,
+                              action: "change->type-selection#update"
+                            } %>
+                      <span><%= personality_type.code %></span>
+                    </label>
+                  <% end %>
+                </div>
+              </section>
+            <% end %>
+          </fieldset>
+
+          <div class="selection-row">
+            <p class="selected-label">
+              選択中：
+              <strong data-type-selection-target="selected"><%= @user.personality_type&.code || "未選択" %></strong>
+            </p>
+
+            <div class="actions">
+              <%= link_to "← 呼ばれ方の設定へ",
+                          edit_onboarding_nickname_path,
+                          class: "back-step" %>
+              <%= f.submit "次へ：ミツメイトを選ぶ", class: "submit" %>
+            </div>
+          </div>
+        <% end %>
       </section>
     </div>
 

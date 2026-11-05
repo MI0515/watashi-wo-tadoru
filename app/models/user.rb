@@ -29,4 +29,9 @@ class User < ApplicationRecord
             length: { maximum: 10 },
             allow_blank: true,
             on: :nickname_setup
+
+  # 自分の16タイプを設定するときだけ、存在するタイプを必須にする
+  validates :personality_type,
+            presence: true,
+            on: :personality_type_setup
 end

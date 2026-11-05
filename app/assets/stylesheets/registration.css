@@ -209,3 +209,161 @@
   font-family: inherit;
   cursor: pointer;
 }
+
+/* 16タイプの選択画面 */
+#watashi-wo-tadoru-signup[data-screen="personality-type"] .card {
+  width: min(1080px, 100%);
+  padding: 28px;
+}
+
+#watashi-wo-tadoru-signup[data-screen="personality-type"] .lead {
+  margin-bottom: 14px;
+}
+
+#watashi-wo-tadoru-signup .type-help {
+  display: inline-block;
+  font-size: 12px;
+  line-height: 1.8;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* 見た目だけ隠し、読み上げやキーボード操作では使えるようにする */
+#watashi-wo-tadoru-signup .visually-hidden,
+#watashi-wo-tadoru-signup .type-option input[type="radio"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+#watashi-wo-tadoru-signup .type-groups {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  min-width: 0;
+  margin: 18px 0;
+  padding: 0;
+  border: 0;
+}
+
+#watashi-wo-tadoru-signup .type-group {
+  --group-color: #a88ae0;
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid var(--group-color);
+  border-top-width: 3px;
+  border-radius: 12px;
+}
+
+#watashi-wo-tadoru-signup .type-group.nf {
+  --group-color: #78c99b;
+}
+
+#watashi-wo-tadoru-signup .type-group.sj {
+  --group-color: #72bee6;
+}
+
+#watashi-wo-tadoru-signup .type-group.sp {
+  --group-color: #efbf62;
+}
+
+#watashi-wo-tadoru-signup .group-name {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+#watashi-wo-tadoru-signup .type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+#watashi-wo-tadoru-signup .type-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border: 1px solid;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  cursor: pointer;
+}
+
+#watashi-wo-tadoru-signup .type-option:focus-within {
+  outline: 3px solid var(--wt-navy);
+  outline-offset: 3px;
+}
+
+#watashi-wo-tadoru-signup .type-option.selected::after {
+  content: "✓";
+  position: absolute;
+  top: 2px;
+  right: 5px;
+  font-size: 10px;
+}
+
+#watashi-wo-tadoru-signup .selection-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+#watashi-wo-tadoru-signup .selected-label {
+  margin: 0;
+  font-size: 12px;
+}
+
+#watashi-wo-tadoru-signup .selected-label strong {
+  font-size: 15px;
+}
+
+#watashi-wo-tadoru-signup .actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+#watashi-wo-tadoru-signup .back-step {
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+#watashi-wo-tadoru-signup .actions .submit {
+  width: auto;
+  padding: 0 22px;
+}
+
+@media (max-width: 760px) {
+  #watashi-wo-tadoru-signup[data-screen="personality-type"] .card {
+    padding: 28px 18px;
+  }
+
+  #watashi-wo-tadoru-signup .type-groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #watashi-wo-tadoru-signup .selection-row,
+  #watashi-wo-tadoru-signup .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #watashi-wo-tadoru-signup .actions .submit {
+    width: 100%;
+    padding: 0 12px;
+    font-size: 14px;
+  }
+}

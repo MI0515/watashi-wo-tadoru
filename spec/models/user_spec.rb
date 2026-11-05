@@ -103,4 +103,38 @@ RSpec.describe User, type: :model do
       expect(new_user).to be_valid
     end
   end
+  describe "自分の16タイプの初期設定" do
+    let(:user) { create(:user) }
+
+    it "登録済みのタイプを保存できる" do
+      personality_type = create(:personality_type)
+      user.personality_type = personality_type
+
+      expect(user.save(context: :personality_type_setup)).to be true
+      expect(user.reload.personality_type).to eq(personality_type)
+    end
+
+    it "未選択なら無効になる" do
+      user.personality_type = nil
+
+      expect(user.valid?(:personality_type_setup)).to be false
+      expect(user.errors.of_kind?(:personality_type, :blank)).to be true
+      expect(user.errors.full_messages).to include(
+        "16タイプを選択してください"
+      )
+    end
+
+    it "存在しないタイプのIDなら無効になる" do
+      user.personality_type_id = PersonalityType.maximum(:id).to_i + 1
+
+      expect(user.valid?(:personality_type_setup)).to be false
+      expect(user.errors.of_kind?(:personality_type, :blank)).to be true
+    end
+
+    it "通常の新規登録ではタイプ未設定でも有効になる" do
+      new_user = build(:user, personality_type: nil)
+
+      expect(new_user).to be_valid
+    end
+  end
 end
