@@ -4,7 +4,8 @@ Rails.application.routes.draw do
   # ログイン後の初期設定
   namespace :onboarding do
     resource :nickname, only: [ :edit, :update ]
-    resource :personality_type, only: [ :edit ]
+    resource :personality_type, only: [ :edit, :update ]
+    resource :companion, only: [ :edit ]
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

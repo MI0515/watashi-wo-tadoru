@@ -1,0 +1,27 @@
+<% content_for :title, "ミツメイトの設定 | わたしを辿る" %>
+
+<div id="watashi-wo-tadoru-signup">
+  <div class="page">
+    <header class="header wtc-header">
+      <%= link_to "わたしを辿る", root_path, class: "brand" %>
+      <%= button_to "ログアウト", destroy_user_session_path,
+                    method: :delete, class: "back-link" %>
+    </header>
+
+    <div class="main">
+      <section class="card" aria-labelledby="companion-title">
+        <p class="eyebrow">初期設定 3 / 3</p>
+        <h1 id="companion-title">ミツメイトを選ぼう</h1>
+        <p class="lead">
+          あなたと一緒に気持ちを辿る相手を選ぶ画面です。
+        </p>
+
+        <%= link_to "← 16タイプの設定へ",
+                    edit_onboarding_personality_type_path,
+                    class: "back-step" %>
+      </section>
+    </div>
+
+    <%= render "shared/footer" %>
+  </div>
+</div>

@@ -10,6 +10,13 @@ ja:
         terms_accepted: "利用規約・プライバシーポリシー"
         nickname: "ニックネーム"
         honorific: "呼び方（敬称など）"
+        personality_type: "16タイプ"
+    errors:
+      models:
+        user:
+          attributes:
+            personality_type:
+              blank: "を選択してください"
 
   errors:
     format: "%{attribute}%{message}"
