@@ -11,11 +11,14 @@ ja:
         nickname: "ニックネーム"
         honorific: "呼び方（敬称など）"
         personality_type: "16タイプ"
+        companion: "ミツメイト"
     errors:
       models:
         user:
           attributes:
             personality_type:
+              blank: "を選択してください"
+            companion:
               blank: "を選択してください"
 
   errors:

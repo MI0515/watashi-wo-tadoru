@@ -1,24 +1,105 @@
 <% content_for :title, "ミツメイトの設定 | わたしを辿る" %>
+<% appearance_labels = { "male" => "男の子", "female" => "女の子", "animal" => "動物" } %>
+<% type_options = %w[NT NF SJ SP].map do |group_code|
+     ["#{group_code}グループ", @personality_type_groups.fetch(group_code, []).map { |type| [type.code, type.id] }]
+   end %>
+<% selected_companion = @user.companion if @user.companion&.personality_type_id == @selected_type_id %>
 
-<div id="watashi-wo-tadoru-signup">
+<div id="watashi-buddy-selection-v2">
   <div class="page">
     <header class="header wtc-header">
       <%= link_to "わたしを辿る", root_path, class: "brand" %>
       <%= button_to "ログアウト", destroy_user_session_path,
-                    method: :delete, class: "back-link" %>
+                    method: :delete, class: "logout" %>
     </header>
 
     <div class="main">
-      <section class="card" aria-labelledby="companion-title">
-        <p class="eyebrow">初期設定 3 / 3</p>
-        <h1 id="companion-title">ミツメイトを選ぼう</h1>
-        <p class="lead">
-          あなたと一緒に気持ちを辿る相手を選ぶ画面です。
-        </p>
+      <section class="selection-panel" aria-labelledby="companion-title">
+        <%= form_with model: @user,
+                      url: onboarding_companion_path,
+                      method: :patch,
+                      data: { controller: "companion-selection" } do |f| %>
+          <div class="title-block">
+            <div class="title-copy">
+              <p class="eyebrow">初期設定 3 / 3</p>
+              <h1 id="companion-title">そばにいてほしいミツメイトを選ぼう</h1>
+              <p class="lead">
+                あなた自身のタイプとは別に選べます。あとから設定画面で変更できます。
+              </p>
+            </div>
 
-        <%= link_to "← 16タイプの設定へ",
-                    edit_onboarding_personality_type_path,
-                    class: "back-step" %>
+            <div class="type-picker">
+              <%= label_tag "companion-type", "ミツメイトの16タイプ" %>
+              <%= select_tag :companion_type_id,
+                    grouped_options_for_select(type_options, @selected_type_id),
+                    include_blank: "タイプを選んでください",
+                    id: "companion-type",
+                    data: {
+                      companion_selection_target: "type",
+                      action: "change->companion-selection#changeType"
+                    } %>
+            </div>
+          </div>
+
+          <% if @user.errors.any? %>
+            <div class="companion-errors" role="alert">
+              <h2>入力内容を確認してください</h2>
+              <ul>
+                <% @user.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <%= f.hidden_field :companion_id, value: "" %>
+
+          <% @companions_by_type.each do |type_id, companions| %>
+            <%= tag.fieldset class: "choices companion-choices",
+                  hidden: type_id != @selected_type_id,
+                  data: { companion_selection_target: "group", type_id: type_id } do %>
+              <legend class="visually-hidden">
+                <%= companions.first.personality_type.code %>の見た目を選択
+              </legend>
+
+              <% companions.sort_by { |companion| %w[male female animal].index(companion.appearance_type) }.each do |companion| %>
+                <% label = "#{companion.personality_type.code}・#{appearance_labels.fetch(companion.appearance_type)}" %>
+                <label class="buddy<%= " selected" if @user.companion_id == companion.id %>"
+                       data-companion-selection-target="option">
+                  <%= f.radio_button :companion_id, companion.id,
+                        disabled: type_id != @selected_type_id,
+                        data: {
+                          companion_selection_target: "radio",
+                          label: label,
+                          line: @preview_lines[companion.id],
+                          action: "change->companion-selection#select"
+                        } %>
+
+                  <span class="visual"
+                        data-group="<%= companion.personality_type.group_code.downcase %>">
+                    <%= image_tag companion.full_image_path, alt: "" %>
+                  </span>
+
+                  <span class="choice-label">
+                    <span class="check" aria-hidden="true">✓</span>
+                    <span><%= label %></span>
+                  </span>
+                </label>
+              <% end %>
+            <% end %>
+          <% end %>
+
+          <p class="sample" aria-live="polite">
+            <strong data-companion-selection-target="selected"><%= selected_companion ? "#{selected_companion.personality_type.code}・#{appearance_labels.fetch(selected_companion.appearance_type)}" : "未選択" %></strong>
+            <span data-companion-selection-target="line"><%= @preview_lines[selected_companion&.id] || "見た目を選ぶと、ミツメイトの言葉を表示します。" %></span>
+          </p>
+
+          <div class="bottom">
+            <%= link_to "← 16タイプの選択へ",
+                        edit_onboarding_personality_type_path, class: "back" %>
+            <%= f.submit "このミツメイトと始める", class: "primary" %>
+          </div>
+        <% end %>
       </section>
     </div>
 

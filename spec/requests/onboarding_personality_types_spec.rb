@@ -75,7 +75,7 @@ RSpec.describe "16タイプの初期設定", type: :request do
       expect(response).to have_http_status(:ok)
       expect(
         response.parsed_body.at_css("#companion-title").text
-      ).to eq("ミツメイトを選ぼう")
+      ).to eq("そばにいてほしいミツメイトを選ぼう")
     end
 
     it "保存済みのタイプを選択状態で表示する" do

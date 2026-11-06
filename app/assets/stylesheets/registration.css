@@ -367,3 +367,334 @@
     font-size: 14px;
   }
 }
+
+/* ミツメイト選択画面 */
+#watashi-buddy-selection-v2 .page {
+  min-height: max(820px, 100svh);
+  display: flex;
+  flex-direction: column;
+}
+
+#watashi-buddy-selection-v2 .logout {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+#watashi-buddy-selection-v2 .main {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+#watashi-buddy-selection-v2 .selection-panel {
+  width: 100%;
+  min-width: 0;
+  padding: 0 22px 16px;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+/* 見出しの帯。右側にタイプ切り替え欄を置く */
+#watashi-buddy-selection-v2 .title-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 0 -22px 12px;
+  padding: 15px 22px 13px;
+  border-bottom: 1px solid rgba(47, 54, 82, .18);
+  background: rgba(255, 255, 255, .18);
+}
+
+#watashi-buddy-selection-v2 .title-copy {
+  min-width: 0;
+}
+
+#watashi-buddy-selection-v2 .eyebrow {
+  margin: 0 0 3px;
+  font-size: 12px;
+  letter-spacing: .12em;
+}
+
+#watashi-buddy-selection-v2 h1 {
+  margin: 0;
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: .04em;
+}
+
+#watashi-buddy-selection-v2 .lead {
+  margin: 4px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+#watashi-buddy-selection-v2 .type-picker {
+  flex: 0 0 200px;
+}
+
+#watashi-buddy-selection-v2 .type-picker label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 11px;
+}
+
+#watashi-buddy-selection-v2 #companion-type {
+  width: 100%;
+  min-height: 36px;
+  padding: 7px 10px;
+  border: 1px solid rgba(47, 54, 82, .30);
+  border-radius: 8px;
+  background: var(--wt-glass-inner);
+  color: var(--wt-text);
+  font: inherit;
+  font-size: 13px;
+}
+
+/* 画像カード */
+#watashi-buddy-selection-v2 .choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  min-width: 0;
+  margin: 0 0 10px;
+  padding: 0;
+  border: 0;
+}
+
+#watashi-buddy-selection-v2 .choices[hidden] {
+  display: none;
+}
+
+#watashi-buddy-selection-v2 .buddy {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0;
+  border: 1px solid var(--wt-glass-line);
+  border-radius: 14px;
+  background: var(--wt-glass-inner);
+  box-shadow: 0 12px 28px rgba(47, 54, 82, .12);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+#watashi-buddy-selection-v2 .buddy:only-of-type {
+  grid-column: 2;
+}
+
+#watashi-buddy-selection-v2 .buddy:focus-within {
+  outline: 3px solid var(--wt-navy);
+  outline-offset: 3px;
+}
+
+#watashi-buddy-selection-v2 .visual {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 420px;
+  padding: 8px 10px 0;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, .30),
+    rgba(221, 211, 226, .34)
+  );
+}
+
+#watashi-buddy-selection-v2 .visual img {
+  display: block;
+  max-width: 93%;
+  max-height: 412px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 13px rgba(1, 7, 26, .52));
+}
+
+#watashi-buddy-selection-v2 .choice-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 50px;
+  padding: 9px 10px;
+  background: rgba(255, 255, 255, .58);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: .05em;
+}
+
+#watashi-buddy-selection-v2 .check {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  font-size: 12px;
+}
+
+#watashi-buddy-selection-v2 .buddy.selected .check {
+  display: inline-flex;
+}
+
+/* 選択中の名前と、登録済みの独り言 */
+#watashi-buddy-selection-v2 .sample {
+  margin: 0;
+  padding: 9px 13px;
+  border-left: 3px solid;
+  border-radius: 9px;
+  background: var(--wt-glass-inner);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+#watashi-buddy-selection-v2 .sample strong {
+  margin-right: 8px;
+  font-weight: 500;
+}
+
+#watashi-buddy-selection-v2 .bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 11px;
+}
+
+#watashi-buddy-selection-v2 .back {
+  font-size: 12px;
+  text-decoration: none;
+}
+
+#watashi-buddy-selection-v2 .primary {
+  min-width: 245px;
+  min-height: 50px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 15px;
+  letter-spacing: .06em;
+  cursor: pointer;
+}
+
+/* ラジオボタンを隠しても、キーボード操作は残す */
+#watashi-buddy-selection-v2 .visually-hidden,
+#watashi-buddy-selection-v2 .buddy input[type="radio"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+#watashi-buddy-selection-v2 .companion-errors {
+  margin: 0 0 16px;
+  padding: 16px;
+  border: 1px solid #eda4b8;
+  border-radius: 10px;
+  background: #fceef2;
+  color: #cf4469;
+}
+
+#watashi-buddy-selection-v2 .companion-errors h2 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+#watashi-buddy-selection-v2 .companion-errors ul {
+  margin: 0;
+  padding-left: 1.5em;
+  list-style: disc;
+  font-size: 13px;
+}
+
+@media (max-width: 760px) {
+  #watashi-buddy-selection-v2 .main {
+    padding: 18px 14px;
+  }
+
+  #watashi-buddy-selection-v2 .selection-panel {
+    padding: 0 18px 16px;
+  }
+
+  #watashi-buddy-selection-v2 .title-block {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-right: -18px;
+    margin-left: -18px;
+    padding: 15px 18px;
+  }
+
+  #watashi-buddy-selection-v2 h1 {
+    font-size: 22px;
+  }
+
+  #watashi-buddy-selection-v2 .type-picker {
+    flex: none;
+  }
+
+  #watashi-buddy-selection-v2 .choices {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #watashi-buddy-selection-v2 .buddy {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #watashi-buddy-selection-v2 .buddy:only-of-type {
+    grid-column: auto;
+  }
+
+  #watashi-buddy-selection-v2 .visual {
+    height: 360px;
+    padding: 8px 10px 0;
+  }
+
+  #watashi-buddy-selection-v2 .visual img {
+    max-height: 352px;
+  }
+
+  #watashi-buddy-selection-v2 .choice-label {
+    min-height: 50px;
+    font-size: 15px;
+  }
+
+  #watashi-buddy-selection-v2 .bottom {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #watashi-buddy-selection-v2 .primary {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* SJ・SPは画像内の余白に合わせて、キャラ本体の位置を調整する */
+#watashi-buddy-selection-v2 .visual[data-group="sj"],
+#watashi-buddy-selection-v2 .visual[data-group="sp"] {
+  align-items: center;
+}
+
+#watashi-buddy-selection-v2 .visual[data-group="sj"] img {
+  transform: translateX(-8%);
+}
+
+#watashi-buddy-selection-v2 .visual[data-group="sp"] img {
+  transform: translateX(-5%);
+}

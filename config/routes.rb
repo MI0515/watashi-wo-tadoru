@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   namespace :onboarding do
     resource :nickname, only: [ :edit, :update ]
     resource :personality_type, only: [ :edit, :update ]
-    resource :companion, only: [ :edit ]
+    resource :companion, only: [ :edit, :update ]
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -16,6 +16,9 @@ Rails.application.routes.draw do
 
   # サイトの入口「/」にアクセスしたら、TOPページを表示する
   root "pages#home"
+
+  # ログイン後のホーム
+  get "home", to: "homes#show", as: :home
 
   # 未ログインでも閲覧できる利用規約・プライバシーポリシー
   get "terms", to: "pages#terms"
