@@ -34,4 +34,9 @@ class User < ApplicationRecord
   validates :personality_type,
             presence: true,
             on: :personality_type_setup
+
+  # ミツメイトを設定するときだけ、存在するミツメイトを必須にする
+  validates :companion,
+            presence: true,
+            on: :companion_setup
 end

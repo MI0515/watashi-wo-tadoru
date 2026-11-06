@@ -1,0 +1,20 @@
+<% content_for :title, "ホーム | わたしを辿る" %>
+
+<div id="watashi-wo-tadoru-signup">
+  <div class="page">
+    <header class="header wtc-header">
+      <%= link_to "わたしを辿る", home_path, class: "brand" %>
+      <%= button_to "ログアウト", destroy_user_session_path,
+                    method: :delete, class: "back-link" %>
+    </header>
+
+    <div class="main">
+      <section class="card" aria-labelledby="home-title">
+        <h1 id="home-title">ホーム</h1>
+        <p class="lead">ミツメイトの設定が完了しました。</p>
+      </section>
+    </div>
+
+    <%= render "shared/footer" %>
+  </div>
+</div>

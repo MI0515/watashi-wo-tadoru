@@ -137,4 +137,54 @@ RSpec.describe User, type: :model do
       expect(new_user).to be_valid
     end
   end
+
+  describe "ミツメイトの初期設定" do
+    let(:user) { create(:user) }
+
+    it "登録済みのミツメイトを保存できる" do
+      companion = create(:companion)
+      user.companion = companion
+
+      expect(user.save(context: :companion_setup)).to be true
+      expect(user.reload.companion).to eq(companion)
+    end
+
+    it "自分とは異なるタイプのミツメイトも保存できる" do
+      own_type = create(
+        :personality_type, code: "INFJ", group_code: "NF"
+      )
+      user.update!(personality_type: own_type)
+
+      companion = create(:companion)
+      user.companion = companion
+
+      expect(user.save(context: :companion_setup)).to be true
+      expect(user.reload.companion).to eq(companion)
+      expect(user.personality_type).to eq(own_type)
+      expect(companion.personality_type).not_to eq(own_type)
+    end
+
+    it "未選択なら無効になり、日本語のエラーを表示する" do
+      user.companion = nil
+
+      expect(user.valid?(:companion_setup)).to be false
+      expect(user.errors.of_kind?(:companion, :blank)).to be true
+      expect(user.errors.full_messages).to include(
+        "ミツメイトを選択してください"
+      )
+    end
+
+    it "存在しないミツメイトのIDなら無効になる" do
+      user.companion_id = Companion.maximum(:id).to_i + 1
+
+      expect(user.valid?(:companion_setup)).to be false
+      expect(user.errors.of_kind?(:companion, :blank)).to be true
+    end
+
+    it "通常の新規登録ではミツメイト未選択でも有効になる" do
+      new_user = build(:user, companion: nil)
+
+      expect(new_user).to be_valid
+    end
+  end
 end
