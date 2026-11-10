@@ -11,12 +11,12 @@ RSpec.describe "ユーザー登録", type: :request do
     }
   end
 
-  it "正しい入力と同意があれば登録でき、TOPへ戻る" do
+  it "正しい入力と同意があれば登録でき、呼ばれ方の設定へ進む" do
     expect {
       post user_registration_path, params: { user: registration_params }
     }.to change(User, :count).by(1)
 
-    expect(response).to redirect_to(root_path)
+    expect(response).to redirect_to(edit_onboarding_nickname_path)
     expect(flash[:notice]).to eq("アカウントを登録しました。")
   end
 
