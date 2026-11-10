@@ -34,11 +34,9 @@
                   required: true %>
           </div>
 
-          <%# パスワード再設定へのリンクは#17で接続する %>
           <p class="forgot-link">
-            <button type="button" disabled>
-              パスワードを忘れた方はこちら（準備中）
-            </button>
+            <%= link_to "パスワードを忘れた方はこちら",
+                        new_user_password_path %>
           </p>
 
           <%= f.submit "ログイン", class: "submit" %>
