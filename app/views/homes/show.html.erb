@@ -10,9 +10,14 @@
   <div class="stage">
     <% if @companion %>
       <div class="character">
+      <% if @monologue %>
+        <p class="quote" aria-live="polite"><%= @monologue.content %></p>
+      <% end %>
+
         <%= image_tag @companion.sd_image_path,
                       alt: "選択中のミツメイト", class: "sd-mate" %>
       </div>
+
     <% end %>
 
     <section class="panel home-panel" aria-labelledby="home-title">
@@ -21,10 +26,6 @@
       <p class="hello">
         <%= @display_name ? "おかえり、#{@display_name}。" : "おかえりなさい。" %>
       </p>
-
-      <% if @monologue %>
-        <p class="quote"><%= @monologue.content %></p>
-      <% end %>
 
       <div class="home-actions">
         <p>少し立ち止まって、自分の気持ちを辿ってみる？</p>
