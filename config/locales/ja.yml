@@ -12,6 +12,7 @@ ja:
         honorific: "呼び方（敬称など）"
         personality_type: "16タイプ"
         companion: "ミツメイト"
+        reset_password_token: "再設定用リンク"
     errors:
       models:
         user:
@@ -20,6 +21,10 @@ ja:
               blank: "を選択してください"
             companion:
               blank: "を選択してください"
+            reset_password_token:
+              invalid: "が無効です。再設定用メールをもう一度申請してください。"
+              expired: "の有効期限が切れています。再設定用メールをもう一度申請してください。"
+              blank: "がありません。再設定用メールのリンクからアクセスしてください。"
 
   errors:
     format: "%{attribute}%{message}"
@@ -32,8 +37,12 @@ ja:
       too_long: "は%{count}文字以内で入力してください"
       accepted: "に同意してください"
       not_saved: "%{count}件のエラーにより、%{resource}を登録できませんでした。"
+      not_found: "が見つかりません"
 
   devise:
+    mailer:
+      reset_password_instructions:
+        subject: "【わたしを辿る】パスワード再設定のご案内"
     registrations:
       signed_up: "アカウントを登録しました。"
     failure:
@@ -45,3 +54,9 @@ ja:
       signed_in: "ログインしました。"
       signed_out: "ログアウトしました。"
       already_signed_out: "すでにログアウトしています。"
+    passwords:
+      no_token: "再設定用メールに記載されたリンクからアクセスしてください。"
+      send_instructions: "パスワード再設定の案内をメールでお送りします。メールをご確認ください。"
+      send_paranoid_instructions: "登録済みのメールアドレスの場合、パスワード再設定の案内をお送りします。メールをご確認ください。"
+      updated: "パスワードを変更しました。ログインしました。"
+      updated_not_active: "パスワードを変更しました。ログインしてください。"
