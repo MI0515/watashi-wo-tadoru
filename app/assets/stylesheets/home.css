@@ -1,0 +1,149 @@
+/* ホームの背景と、ミツメイト・パネルの配置 */
+#watashi-dialogue-response-states[data-screen="home"] {
+  --wt-scene-height: 56.28vw;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  overflow: clip;
+  background-color: #66585a;
+  background-image: url("home-winter-v2.webp");
+  background-repeat: no-repeat;
+}
+
+#watashi-dialogue-response-states[data-screen="home"] .stage {
+  display: grid;
+  grid-template-columns: minmax(0, 37fr) minmax(0, 63fr);
+  align-items: center;
+  flex: 1;
+  gap: 12px;
+  width: 100%;
+  max-width: 1280px;
+  min-height: 550px;
+  margin-inline: auto;
+  padding: 20px 22px 18px 0;
+}
+
+#watashi-dialogue-response-states[data-screen="home"] .character {
+  min-width: 0;
+  height: 512px;
+  padding-top: 30px;
+}
+
+#watashi-dialogue-response-states[data-screen="home"] .sd-mate {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 12px 20px rgba(43, 32, 50, .22));
+}
+
+#watashi-dialogue-response-states[data-screen="home"] .home-panel {
+  min-width: 0;
+  padding: 28px;
+  border-radius: 22px;
+  overflow-wrap: anywhere;
+}
+
+/* ミツメイト未設定時は、パネルを中央に置く */
+#watashi-dialogue-response-states[data-screen="home"] .home-panel:only-child {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: min(100%, 640px);
+}
+
+#watashi-dialogue-response-states[data-screen="home"] .hello {
+  margin: 0 0 20px;
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+#watashi-dialogue-response-states[data-screen="home"] .quote {
+  position: relative;
+  margin: 0;
+  padding: 22px;
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(40, 30, 40, .06);
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+#watashi-dialogue-response-states[data-screen="home"] .quote::before {
+  content: "";
+  position: absolute;
+  top: 32px;
+  left: -11px;
+  border: 11px solid transparent;
+  border-right: 12px solid #fff;
+  border-left: 0;
+}
+
+#watashi-dialogue-response-states[data-screen="home"] .home-actions {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(47, 54, 82, .18);
+}
+
+#watashi-dialogue-response-states[data-screen="home"] .home-actions p {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+#watashi-dialogue-response-states[data-screen="home"] .actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#watashi-dialogue-response-states[data-screen="home"] .actions button {
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  font-size: 14px;
+}
+
+#watashi-dialogue-response-states[data-screen="home"] .actions button:disabled {
+  opacity: .65;
+}
+
+@media (max-width: 600px) {
+  #watashi-dialogue-response-states[data-screen="home"] {
+    --wt-scene-height: max(328px, 56.28vw);
+    background-size: auto var(--wt-scene-height) !important;
+  }
+
+  #watashi-dialogue-response-states[data-screen="home"] .stage {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    min-height: 0;
+    padding: 12px;
+  }
+
+  #watashi-dialogue-response-states[data-screen="home"] .character {
+    height: 220px;
+    padding-top: 0;
+  }
+
+  #watashi-dialogue-response-states[data-screen="home"] .home-panel {
+    padding: 20px;
+  }
+
+  #watashi-dialogue-response-states[data-screen="home"] .quote {
+    padding: 16px;
+    font-size: 16px;
+  }
+
+  #watashi-dialogue-response-states[data-screen="home"] .quote::before {
+    top: -10px;
+    left: 28px;
+    border: 10px solid transparent;
+    border-top: 0;
+    border-bottom-color: #fff;
+  }
+}
