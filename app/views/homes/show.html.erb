@@ -1,20 +1,40 @@
 <% content_for :title, "ホーム | わたしを辿る" %>
 
-<div id="watashi-wo-tadoru-signup">
-  <div class="page">
-    <header class="header wtc-header">
-      <%= link_to "わたしを辿る", home_path, class: "brand" %>
-      <%= button_to "ログアウト", destroy_user_session_path,
-                    method: :delete, class: "back-link" %>
-    </header>
+<div id="watashi-dialogue-response-states" data-screen="home">
+  <header class="header wtc-header">
+    <%= link_to "わたしを辿る", home_path, class: "brand" %>
+    <%= button_to "ログアウト", destroy_user_session_path,
+                  method: :delete, class: "wtc-link" %>
+  </header>
 
-    <div class="main">
-      <section class="card" aria-labelledby="home-title">
-        <h1 id="home-title">ホーム</h1>
-        <p class="lead">ミツメイトの設定が完了しました。</p>
-      </section>
-    </div>
+  <div class="stage">
+    <% if @companion %>
+      <div class="character">
+        <%= image_tag @companion.sd_image_path,
+                      alt: "選択中のミツメイト", class: "sd-mate" %>
+      </div>
+    <% end %>
 
-    <%= render "shared/footer" %>
+    <section class="panel home-panel" aria-labelledby="home-title">
+      <h1 id="home-title" class="sr-only">ホーム</h1>
+
+      <p class="hello">
+        <%= @display_name ? "おかえり、#{@display_name}。" : "おかえりなさい。" %>
+      </p>
+
+      <% if @monologue %>
+        <p class="quote"><%= @monologue.content %></p>
+      <% end %>
+
+      <div class="home-actions">
+        <p>少し立ち止まって、自分の気持ちを辿ってみる？</p>
+        <div class="actions">
+          <button type="button" class="primary" disabled>振り返りを始める</button>
+          <button type="button" class="secondary" disabled>記録を見る</button>
+        </div>
+      </div>
+    </section>
   </div>
+
+  <%= render "shared/footer" %>
 </div>
