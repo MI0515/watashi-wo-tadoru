@@ -34,7 +34,7 @@ RSpec.describe "ミツメイトの初期設定", type: :request do
 
   let(:intp) { types.find { |type| type.code == "INTP" } }
   let(:infj) { types.find { |type| type.code == "INFJ" } }
-  let(:user) { create(:user, personality_type: intp) }
+  let(:user) { create(:user, nickname: "七海", personality_type: intp) }
 
   def visible_choices
     response.parsed_body.at_css(".companion-choices:not([hidden])")

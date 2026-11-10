@@ -12,6 +12,18 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def after_sign_in_path_for(resource)
+    pending_onboarding_path_for(resource) || home_path
+  end
+
+  def pending_onboarding_path_for(user)
+    return edit_onboarding_nickname_path if user.nickname.blank?
+    return edit_onboarding_personality_type_path if user.personality_type_id.nil?
+    return edit_onboarding_companion_path if user.companion_id.nil?
+
+    nil
+  end
+
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [ :terms_accepted ])
   end

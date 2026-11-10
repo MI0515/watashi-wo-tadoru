@@ -4,16 +4,16 @@ RSpec.describe "ログイン・ログアウト", type: :request do
   # 各テストで必要になったとき、登録済みユーザーを作る
   let(:user) { create(:user) }
 
-  it "正しい情報でログインでき、ヘッダーが切り替わる" do
+  it "ログイン後は呼ばれ方の設定へ進み、TOPのメニューも切り替わる" do
     post user_session_path, params: {
       user: { email: user.email, password: "test123" }
     }
 
-    expect(response).to redirect_to(root_path)
+    expect(response).to redirect_to(edit_onboarding_nickname_path)
     expect(flash[:notice]).to eq("ログインしました。")
 
-    # 遷移先を開き、ヘッダー内の表示を確認する
-    follow_redirect!
+    # TOPを開き、ログイン済みのメニューを確認する
+    get root_path
     navigation = response.parsed_body.at_css(".wtc-nav").text
 
     expect(navigation).to include("ログアウト")
@@ -42,7 +42,7 @@ RSpec.describe "ログイン・ログアウト", type: :request do
       user: { email: user.email, password: "test123" }
     }
 
-    follow_redirect!
+    get root_path
     expect(response.parsed_body.at_css(".wtc-nav").text)
       .to include("ログアウト")
 
