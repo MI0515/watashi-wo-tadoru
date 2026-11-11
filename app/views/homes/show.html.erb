@@ -9,15 +9,25 @@
 
   <div class="stage">
     <% if @companion %>
-      <div class="character">
-      <% if @monologue %>
-        <p class="quote" aria-live="polite"><%= @monologue.content %></p>
+      <%= tag.div class: "character",
+                  data: {
+                    controller: "monologue",
+                    monologue_contents_value: @monologues.map(&:content)
+                  } do %>
+        <% if @monologue %>
+          <p class="quote"
+             aria-live="polite"
+             data-monologue-target="quote"><%= @monologue.content %></p>
+        <% end %>
+
+        <button type="button"
+                class="monologue-button"
+                aria-label="独り言を切り替える"
+                data-action="click->monologue#change">
+          <%= image_tag @companion.sd_image_path,
+                        alt: "選択中のミツメイト", class: "sd-mate" %>
+        </button>
       <% end %>
-
-        <%= image_tag @companion.sd_image_path,
-                      alt: "選択中のミツメイト", class: "sd-mate" %>
-      </div>
-
     <% end %>
 
     <section class="panel home-panel" aria-labelledby="home-title">
