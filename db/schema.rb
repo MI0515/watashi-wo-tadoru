@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_04_054152) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_11_084403) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -62,6 +62,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_04_054152) do
     t.datetime "updated_at", null: false
     t.bigint "personality_type_id"
     t.bigint "companion_id"
+    t.datetime "onboarding_completed_at"
     t.index ["companion_id"], name: "index_users_on_companion_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["personality_type_id"], name: "index_users_on_personality_type_id"

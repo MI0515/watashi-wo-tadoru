@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
   # サイトの入口「/」にアクセスしたら、TOPページを表示する
   root "pages#home"
+  patch "home/guide", to: "homes#complete_guide", as: :home_guide
 
   # ログイン後のホーム
   get "home", to: "homes#show", as: :home
