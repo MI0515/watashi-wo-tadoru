@@ -1,10 +1,14 @@
 class HomesController < ApplicationController
+  # 順番に意味がある：current_user を使うため、ログイン確認を先に実行する
   before_action :authenticate_user!
   before_action :redirect_to_pending_onboarding
 
   def show
+    # 初期設定が済んでいることは before_action で保証済みなので、nil チェックはしない
     @companion = current_user.companion
-    @monologue = @companion&.personality_type&.random_monologue
+    # 画面で独り言を切り替えるため、1件ではなく全件を渡す
+    @monologues = @companion.personality_type.monologues.to_a
+    @monologue = @monologues.sample
 
     if current_user.nickname.present?
       @display_name = "#{current_user.nickname}#{current_user.honorific}"

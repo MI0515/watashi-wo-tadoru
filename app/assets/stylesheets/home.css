@@ -34,6 +34,16 @@
   padding-top: 30px;
 }
 
+#watashi-dialogue-response-states[data-screen="home"] .monologue-button {
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+}
+
 #watashi-dialogue-response-states[data-screen="home"] .sd-mate {
   display: block;
   width: auto;
@@ -41,6 +51,20 @@
   max-width: 100%;
   max-height: 482px;
   filter: drop-shadow(0 12px 20px rgba(43, 32, 50, .22));
+}
+
+#watashi-dialogue-response-states[data-screen="home"] .monologue-button:is(:focus-visible, :active) .sd-mate {
+  filter:
+    drop-shadow(0 12px 20px rgba(43, 32, 50, .22))
+    drop-shadow(0 0 14px var(--wt-accent));
+}
+
+@media (hover: hover) {
+  #watashi-dialogue-response-states[data-screen="home"] .monologue-button:hover .sd-mate {
+    filter:
+      drop-shadow(0 12px 20px rgba(43, 32, 50, .22))
+      drop-shadow(0 0 14px var(--wt-accent));
+  }
 }
 
 #watashi-dialogue-response-states[data-screen="home"] .home-panel {
