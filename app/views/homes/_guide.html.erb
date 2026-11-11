@@ -1,0 +1,41 @@
+<dialog class="guide-card"
+        aria-labelledby="home-guide-title"
+        data-controller="home-guide"
+        data-action="turbo:before-cache@document->home-guide#close">
+  <p class="guide-eyebrow">はじめての方へ</p>
+  <h2 id="home-guide-title">ここでは、<span class="guide-mobile-line">こんなふうに過ごせるよ</span></h2>
+  <p class="guide-lead">
+    全部使わなくても大丈夫。<span class="guide-mobile-line">今の自分に合うところから始めてね。</span>
+  </p>
+
+  <div class="guide-steps">
+    <section class="guide-step">
+      <span class="guide-number" aria-hidden="true">1</span>
+      <h3>ミツメイトの言葉に触れる</h3>
+      <p>ミツメイトをクリック・タップすると、別の独り言が表示されます。</p>
+    </section>
+
+    <section class="guide-step">
+      <span class="guide-number" aria-hidden="true">2</span>
+      <h3>気持ちを少し振り返る</h3>
+      <p>「振り返りを始める」から、感情や出来事を短い言葉で整理できます。</p>
+    </section>
+
+    <section class="guide-step">
+      <span class="guide-number" aria-hidden="true">3</span>
+      <h3>気づきをあとから見返す</h3>
+      <p>保存した振り返りは、「記録を見る」からいつでも読み返せます。</p>
+    </section>
+  </div>
+
+  <p class="guide-note">
+    16タイプは、自分を決めつけるものではなく、<span class="guide-mobile-line">考えるための手がかりのひとつです。</span>
+    <span class="guide-note-line">ミツメイトの言葉が当てはまらなくても大丈夫。</span>
+  </p>
+
+  <%= button_to "はじめる",
+                home_guide_path,
+                method: :patch,
+                class: "guide-start",
+                form: { class: "guide-actions" } %>
+</dialog>

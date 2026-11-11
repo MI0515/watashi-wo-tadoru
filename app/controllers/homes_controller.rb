@@ -15,6 +15,17 @@ class HomesController < ApplicationController
     end
   end
 
+  def complete_guide
+    # 二重送信されても、最初の案内完了日時を保持する
+    current_user.with_lock do
+      if current_user.onboarding_completed_at.nil?
+        current_user.update!(onboarding_completed_at: Time.current)
+      end
+    end
+
+    redirect_to home_path, status: :see_other
+  end
+
   private
 
   def redirect_to_pending_onboarding
