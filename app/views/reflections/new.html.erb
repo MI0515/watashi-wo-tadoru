@@ -40,14 +40,15 @@
         </fieldset>
 
         <div class="initial-text-field">
-          <%= form.label :initial_text, "何があったか、一言だけ聞かせて。" %>
+          <%= form.label :initial_text, "今、どんなことが浮かんでる？" %>
           <%= form.text_area :initial_text,
                              rows: 4,
                              maxlength: 400,
                              required: true,
                              aria: { describedby: "entry-input-help entry-ai-note" } %>
           <p id="entry-input-help" class="helper">
-            400文字以内。「何もなかった」「何もできなかった」「何も感じない」でも大丈夫。
+            うまくまとまっていなくても大丈夫。
+            「何も浮かばない」「何も感じない」でも、そのまま書いてね。（400文字まで）
           </p>
         </div>
 

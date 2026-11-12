@@ -26,6 +26,9 @@ module Myapp
     # 画面やエラーメッセージの標準言語を日本語にする
     config.i18n.default_locale = :ja
 
+    # 項目名を付けないエラー文を、項目別の翻訳設定で指定できるようにする
+    config.active_model.i18n_customize_full_message = true
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.

@@ -2,6 +2,7 @@ ja:
   activerecord:
     models:
       user: "ユーザー"
+      reflection: "振り返り"
     attributes:
       user:
         email: "メールアドレス"
@@ -13,6 +14,8 @@ ja:
         personality_type: "16タイプ"
         companion: "ミツメイト"
         reset_password_token: "再設定用リンク"
+      reflection:
+        initial_text: "入力内容"
     errors:
       models:
         user:
@@ -25,6 +28,12 @@ ja:
               invalid: "が無効です。再設定用メールをもう一度申請してください。"
               expired: "の有効期限が切れています。再設定用メールをもう一度申請してください。"
               blank: "がありません。再設定用メールのリンクからアクセスしてください。"
+        reflection:
+          attributes:
+            initial_text:
+              format: "%{message}"
+              blank: "ひとこと入力してください"
+              too_long: "入力内容は%{count}文字以内で入力してください"
 
   errors:
     format: "%{attribute}%{message}"
