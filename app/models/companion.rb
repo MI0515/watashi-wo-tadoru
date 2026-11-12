@@ -1,6 +1,7 @@
 class Companion < ApplicationRecord
   belongs_to :personality_type
   has_many :users
+  has_many :reflections, dependent: :restrict_with_error
 
   # 見た目は3種類。同じタイプ内での重複を防ぐ
   validates :appearance_type,
