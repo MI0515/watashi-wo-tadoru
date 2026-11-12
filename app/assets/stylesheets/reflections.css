@@ -1,0 +1,223 @@
+#watashi-dialogue-response-states[data-screen="entry"] {
+  --wt-scene-height: 56.28vw;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  overflow: clip;
+  background-color: #66585a;
+  background-image: url("home-winter-v2.webp");
+  background-repeat: no-repeat;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .stage {
+  display: grid;
+  grid-template-columns: minmax(0, 37fr) minmax(0, 63fr);
+  align-items: center;
+  flex: 1;
+  gap: 12px;
+  width: 100%;
+  max-width: 1280px;
+  min-height: 550px;
+  margin-inline: auto;
+  padding: 20px 22px 18px 0;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .character {
+  position: relative;
+  min-width: 0;
+  min-height: 512px;
+  overflow: hidden;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .full-mate {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  width: 560px;
+  height: 840px;
+  max-width: none;
+  object-fit: contain;
+  object-position: center top;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 12px 20px rgba(43, 32, 50, .22));
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .entry-panel {
+  min-width: 0;
+  padding: 28px;
+  border-radius: 22px;
+  overflow-wrap: anywhere;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] h1 {
+  margin: 0 0 12px;
+  font-size: 25px;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  #watashi-dialogue-response-states[data-screen="entry"] {
+    --wt-scene-height: max(440px, 56.28vw);
+    background-size: auto var(--wt-scene-height) !important;
+  }
+
+  #watashi-dialogue-response-states[data-screen="entry"] .stage {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+    padding: 12px;
+  }
+
+  #watashi-dialogue-response-states[data-screen="entry"] .character {
+    height: 220px;
+    min-height: 0;
+  }
+
+  #watashi-dialogue-response-states[data-screen="entry"] .full-mate {
+    top: 0;
+    width: 360px;
+    height: 540px;
+  }
+
+  #watashi-dialogue-response-states[data-screen="entry"] .entry-panel {
+    padding: 20px;
+  }
+
+  #watashi-dialogue-response-states[data-screen="entry"] h1 {
+    font-size: 21px;
+  }
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .intro {
+  margin: 0 0 20px;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .emotion-field {
+  min-width: 0;
+  margin: 0 0 22px;
+  padding: 0;
+  border: 0;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .emotion-field legend {
+  font-weight: 700;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .helper {
+  margin: 7px 0 12px;
+  color: var(--wt-sub);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .emotions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .emotion-option {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--wt-accent);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--wt-navy);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .emotion-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+/* 共通テーマのlabelの文字色より、選択時の白色を優先する */
+#watashi-dialogue-response-states[data-screen="entry"] .emotion-option:has(input:checked) {
+  background: var(--wt-navy);
+  color: #fff !important;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .emotion-option:has(input:checked) span::before {
+  content: "✓ ";
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .emotion-option:has(input:focus-visible) {
+  outline: 3px solid var(--wt-navy);
+  outline-offset: 3px;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .initial-text-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] textarea {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  resize: vertical;
+  border: 1px solid;
+  border-radius: 10px;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .entry-ai-note {
+  margin: 18px 0;
+  color: var(--wt-sub);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .actions :is(.primary, .secondary) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .primary:disabled {
+  opacity: .65;
+  cursor: wait;
+}
+
+@media (max-width: 600px) {
+  #watashi-dialogue-response-states[data-screen="entry"] .actions {
+    flex-direction: column;
+  }
+
+  #watashi-dialogue-response-states[data-screen="entry"] .actions .primary {
+    order: -1;
+  }
+}
+
+#watashi-dialogue-response-states[data-screen="entry"] .initial-text {
+  margin: 12px 0 24px;
+  white-space: pre-wrap;
+  line-height: 1.7;
+}

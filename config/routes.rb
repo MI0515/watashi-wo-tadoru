@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   # ログイン後のホーム
   get "home", to: "homes#show", as: :home
 
+  resources :reflections, only: [ :new, :create, :show ]
+
   # 未ログインでも閲覧できる利用規約・プライバシーポリシー
   get "terms", to: "pages#terms"
   get "privacy", to: "pages#privacy"

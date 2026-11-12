@@ -1,0 +1,70 @@
+<% content_for :title, "振り返りを始める | わたしを辿る" %>
+
+<div id="watashi-dialogue-response-states" data-screen="entry">
+  <header class="header wtc-header">
+    <%= link_to "わたしを辿る", home_path, class: "brand" %>
+    <%= button_to "ログアウト", destroy_user_session_path,
+                  method: :delete, class: "wtc-link" %>
+  </header>
+
+  <div class="stage">
+    <div class="character">
+      <%= image_tag @companion.full_image_path,
+                    alt: "選択中のミツメイト", class: "full-mate" %>
+    </div>
+
+    <section class="panel entry-panel" aria-labelledby="entry-title">
+      <h1 id="entry-title">今の気持ちを、少しだけ教えて</h1>
+      <p class="intro">
+        きれいに整理できていなくても大丈夫。近いものから選んでね。
+      </p>
+
+      <%= render "devise/shared/error_messages",
+                 resource: @reflection,
+                 heading: "入力内容を確認してください。" %>
+
+      <%= form_with model: @reflection do |form| %>
+        <fieldset class="emotion-field">
+          <legend>どんな気持ちがある？</legend>
+          <p class="helper">複数選択可・選ばずに進んでも大丈夫です。</p>
+
+          <div class="emotions">
+            <%= form.collection_check_boxes :emotion_ids,
+                                            @emotions, :id, :name do |option| %>
+              <%= option.label class: "emotion-option" do %>
+                <%= option.check_box %>
+                <span><%= option.text %></span>
+              <% end %>
+            <% end %>
+          </div>
+        </fieldset>
+
+        <div class="initial-text-field">
+          <%= form.label :initial_text, "何があったか、一言だけ聞かせて。" %>
+          <%= form.text_area :initial_text,
+                             rows: 4,
+                             maxlength: 400,
+                             required: true,
+                             aria: { describedby: "entry-input-help entry-ai-note" } %>
+          <p id="entry-input-help" class="helper">
+            400文字以内。「何もなかった」「何もできなかった」「何も感じない」でも大丈夫。
+          </p>
+        </div>
+
+        <p id="entry-ai-note" class="entry-ai-note">
+          入力内容や選んだ感情は、対話・まとめ生成のために外部のAIサービス（OpenAI）へ送信されます。
+          氏名・住所・連絡先など、個人を特定できる情報は入力しないでください。
+        </p>
+
+        <div class="actions">
+          <%= link_to "ホームへ戻る", home_path, class: "secondary" %>
+          <%= form.submit "ミツメイトと振り返る",
+                          class: "primary",
+                          data: { turbo_submits_with: "開始しています…" } %>
+        </div>
+      <% end %>
+    </section>
+  </div>
+
+  <%= render "shared/footer" %>
+</div>
