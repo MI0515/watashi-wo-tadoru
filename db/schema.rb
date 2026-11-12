@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_11_084403) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_12_053413) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -50,6 +50,32 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_084403) do
     t.index ["code"], name: "index_personality_types_on_code", unique: true
   end
 
+  create_table "reflection_emotions", force: :cascade do |t|
+    t.bigint "reflection_id", null: false
+    t.bigint "emotion_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["emotion_id"], name: "index_reflection_emotions_on_emotion_id"
+    t.index ["reflection_id", "emotion_id"], name: "index_reflection_emotions_on_reflection_id_and_emotion_id", unique: true
+    t.index ["reflection_id"], name: "index_reflection_emotions_on_reflection_id"
+  end
+
+  create_table "reflections", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "companion_id", null: false
+    t.text "initial_text", null: false
+    t.string "title"
+    t.text "valued_thing"
+    t.text "insight"
+    t.text "personal_note"
+    t.integer "status", default: 0, null: false
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["companion_id"], name: "index_reflections_on_companion_id"
+    t.index ["user_id"], name: "index_reflections_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -71,6 +97,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_084403) do
 
   add_foreign_key "companions", "personality_types"
   add_foreign_key "monologues", "personality_types"
+  add_foreign_key "reflection_emotions", "emotions", on_delete: :restrict
+  add_foreign_key "reflection_emotions", "reflections", on_delete: :cascade
+  add_foreign_key "reflections", "companions", on_delete: :restrict
+  add_foreign_key "reflections", "users", on_delete: :cascade
   add_foreign_key "users", "companions"
   add_foreign_key "users", "personality_types"
 end

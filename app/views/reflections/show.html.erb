@@ -1,0 +1,29 @@
+<% content_for :title, "振り返り | わたしを辿る" %>
+
+<div id="watashi-dialogue-response-states" data-screen="entry">
+  <header class="header wtc-header">
+    <%= link_to "わたしを辿る", home_path, class: "brand" %>
+    <%= button_to "ログアウト", destroy_user_session_path,
+                  method: :delete, class: "wtc-link" %>
+  </header>
+
+  <div class="stage">
+    <div class="character">
+      <%= image_tag @companion.full_image_path,
+                    alt: "この振り返りのミツメイト", class: "full-mate" %>
+    </div>
+
+    <section class="panel entry-panel" aria-labelledby="reflection-title">
+      <h1 id="reflection-title">振り返り</h1>
+
+      <h2>最初に話したこと</h2>
+      <p class="initial-text"><%= @reflection.initial_text %></p>
+
+      <div class="actions">
+        <%= link_to "ホームへ戻る", home_path, class: "secondary" %>
+      </div>
+    </section>
+  </div>
+
+  <%= render "shared/footer" %>
+</div>

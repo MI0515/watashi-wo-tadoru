@@ -130,12 +130,16 @@
   gap: 10px;
 }
 
-#watashi-dialogue-response-states[data-screen="home"] .actions button {
+#watashi-dialogue-response-states[data-screen="home"] .actions :is(a, button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 44px;
   padding: 10px 16px;
   border: 1px solid transparent;
   border-radius: 11px;
   font-size: 14px;
+  text-decoration: none;
 }
 
 #watashi-dialogue-response-states[data-screen="home"] .actions .primary {
