@@ -79,4 +79,10 @@ end
 group :test do
   # テスト時だけ使い、計測開始のタイミングは自分で指定する
   gem "simplecov", require: false
+
+  # ブラウザ操作を使った画面遷移のテストを行う
+  gem "capybara"
+
+  # Capybaraから実際のブラウザを操作する
+  gem "selenium-webdriver"
 end
