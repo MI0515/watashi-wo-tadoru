@@ -100,6 +100,14 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Set up Chrome
+        id: chrome
+        uses: browser-actions/setup-chrome@v2
+        with:
+          chrome-version: stable
+          install-chromedriver: true
+          install-dependencies: true
+
       # 初期データは投入せず、テスト用DBとテーブルを作成する
       - name: Prepare test database
         run: bin/rails db:create db:schema:load
@@ -109,4 +117,7 @@ jobs:
         run: bin/rails tailwindcss:build
 
       - name: Run RSpec
+        env:
+          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+          CHROMEDRIVER_PATH: ${{ steps.chrome.outputs.chromedriver-path }}
         run: bundle exec rspec
