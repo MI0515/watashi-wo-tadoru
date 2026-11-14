@@ -252,4 +252,59 @@ RSpec.describe "振り返りの開始", type: :request do
     expect(reflection.emotion_ids).to eq([ emotion.id ])
     expect(response).to redirect_to(reflection_path(reflection))
   end
+
+  it "最初の入力に続けて、メッセージを発言順で表示する" do
+    reflection = create(
+      :reflection,
+      user: user,
+      companion: companion,
+      initial_text: "最初の入力"
+    )
+    create(
+      :reflection_message,
+      reflection: reflection,
+      role: :assistant,
+      position: 2,
+      content: "AIの返信"
+    )
+    create(
+      :reflection_message,
+      reflection: reflection,
+      role: :user,
+      position: 1,
+      content: "利用者の発言"
+    )
+
+    get reflection_path(reflection)
+
+    expect(response).to have_http_status(:ok)
+    doc = response.parsed_body
+
+    expect(doc.css(".thread .bubble").map(&:text))
+      .to eq([ "最初の入力", "利用者の発言", "AIの返信" ])
+    expect(doc.css(".message.user .bubble").map(&:text))
+      .to eq([ "最初の入力", "利用者の発言" ])
+    expect(doc.at_css(".message.assistant .bubble").text)
+      .to eq("AIの返信")
+    expect(doc.at_css(".message.assistant .avatar")["src"])
+      .to include("nt-animal-icon")
+  end
+
+  it "メッセージがなくても最初の入力を表示し、重複登録しない" do
+    reflection = create(
+      :reflection,
+      user: user,
+      companion: companion,
+      initial_text: "まだ言葉にならない気持ち"
+    )
+
+    expect {
+      get reflection_path(reflection)
+    }.not_to change(ReflectionMessage, :count)
+
+    expect(response).to have_http_status(:ok)
+    expect(response.parsed_body.css(".thread .bubble").map(&:text))
+      .to eq([ "まだ言葉にならない気持ち" ])
+    expect(reflection.reflection_messages).to be_empty
+  end
 end

@@ -1,6 +1,6 @@
 <% content_for :title, "振り返り | わたしを辿る" %>
 
-<div id="watashi-dialogue-response-states" data-screen="entry">
+<div id="watashi-dialogue-response-states" data-screen="chat">
   <header class="header wtc-header">
     <%= link_to "わたしを辿る", home_path, class: "brand" %>
     <%= button_to "ログアウト", destroy_user_session_path,
@@ -13,11 +13,49 @@
                     alt: "この振り返りのミツメイト", class: "full-mate" %>
     </div>
 
-    <section class="panel entry-panel" aria-labelledby="reflection-title">
-      <h1 id="reflection-title">振り返り</h1>
+    <section class="panel chat-panel" aria-labelledby="reflection-title">
+      <h1 id="reflection-title">振り返り中</h1>
 
-      <h2>最初に話したこと</h2>
-      <p class="initial-text"><%= @reflection.initial_text %></p>
+      <div class="thread" aria-live="polite">
+        <div class="message user">
+          <div class="message-body">
+            <span class="sr-only">あなた</span>
+            <p class="bubble initial-text"><%= @reflection.initial_text %></p>
+            <time class="time" datetime="<%= @reflection.created_at.iso8601 %>">
+              <%= @reflection.created_at.strftime("%H:%M") %>
+            </time>
+          </div>
+        </div>
+
+        <% @messages.each do |message| %>
+          <div class="message <%= message.role %>">
+            <% if message.assistant? %>
+              <%= image_tag @companion.icon_image_path,
+                            alt: "", class: "avatar" %>
+            <% end %>
+
+            <div class="message-body">
+              <span class="sr-only"><%= message.user? ? "あなた" : "ミツメイト" %></span>
+              <p class="bubble"><%= message.content %></p>
+              <time class="time" datetime="<%= message.created_at.iso8601 %>">
+                <%= message.created_at.strftime("%H:%M") %>
+              </time>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="composer">
+        <div>
+          <label class="sr-only" for="reflection-reply">ミツメイトへの返答</label>
+          <textarea id="reflection-reply"
+                    rows="2"
+                    placeholder="うまくまとまっていなくても大丈夫"
+                    disabled></textarea>
+          <p class="enter-note">Enterで改行。送信はボタンから。</p>
+        </div>
+        <button type="button" class="primary" disabled>送信</button>
+      </div>
 
       <div class="actions">
         <%= link_to "ホームへ戻る", home_path, class: "secondary" %>

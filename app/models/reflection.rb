@@ -3,6 +3,7 @@ class Reflection < ApplicationRecord
   belongs_to :companion
   has_many :reflection_emotions, dependent: :destroy
   has_many :emotions, through: :reflection_emotions
+  has_many :reflection_messages, dependent: :destroy
 
   enum :status, { in_progress: 0, completed: 1 }, validate: true
 
