@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_12_053413) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_14_063405) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -60,6 +60,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_12_053413) do
     t.index ["reflection_id"], name: "index_reflection_emotions_on_reflection_id"
   end
 
+  create_table "reflection_messages", force: :cascade do |t|
+    t.bigint "reflection_id", null: false
+    t.integer "role", null: false
+    t.text "content", null: false
+    t.integer "position", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reflection_id", "position"], name: "index_reflection_messages_on_reflection_id_and_position", unique: true
+    t.index ["reflection_id"], name: "index_reflection_messages_on_reflection_id"
+  end
+
   create_table "reflections", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "companion_id", null: false
@@ -99,6 +110,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_12_053413) do
   add_foreign_key "monologues", "personality_types"
   add_foreign_key "reflection_emotions", "emotions", on_delete: :restrict
   add_foreign_key "reflection_emotions", "reflections", on_delete: :cascade
+  add_foreign_key "reflection_messages", "reflections", on_delete: :cascade
   add_foreign_key "reflections", "companions", on_delete: :restrict
   add_foreign_key "reflections", "users", on_delete: :cascade
   add_foreign_key "users", "companions"
