@@ -36,6 +36,39 @@ RSpec.describe ReflectionMessage, type: :model do
     expect(message.errors.of_kind?(:content, :blank)).to be true
   end
 
+  it "利用者の発言は400文字まで有効になる" do
+    message = build(
+      :reflection_message,
+      role: :user,
+      content: "あ" * 400
+    )
+
+    expect(message).to be_valid
+  end
+
+  it "利用者の発言が401文字なら、切り捨てずに無効になる" do
+    text = "あ" * 401
+    message = build(
+      :reflection_message,
+      role: :user,
+      content: text
+    )
+
+    expect(message).to be_invalid
+    expect(message.errors.of_kind?(:content, :too_long)).to be true
+    expect(message.content).to eq(text)
+  end
+
+  it "AIの返答には利用者の400文字制限を適用しない" do
+    message = build(
+      :reflection_message,
+      role: :assistant,
+      content: "あ" * 401
+    )
+
+    expect(message).to be_valid
+  end
+
   it "定義されていない発言者は無効になる" do
     message = build(:reflection_message, role: "unknown")
 
