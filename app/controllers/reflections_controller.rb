@@ -20,6 +20,8 @@ class ReflectionsController < ApplicationController
     @reflection.emotions = Emotion.find(selected_ids).uniq
 
     if @reflection.save
+      ReflectionInitialReply.new(reflection: @reflection).call
+
       redirect_to reflection_path(@reflection), status: :see_other
     else
       render :new, status: :unprocessable_content
