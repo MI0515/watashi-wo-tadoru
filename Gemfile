@@ -53,7 +53,7 @@ gem "devise"
 
 group :development, :test do
   # Railsの動作を自動で確認するテストフレームワーク
-  gem "rspec-rails", "~> 8.0"
+  gem "rspec-rails", "~> 8.1"
 
   # テスト用データの定義・作成を支援する
   gem "factory_bot_rails", "~> 6.0"
