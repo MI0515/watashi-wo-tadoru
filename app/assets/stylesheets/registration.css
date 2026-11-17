@@ -123,7 +123,7 @@
 }
 
 /* 入力エラーをフォーム上部で目立たせる */
-:is(#watashi-wo-tadoru-signup, #watashi-dialogue-response-states[data-screen="entry"]) #error_explanation {
+:is(#watashi-wo-tadoru-signup, #watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"])) #error_explanation {
   margin: 0 0 24px;
   padding: 16px;
   border: 1px solid #eda4b8;
@@ -132,7 +132,7 @@
   color: #cf4469;
 }
 
-:is(#watashi-wo-tadoru-signup, #watashi-dialogue-response-states[data-screen="entry"]) #error_explanation h2 {
+:is(#watashi-wo-tadoru-signup, #watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"])) #error_explanation h2 {
   margin: 0 0 8px;
   /* 共通テーマの見出し色より、エラーの文字色を優先する */
   color: inherit !important;
@@ -141,7 +141,7 @@
   line-height: 1.7;
 }
 
-:is(#watashi-wo-tadoru-signup, #watashi-dialogue-response-states[data-screen="entry"]) #error_explanation ul {
+:is(#watashi-wo-tadoru-signup, #watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"])) #error_explanation ul {
   margin: 0;
   padding-left: 1.5em;
   list-style: disc;

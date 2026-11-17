@@ -20,6 +20,8 @@ class ReflectionsController < ApplicationController
     @reflection.emotions = Emotion.find(selected_ids).uniq
 
     if @reflection.save
+      ReflectionInitialReply.new(reflection: @reflection).call
+
       redirect_to reflection_path(@reflection), status: :see_other
     else
       render :new, status: :unprocessable_content
@@ -30,6 +32,7 @@ class ReflectionsController < ApplicationController
     @reflection = current_user.reflections.find(params[:id])
     @companion = @reflection.companion
     @messages = @reflection.reflection_messages.order(:position)
+    @reply = @reflection.reflection_messages.build(role: :user)
   end
 
   private

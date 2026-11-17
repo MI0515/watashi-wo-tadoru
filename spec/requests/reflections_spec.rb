@@ -11,7 +11,18 @@ RSpec.describe "振り返りの開始", type: :request do
     )
   end
 
+  let(:ai_client) { instance_double(OpenaiClient) }
+  let(:ai_response) do
+    instance_double(
+      OpenAI::Models::Responses::Response,
+      output_text: "テスト用のAI返答"
+    )
+  end
+
   before do
+    allow(OpenaiClient).to receive(:new).and_return(ai_client)
+    allow(ai_client).to receive(:call).and_return(ai_response)
+
     post user_session_path, params: {
       user: { email: user.email, password: "test123" }
     }
@@ -306,5 +317,32 @@ RSpec.describe "振り返りの開始", type: :request do
     expect(response.parsed_body.css(".thread .bubble").map(&:text))
       .to eq([ "まだ言葉にならない気持ち" ])
     expect(reflection.reflection_messages).to be_empty
+  end
+
+  it "開始時に初回AI返答を保存・表示し、再読み込みでは追加生成しない" do
+    initial_text = "今日は少し話したい。"
+
+    expect {
+      post reflections_path, params: {
+        reflection: { initial_text: initial_text }
+      }
+    }.to change(ReflectionMessage, :count).by(1)
+
+    reflection = user.reflections.last
+    message = reflection.reflection_messages.sole
+
+    expect(message).to be_assistant
+    expect(message.position).to eq(1)
+    expect(message.content).to eq("テスト用のAI返答")
+    expect(response).to redirect_to(reflection_path(reflection))
+
+    expect {
+      2.times { get reflection_path(reflection) }
+    }.not_to change(ReflectionMessage, :count)
+
+    expect(response).to have_http_status(:ok)
+    expect(response.parsed_body.css(".thread .bubble").map(&:text))
+      .to eq([ initial_text, "テスト用のAI返答" ])
+    expect(ai_client).to have_received(:call).once
   end
 end

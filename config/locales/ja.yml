@@ -16,6 +16,8 @@ ja:
         reset_password_token: "再設定用リンク"
       reflection:
         initial_text: "入力内容"
+      reflection_message:
+        content: "返答"
     errors:
       models:
         user:
@@ -34,6 +36,12 @@ ja:
               format: "%{message}"
               blank: "ひとこと入力してください"
               too_long: "入力内容は%{count}文字以内で入力してください"
+        reflection_message:
+          attributes:
+            content:
+              format: "%{message}"
+              blank: "ひとこと入力してください"
+              too_long: "返答は%{count}文字以内で入力してください"
 
   errors:
     format: "%{attribute}%{message}"

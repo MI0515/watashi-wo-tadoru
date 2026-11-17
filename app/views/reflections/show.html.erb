@@ -45,17 +45,27 @@
         <% end %>
       </div>
 
-      <div class="composer">
+      <%= render "devise/shared/error_messages",
+                 resource: @reply,
+                 heading: "入力内容を確認してください。" %>
+
+      <%= form_with model: @reply,
+                    url: reflection_messages_path(@reflection),
+                    class: "composer" do |form| %>
         <div>
-          <label class="sr-only" for="reflection-reply">ミツメイトへの返答</label>
-          <textarea id="reflection-reply"
-                    rows="2"
-                    placeholder="うまくまとまっていなくても大丈夫"
-                    disabled></textarea>
-          <p class="enter-note">Enterで改行。送信はボタンから。</p>
+          <%= form.label :content, "ミツメイトへの返答",
+                         for: "reflection-reply", class: "sr-only" %>
+          <%= form.text_area :content,
+                             id: "reflection-reply",
+                             rows: 2,
+                             maxlength: 400,
+                             required: true,
+                             placeholder: "うまくまとまっていなくても大丈夫",
+                             aria: { describedby: "reply-help" } %>
+          <p id="reply-help" class="enter-note">Enterで改行。送信はボタンから。（400文字まで）</p>
         </div>
-        <button type="button" class="primary" disabled>送信</button>
-      </div>
+        <%= form.submit "送信", class: "primary" %>
+      <% end %>
 
       <div class="actions">
         <%= link_to "ホームへ戻る", home_path, class: "secondary" %>
