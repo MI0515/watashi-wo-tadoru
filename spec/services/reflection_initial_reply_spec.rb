@@ -27,6 +27,8 @@ RSpec.describe ReflectionInitialReply do
     expect(message.position).to eq(1)
     expect(message.content).to eq("最初のAIの返答")
     expect(reflection.reflection_messages.where(role: :user)).to be_empty
+    expect(reflection.reload).to be_ai_response_idle
+    expect(reflection.ai_response_started_at).to be_nil
   end
 
   it "保存済みなら再生成・追加保存せず、既存の初回返答を返す" do
@@ -57,5 +59,36 @@ RSpec.describe ReflectionInitialReply do
     }.not_to change(ReflectionMessage, :count)
 
     expect(reflection.reload).to be_persisted
+    expect(reflection).to be_ai_response_failed
+    expect(reflection.ai_response_started_at).not_to be_nil
+  end
+
+  it "生成中の別リクエストを拒否し、進行中の生成状態を変更しない" do
+    expect(dialogue).to receive(:call).once do
+      expect(reflection.reload).to be_ai_response_processing
+      started_at = reflection.ai_response_started_at
+      expect(started_at).not_to be_nil
+
+      other_service = described_class.new(
+        reflection: Reflection.find(reflection.id),
+        dialogue: dialogue
+      )
+
+      expect {
+        other_service.call
+      }.to raise_error(described_class::InProgressError)
+
+      expect(reflection.reload).to be_ai_response_processing
+      expect(reflection.ai_response_started_at).to eq(started_at)
+
+      response
+    end
+
+    expect {
+      service.call
+    }.to change(ReflectionMessage, :count).by(1)
+
+    expect(reflection.reload).to be_ai_response_idle
+    expect(reflection.ai_response_started_at).to be_nil
   end
 end
