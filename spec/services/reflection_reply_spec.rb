@@ -39,6 +39,9 @@ RSpec.describe ReflectionReply do
     expect(result.content).to eq("次のAIの返答")
     expect(reflection.reflection_messages.order(:position).pluck(:position))
       .to eq([ 1, 2, 3 ])
+
+    expect(reflection.reload).to be_ai_response_idle
+    expect(reflection.ai_response_started_at).to be_nil
   end
 
   [ "   ", "あ" * 401 ].each do |content|
@@ -110,6 +113,8 @@ RSpec.describe ReflectionReply do
     expect(message).to be_user
     expect(message.position).to eq(2)
     expect(message.content).to eq("この入力を残したい")
+    expect(reflection.reload).to be_ai_response_failed
+    expect(reflection.ai_response_started_at).not_to be_nil
   end
 
   it "最終返信の指定を対話サービスへ渡す" do
@@ -120,5 +125,38 @@ RSpec.describe ReflectionReply do
       .and_return(response)
 
     service.call(content: "少し整理できた", final_reply: true)
+  end
+
+  it "生成中の追加送信を拒否し、発言とAPI呼び出しを重複させない" do
+    create(:reflection_message, reflection: reflection, position: 1)
+
+    expect(dialogue).to receive(:call).once.with(final_reply: false) do
+      expect(reflection.reload).to be_ai_response_processing
+      started_at = reflection.ai_response_started_at
+      expect(started_at).not_to be_nil
+
+      other_service = described_class.new(
+        reflection: Reflection.find(reflection.id),
+        dialogue: dialogue
+      )
+
+      expect {
+        expect {
+          other_service.call(content: "重複した入力")
+        }.to raise_error(described_class::InProgressError)
+      }.not_to change(ReflectionMessage, :count)
+
+      expect(reflection.reload).to be_ai_response_processing
+      expect(reflection.ai_response_started_at).to eq(started_at)
+
+      response
+    end
+
+    expect {
+      service.call(content: "相談してほしかった")
+    }.to change(ReflectionMessage, :count).by(2)
+
+    expect(reflection.reload).to be_ai_response_idle
+    expect(reflection.ai_response_started_at).to be_nil
   end
 end
