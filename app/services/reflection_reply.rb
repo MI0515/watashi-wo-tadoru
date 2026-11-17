@@ -10,7 +10,7 @@ class ReflectionReply
     @dialogue = dialogue
   end
 
-  def call(content:, final_reply: false)
+  def call(content:, reply_to_id:, final_reply: false)
     generation_started = false
     user_message = nil
 
@@ -24,6 +24,11 @@ class ReflectionReply
 
       unless @reflection.in_progress? && last_message&.assistant?
         raise NotReadyError, "返答を送信できる状態ではありません。"
+      end
+
+      # 古い画面や遅れて届いた送信を、次の問いへの返答として保存しない
+      unless reply_to_id.present? && reply_to_id.to_s == last_message.id.to_s
+        raise NotReadyError, "表示中の会話が更新されています。"
       end
 
       user_message = @reflection.reflection_messages.create!(

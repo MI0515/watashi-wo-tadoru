@@ -52,6 +52,7 @@
       <%= form_with model: @reply,
                     url: reflection_messages_path(@reflection),
                     class: "composer" do |form| %>
+        <%= hidden_field_tag "reflection_message[reply_to_id]", @messages.last&.id %>
         <div>
           <%= form.label :content, "ミツメイトへの返答",
                          for: "reflection-reply", class: "sr-only" %>

@@ -5,7 +5,8 @@ class ReflectionMessagesController < ApplicationController
 
   def create
     ReflectionReply.new(reflection: @reflection).call(
-      content: message_params[:content]
+      content: message_params[:content],
+      reply_to_id: message_params[:reply_to_id]
     )
 
     redirect_to reflection_path(@reflection), status: :see_other
@@ -34,6 +35,6 @@ class ReflectionMessagesController < ApplicationController
   end
 
   def message_params
-    params.require(:reflection_message).permit(:content)
+    params.require(:reflection_message).permit(:content, :reply_to_id)
   end
 end
