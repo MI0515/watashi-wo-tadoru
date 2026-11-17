@@ -32,6 +32,7 @@ class ReflectionsController < ApplicationController
     @reflection = current_user.reflections.find(params[:id])
     @companion = @reflection.companion
     @messages = @reflection.reflection_messages.order(:position)
+    @reply = @reflection.reflection_messages.build(role: :user)
   end
 
   private

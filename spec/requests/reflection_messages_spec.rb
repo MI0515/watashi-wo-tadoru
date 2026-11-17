@@ -79,6 +79,19 @@ RSpec.describe "対話メッセージの送信", type: :request do
       }.not_to change(ReflectionMessage, :count)
 
       expect(response).to have_http_status(:unprocessable_content)
+
+      doc = response.parsed_body
+      expect(doc.at_css("#reflection-reply").text).to include(content)
+
+      expected_message =
+        if content.blank?
+          "ひとこと入力してください"
+        else
+          "返答は400文字以内で入力してください"
+        end
+
+      expect(doc.at_css("#error_explanation").text)
+        .to include(expected_message)
     end
   end
 
