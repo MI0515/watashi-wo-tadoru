@@ -45,27 +45,48 @@
         <% end %>
       </div>
 
-      <%= render "devise/shared/error_messages",
-                 resource: @reply,
-                 heading: "入力内容を確認してください。" %>
+      <% if @reflection.in_progress? %>
+        <% if @reflection.ai_response_processing? %>
+          <div class="response-state" role="status">
+            <p>ミツメイトが返答を考えています。</p>
+            <%= link_to "状態を確認する",
+                        reflection_path(@reflection),
+                        class: "secondary" %>
+          </div>
+        <% elsif @reflection.ai_response_failed? %>
+          <div class="response-state" role="alert">
+            <p>返答を取得できませんでした。入力内容は会話に保存されています。</p>
+            <%= button_to "もう一度返答を受け取る",
+                          reflection_retry_path(@reflection),
+                          method: :post,
+                          params: { last_message_id: @messages.last&.id },
+                          class: "primary",
+                          form: { class: "retry-form" } %>
+          </div>
+        <% elsif @messages.last&.assistant? %>
+          <%= render "devise/shared/error_messages",
+                     resource: @reply,
+                     heading: "入力内容を確認してください。" %>
 
-      <%= form_with model: @reply,
-                    url: reflection_messages_path(@reflection),
-                    class: "composer" do |form| %>
-        <%= hidden_field_tag "reflection_message[reply_to_id]", @messages.last&.id %>
-        <div>
-          <%= form.label :content, "ミツメイトへの返答",
-                         for: "reflection-reply", class: "sr-only" %>
-          <%= form.text_area :content,
-                             id: "reflection-reply",
-                             rows: 2,
-                             maxlength: 400,
-                             required: true,
-                             placeholder: "うまくまとまっていなくても大丈夫",
-                             aria: { describedby: "reply-help" } %>
-          <p id="reply-help" class="enter-note">Enterで改行。送信はボタンから。（400文字まで）</p>
-        </div>
-        <%= form.submit "送信", class: "primary" %>
+          <%= form_with model: @reply,
+                        url: reflection_messages_path(@reflection),
+                        class: "composer" do |form| %>
+            <%= hidden_field_tag "reflection_message[reply_to_id]", @messages.last&.id %>
+            <div>
+              <%= form.label :content, "ミツメイトへの返答",
+                             for: "reflection-reply", class: "sr-only" %>
+              <%= form.text_area :content,
+                                 id: "reflection-reply",
+                                 rows: 2,
+                                 maxlength: 400,
+                                 required: true,
+                                 placeholder: "うまくまとまっていなくても大丈夫",
+                                 aria: { describedby: "reply-help" } %>
+              <p id="reply-help" class="enter-note">Enterで改行。送信はボタンから。（400文字まで）</p>
+            </div>
+            <%= form.submit "送信", class: "primary" %>
+          <% end %>
+        <% end %>
       <% end %>
 
       <div class="actions">

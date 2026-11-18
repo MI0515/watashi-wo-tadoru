@@ -250,6 +250,11 @@ RSpec.describe "対話メッセージの送信", type: :request do
         .to include("相談してほしかった")
       expect(response.parsed_body.at_css(".alert").text)
         .to include("入力内容は保存されています。")
+      expect(response.parsed_body.at_css(".retry-form")["action"])
+        .to eq(reflection_retry_path(reflection))
+      expect(response.parsed_body.at_css('input[name="last_message_id"]')["value"])
+        .to eq(message.id.to_s)
+      expect(response.parsed_body.at_css("#reflection-reply")).to be_nil
     end
   end
 end

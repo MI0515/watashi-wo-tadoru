@@ -348,3 +348,43 @@
     height: 550px;
   }
 }
+
+#watashi-dialogue-response-states[data-screen="chat"] .response-state {
+  flex-shrink: 0;
+  padding: 14px;
+  border: 1px solid rgba(47, 54, 82, .22);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .8);
+}
+
+#watashi-dialogue-response-states[data-screen="chat"] .response-state[role="alert"] {
+  border-color: #eda4b8;
+  background: #fceef2;
+  color: #cf4469;
+}
+
+#watashi-dialogue-response-states[data-screen="chat"] .response-state p {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+#watashi-dialogue-response-states[data-screen="chat"] .retry-form {
+  margin: 0;
+}
+
+#watashi-dialogue-response-states[data-screen="chat"] .response-state :is(.primary, .secondary) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}

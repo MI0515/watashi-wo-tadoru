@@ -386,6 +386,9 @@ RSpec.describe "振り返りの開始", type: :request do
         .to eq("何が嫌だったのか分からない")
       expect(response.parsed_body.at_css(".alert").text)
         .to include("入力内容は保存されています。")
+      expect(response.parsed_body.at_css(".retry-form")["action"])
+        .to eq(reflection_retry_path(reflection))
+      expect(response.parsed_body.at_css("#reflection-reply")).to be_nil
     end
   end
 end
