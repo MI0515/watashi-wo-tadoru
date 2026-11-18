@@ -209,4 +209,47 @@ RSpec.describe "対話メッセージの送信", type: :request do
     expect(response).to have_http_status(:see_other)
     expect(response).to redirect_to(reflection_path(reflection))
   end
+
+  [ "時間切れ", "応答エラー" ].each do |failure_type|
+    it "追加返信が#{failure_type}でも、発言を保存して会話画面へ戻る" do
+      error =
+        if failure_type == "時間切れ"
+          OpenAI::Errors::APITimeoutError.new(
+            url: URI("https://api.openai.com/v1/responses")
+          )
+        else
+          OpenaiClient::ResponseError.new(
+            "テスト用の応答エラー",
+            response: nil
+          )
+        end
+
+      expect(ai_client).to receive(:call).once.and_raise(error)
+
+      expect {
+        post reflection_messages_path(reflection), params: {
+          reflection_message: {
+            reply_to_id: reply_to_id,
+            content: "相談してほしかった"
+          }
+        }
+      }.to change(ReflectionMessage, :count).by(1)
+
+      expect(response).to have_http_status(:see_other)
+      expect(response).to redirect_to(reflection_path(reflection))
+      expect(reflection.reload).to be_ai_response_failed
+
+      message = reflection.reflection_messages.order(:position).last
+      expect(message).to be_user
+      expect(message.content).to eq("相談してほしかった")
+
+      follow_redirect!
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body.css(".thread .bubble").map(&:text))
+        .to include("相談してほしかった")
+      expect(response.parsed_body.at_css(".alert").text)
+        .to include("入力内容は保存されています。")
+    end
+  end
 end

@@ -345,4 +345,47 @@ RSpec.describe "振り返りの開始", type: :request do
       .to eq([ initial_text, "テスト用のAI返答" ])
     expect(ai_client).to have_received(:call).once
   end
+
+  [ "時間切れ", "応答エラー" ].each do |failure_type|
+    it "初回返信が#{failure_type}でも、入力を保存して会話画面へ戻る" do
+      error =
+        if failure_type == "時間切れ"
+          OpenAI::Errors::APITimeoutError.new(
+            url: URI("https://api.openai.com/v1/responses")
+          )
+        else
+          OpenaiClient::ResponseError.new(
+            "テスト用の応答エラー",
+            response: nil
+          )
+        end
+
+      expect(ai_client).to receive(:call).once.and_raise(error)
+
+      expect {
+        post reflections_path, params: {
+          reflection: {
+            initial_text: "何が嫌だったのか分からない",
+            emotion_ids: []
+          }
+        }
+      }.to change(Reflection, :count).by(1)
+
+      reflection = user.reflections.order(:id).last
+
+      expect(response).to have_http_status(:see_other)
+      expect(response).to redirect_to(reflection_path(reflection))
+      expect(reflection.initial_text).to eq("何が嫌だったのか分からない")
+      expect(reflection).to be_ai_response_failed
+      expect(reflection.reflection_messages).to be_empty
+
+      follow_redirect!
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body.at_css(".initial-text").text)
+        .to eq("何が嫌だったのか分からない")
+      expect(response.parsed_body.at_css(".alert").text)
+        .to include("入力内容は保存されています。")
+    end
+  end
 end
