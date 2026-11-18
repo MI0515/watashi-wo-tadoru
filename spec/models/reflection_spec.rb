@@ -75,4 +75,37 @@ RSpec.describe Reflection, type: :model do
     expect(reflection).to be_invalid
     expect(reflection.errors.of_kind?(:ai_response_status, :inclusion)).to be true
   end
+
+  it "保存前から、それぞれ異なる送信IDを持つ" do
+    first = described_class.new
+    second = described_class.new
+
+    expect(first.submission_token).to be_present
+    expect(second.submission_token).to be_present
+    expect(first.submission_token).not_to eq(second.submission_token)
+  end
+
+  it "送信IDが空欄なら無効になる" do
+    reflection = build(:reflection, submission_token: nil)
+
+    expect(reflection).to be_invalid
+    expect(reflection.errors.of_kind?(:submission_token, :blank)).to be true
+  end
+
+  it "同じ利用者の同じ送信IDをDB側でも重複保存できない" do
+    original = create(:reflection)
+    duplicate = build(
+      :reflection,
+      user: original.user,
+      companion: original.companion,
+      submission_token: original.submission_token
+    )
+
+    expect {
+      # 制約違反で、他のテスト処理までトランザクションが失敗状態にならないようにする
+      described_class.transaction(requires_new: true) do
+        duplicate.save!
+      end
+    }.to raise_error(ActiveRecord::RecordNotUnique)
+  end
 end
