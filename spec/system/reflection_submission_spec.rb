@@ -42,12 +42,12 @@ RSpec.describe "AIへの送信と待機表示", type: :system do
     with_pending_reply do |finish_reply|
       with_reply_input_probe do
         fill_in "ミツメイトへの返答",
-                with: "相談してほしかった",
+                with: "test reply",
                 fill_options: { clear: :backspace }
 
         expect(page).to have_field(
           "ミツメイトへの返答",
-          with: "相談してほしかった"
+          with: "test reply"
         )
       end
 
@@ -59,7 +59,7 @@ RSpec.describe "AIへの送信と待機表示", type: :system do
         text: "ミツメイトが返答を考えています。"
       )
       expect(page).to have_css("#reflection-reply[readonly]")
-      expect(find("#reflection-reply").value).to eq("相談してほしかった")
+      expect(find("#reflection-reply").value).to eq("test reply")
 
       finish_reply.call
 
