@@ -104,7 +104,8 @@ jobs:
         id: chrome
         uses: browser-actions/setup-chrome@v2
         with:
-          chrome-version: stable
+          # Capybaraのブラウザ初期化処理と互換性のある156系を使用する
+          chrome-version: "156"
           install-chromedriver: true
           install-dependencies: true
 
