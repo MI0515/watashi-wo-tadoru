@@ -38,19 +38,11 @@ RSpec.describe "AIへの送信と待機表示", type: :system do
   it "追加送信中は入力を保持して待機案内を出し、返信後に入力欄へ戻る" do
     create(:reflection_message, reflection: reflection, position: 1)
     visit reflection_path(reflection)
+    find("#reflection-reply").click
+    fill_in "ミツメイトへの返答", with: "相談してほしかった"
+    expect(page).to have_field("ミツメイトへの返答", with: "相談してほしかった")
 
     with_pending_reply do |finish_reply|
-      with_reply_input_probe do
-        fill_in "ミツメイトへの返答",
-                with: "test reply",
-                fill_options: { clear: :backspace }
-
-        expect(page).to have_field(
-          "ミツメイトへの返答",
-          with: "test reply"
-        )
-      end
-
       click_button "送信"
 
       expect(page).to have_button("送信中…", disabled: true)
@@ -59,7 +51,7 @@ RSpec.describe "AIへの送信と待機表示", type: :system do
         text: "ミツメイトが返答を考えています。"
       )
       expect(page).to have_css("#reflection-reply[readonly]")
-      expect(find("#reflection-reply").value).to eq("test reply")
+      expect(find("#reflection-reply").value).to eq("相談してほしかった")
 
       finish_reply.call
 
@@ -143,97 +135,7 @@ RSpec.describe "AIへの送信と待機表示", type: :system do
     end
   end
 
-  # CIで入力が反映されない原因を調べるための一時的な観測
-  def with_reply_input_probe
-    page.execute_script(<<~JS)
-      const original = document.querySelector("#reflection-reply")
-      const events = []
-      const startedAt = performance.now()
-      const listeners = new AbortController()
-      const record = (type, event = null) => {
-        const current = document.querySelector("#reflection-reply")
-        events.push({
-          ms: Math.round(performance.now() - startedAt),
-          type,
-          value: current?.value ?? null,
-          sameElement: current === original,
-          focused: document.activeElement === current,
-          readOnly: current?.readOnly ?? null,
-          disabled: current?.disabled ?? null,
-          key: event?.key ?? null,
-          inputType: event?.inputType ?? null
-        })
-      }
-      const probe = { original, events, record }
-      window.__replyInputProbe = probe
-      const types = ["focus", "blur", "keydown", "keyup", "beforeinput",
-                     "input", "change", "compositionstart", "compositionend"]
-      types.forEach((type) => {
-        document.addEventListener(type, (event) => {
-          if (event.target.id === "reflection-reply") record(type, event)
-        }, { capture: true, signal: listeners.signal })
-      })
-      document.addEventListener("reset", (event) => {
-        if (event.target === original?.form) record("form reset")
-      }, { capture: true, signal: listeners.signal })
-      let previous = original
-      const observer = new MutationObserver(() => {
-        const current = document.querySelector("#reflection-reply")
-        if (current !== previous) {
-          record("element changed")
-          previous = current
-        }
-      })
-      observer.observe(document.body, { childList: true, subtree: true })
-      probe.stop = () => { observer.disconnect(); listeners.abort() }
-      record("before fill")
-    JS
-
-    yield
-  ensure
-    log_reply_input_probe
-  end
-
-  def log_reply_input_probe
-    snapshot = page.evaluate_script(<<~JS)
-      (() => {
-        const probe = window.__replyInputProbe
-        if (!probe) return { probeMissing: true }
-        probe.record("after fill check")
-        const current = document.querySelector("#reflection-reply")
-        const result = {
-          sameElement: current === probe.original,
-          originalConnected: probe.original?.isConnected ?? false,
-          currentValue: current?.value ?? null,
-          events: probe.events
-        }
-        probe.stop()
-        delete window.__replyInputProbe
-        return result
-      })()
-    JS
-
-    warn "REPLY_INPUT_PROBE=#{snapshot.to_json}"
-  rescue StandardError => error
-    warn "REPLY_INPUT_PROBE_ERROR=#{error.class.name}"
-  end
-
   def with_pending_reply
-    # HTMLの表示だけでなく、送信処理のJavaScriptが接続されるまで待つ
-    page.document.synchronize(10) do
-      ready = page.evaluate_script(<<~JS)
-        Boolean(
-          window.Turbo && window.Stimulus &&
-          window.Stimulus.getControllerForElementAndIdentifier(
-            document.querySelector('[data-controller~="ai-submission"]'),
-            "ai-submission"
-          )
-        )
-      JS
-
-      raise Capybara::ElementNotFound, "送信処理のJavaScriptが未接続です" unless ready
-    end
-
     gate = Queue.new
 
     # 実行速度に左右されず、待機中の表示を確認してから応答を返す
