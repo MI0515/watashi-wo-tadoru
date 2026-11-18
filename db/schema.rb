@@ -10,9 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_18_070132) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_18_084308) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "api_usage_logs", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "reflection_id"
+    t.integer "request_kind", null: false
+    t.integer "status", default: 0, null: false
+    t.boolean "initial_reply", default: false, null: false
+    t.boolean "retry", default: false, null: false
+    t.string "response_id"
+    t.integer "input_tokens"
+    t.integer "output_tokens"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reflection_id"], name: "index_api_usage_logs_on_reflection_id"
+    t.index ["response_id"], name: "index_api_usage_logs_on_response_id", unique: true
+    t.index ["user_id", "created_at"], name: "index_api_usage_logs_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_api_usage_logs_on_user_id"
+  end
 
   create_table "companions", force: :cascade do |t|
     t.bigint "personality_type_id", null: false
@@ -110,6 +128,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_070132) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "api_usage_logs", "reflections", on_delete: :nullify
+  add_foreign_key "api_usage_logs", "users", on_delete: :cascade
   add_foreign_key "companions", "personality_types"
   add_foreign_key "monologues", "personality_types"
   add_foreign_key "reflection_emotions", "emotions", on_delete: :restrict

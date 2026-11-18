@@ -69,7 +69,7 @@ RSpec.describe ReflectionRetry do
   it "再試行中の別リクエストを拒否し、元の生成状態を変更しない" do
     message_id = user_message.id
 
-    expect(dialogue).to receive(:call).once.with(final_reply: false) do
+    expect(dialogue).to receive(:call).once.with(final_reply: false, retrying: true) do
       expect(reflection.reload).to be_ai_response_processing
       started_at = reflection.ai_response_started_at
       expect(started_at).not_to be_nil

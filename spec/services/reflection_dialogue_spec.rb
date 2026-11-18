@@ -3,7 +3,13 @@ require "rails_helper"
 RSpec.describe ReflectionDialogue do
   let(:reflection) { create(:reflection) }
   let(:client) { instance_double(OpenaiClient) }
-  let(:response) { instance_double(OpenAI::Models::Responses::Response) }
+  let(:response) do
+    instance_double(
+      OpenAI::Models::Responses::Response,
+      id: "response-test-dialogue",
+      usage: nil
+    )
+  end
   let(:service) { described_class.new(reflection: reflection, client: client) }
 
   before do
@@ -31,6 +37,7 @@ RSpec.describe ReflectionDialogue do
 
     expect(client).to receive(:call) do |instructions:, input:|
       expect(input.first[:content]).to start_with("選択した感情：モヤモヤ・不安")
+      response
     end
 
     service.call
@@ -70,6 +77,7 @@ RSpec.describe ReflectionDialogue do
           }
         ]
       )
+      response
     end
 
     service.call
@@ -90,6 +98,7 @@ RSpec.describe ReflectionDialogue do
       expect(instructions).to eq(
         ReflectionPrompt.call(speaking_style: "polite", final_reply: true)
       )
+      response
     end
 
     service.call(final_reply: true)

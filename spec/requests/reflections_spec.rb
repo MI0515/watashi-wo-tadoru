@@ -16,6 +16,8 @@ RSpec.describe "振り返りの開始", type: :request do
   let(:ai_response) do
     instance_double(
       OpenAI::Models::Responses::Response,
+      id: "response-test-request",
+      usage: nil,
       output_text: "テスト用のAI返答"
     )
   end
@@ -357,7 +359,7 @@ RSpec.describe "振り返りの開始", type: :request do
         else
           OpenaiClient::ResponseError.new(
             "テスト用の応答エラー",
-            response: nil
+            response: ai_response
           )
         end
 
