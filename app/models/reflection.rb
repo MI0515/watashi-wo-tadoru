@@ -4,6 +4,7 @@ class Reflection < ApplicationRecord
   has_many :reflection_emotions, dependent: :destroy
   has_many :emotions, through: :reflection_emotions
   has_many :reflection_messages, dependent: :destroy
+  has_many :api_usage_logs, dependent: :nullify
 
   # フォーム表示時点で、再送時にも同じ値を使える送信IDを用意する
   attribute :submission_token, default: -> { SecureRandom.uuid }
