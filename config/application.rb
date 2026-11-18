@@ -26,6 +26,9 @@ module Myapp
     # 画面やエラーメッセージの標準言語を日本語にする
     config.i18n.default_locale = :ja
 
+    # 画面の日時表示と日付の区切りを日本時間に揃える
+    config.time_zone = "Tokyo"
+
     # 項目名を付けないエラー文を、項目別の翻訳設定で指定できるようにする
     config.active_model.i18n_customize_full_message = true
 

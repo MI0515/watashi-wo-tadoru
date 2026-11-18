@@ -219,7 +219,7 @@
 #watashi-dialogue-response-states[data-screen="chat"] .chat-panel {
   display: flex;
   flex-direction: column;
-  height: 512px;
+  height: max(600px, calc(100svh - 160px));
 }
 
 #watashi-dialogue-response-states[data-screen="chat"] .thread {
@@ -345,7 +345,7 @@
 
 @media (max-width: 600px) {
   #watashi-dialogue-response-states[data-screen="chat"] .chat-panel {
-    height: 550px;
+    height: max(620px, calc(100svh - 370px));
   }
 }
 
