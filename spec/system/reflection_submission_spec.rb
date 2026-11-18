@@ -134,6 +134,21 @@ RSpec.describe "AIへの送信と待機表示", type: :system do
   end
 
   def with_pending_reply
+    # HTMLの表示だけでなく、送信処理のJavaScriptが接続されるまで待つ
+    page.document.synchronize(10) do
+      ready = page.evaluate_script(<<~JS)
+        Boolean(
+          window.Turbo && window.Stimulus &&
+          window.Stimulus.getControllerForElementAndIdentifier(
+            document.querySelector('[data-controller~="ai-submission"]'),
+            "ai-submission"
+          )
+        )
+      JS
+
+      raise Capybara::ElementNotFound, "送信処理のJavaScriptが未接続です" unless ready
+    end
+
     gate = Queue.new
 
     # 実行速度に左右されず、待機中の表示を確認してから応答を返す
