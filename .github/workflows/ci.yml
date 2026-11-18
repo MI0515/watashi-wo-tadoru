@@ -121,4 +121,10 @@ jobs:
         env:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
           CHROMEDRIVER_PATH: ${{ steps.chrome.outputs.chromedriver-path }}
-        run: bundle exec rspec
+        run: |
+          bundle exec rspec --exclude-pattern 'spec/system/**/*_spec.rb'
+          # system specのファイル間でブラウザやRubyプロセスの状態を共有しない
+          shopt -s globstar nullglob
+          for spec_file in spec/system/**/*_spec.rb; do
+            bundle exec rspec "$spec_file"
+          done
