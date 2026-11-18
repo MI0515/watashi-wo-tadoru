@@ -38,8 +38,15 @@ RSpec.describe "AIへの送信と待機表示", type: :system do
   it "追加送信中は入力を保持して待機案内を出し、返信後に入力欄へ戻る" do
     create(:reflection_message, reflection: reflection, position: 1)
     visit reflection_path(reflection)
-    find("#reflection-reply").click
-    fill_in "ミツメイトへの返答", with: "相談してほしかった"
+    expect(page).to have_css("#reflection-reply:not([readonly]):enabled")
+
+    # このテストは送信後の待機表示を対象とし、入力内容は事前に用意する
+    page.execute_script(<<~JS, find("#reflection-reply"), "相談してほしかった")
+      const field = arguments[0]
+      field.value = arguments[1]
+      field.dispatchEvent(new Event("input", { bubbles: true }))
+      field.dispatchEvent(new Event("change", { bubbles: true }))
+    JS
     expect(page).to have_field("ミツメイトへの返答", with: "相談してほしかった")
 
     with_pending_reply do |finish_reply|
@@ -63,6 +70,8 @@ RSpec.describe "AIへの送信と待機表示", type: :system do
 
       expect(reflection.reload).to be_ai_response_idle
       expect(reflection.reflection_messages.where(role: :user).count).to eq(1)
+      expect(reflection.reflection_messages.find_by!(role: :user).content)
+        .to eq("相談してほしかった")
       expect(ai_client).to have_received(:call).once
     end
   end
