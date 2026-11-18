@@ -22,6 +22,8 @@ RSpec.describe "AI返信の再試行", type: :request do
   let(:ai_response) do
     instance_double(
       OpenAI::Models::Responses::Response,
+      id: "response-test-request",
+      usage: nil,
       output_text: "再試行で生成したAIの返答"
     )
   end

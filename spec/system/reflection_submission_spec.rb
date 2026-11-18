@@ -18,6 +18,8 @@ RSpec.describe "AIへの送信と待機表示", type: :system do
   let(:ai_response) do
     instance_double(
       OpenAI::Models::Responses::Response,
+      id: "response-test-request",
+      usage: nil,
       output_text: "待機後のAIの返答"
     )
   end

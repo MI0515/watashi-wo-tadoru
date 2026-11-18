@@ -4,14 +4,25 @@ class ReflectionDialogue
     @client = client || OpenaiClient.new
   end
 
-  def call(final_reply: false)
+  def call(final_reply: false, retrying: false)
     # 設定変更後も、この振り返りを始めたミツメイトの話し方を使う
     instructions = ReflectionPrompt.call(
       speaking_style: @reflection.companion.speaking_style,
       final_reply: final_reply
     )
 
-    @client.call(instructions: instructions, input: build_input)
+    input = build_input
+
+    recorder = ApiUsageRecorder.new(
+      reflection: @reflection,
+      request_kind: :dialogue,
+      initial_reply: input.size == 1,
+      retrying: retrying
+    )
+
+    recorder.call do
+      @client.call(instructions: instructions, input: input)
+    end
   end
 
   private

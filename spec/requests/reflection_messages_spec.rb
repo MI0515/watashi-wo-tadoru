@@ -22,6 +22,8 @@ RSpec.describe "対話メッセージの送信", type: :request do
   let(:ai_response) do
     instance_double(
       OpenAI::Models::Responses::Response,
+      id: "response-test-request",
+      usage: nil,
       output_text: "次のAIの返答"
     )
   end
@@ -220,7 +222,7 @@ RSpec.describe "対話メッセージの送信", type: :request do
         else
           OpenaiClient::ResponseError.new(
             "テスト用の応答エラー",
-            response: nil
+            response: ai_response
           )
         end
 

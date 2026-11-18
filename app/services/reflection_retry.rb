@@ -38,7 +38,7 @@ class ReflectionRetry
 
     # 保存済みの会話を使い、利用者の発言は追加しない
     dialogue = @dialogue || ReflectionDialogue.new(reflection: @reflection)
-    response = dialogue.call(final_reply: final_reply)
+    response = dialogue.call(final_reply: final_reply, retrying: true)
 
     @reflection.with_lock do
       reply = @reflection.reflection_messages.create!(
