@@ -29,4 +29,9 @@ RSpec.configure do |config|
   config.before(:each, type: :system) do
     driven_by :headless_chromium
   end
+
+  # 画面テスト間でブラウザの内部状態を引き継がない
+  config.after(:each, type: :system) do
+    Capybara.current_session.driver.quit
+  end
 end
