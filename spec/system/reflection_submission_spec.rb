@@ -40,15 +40,16 @@ RSpec.describe "AIへの送信と待機表示", type: :system do
     visit reflection_path(reflection)
 
     with_pending_reply do |finish_reply|
-      # JavaScriptの接続後に入力し、入力結果を確認してから送信する
-      fill_in "ミツメイトへの返答",
-              with: "相談してほしかった",
-              fill_options: { clear: :backspace }
+      with_reply_input_probe do
+        fill_in "ミツメイトへの返答",
+                with: "相談してほしかった",
+                fill_options: { clear: :backspace }
 
-      expect(page).to have_field(
-        "ミツメイトへの返答",
-        with: "相談してほしかった"
-      )
+        expect(page).to have_field(
+          "ミツメイトへの返答",
+          with: "相談してほしかった"
+        )
+      end
 
       click_button "送信"
 
@@ -140,6 +141,81 @@ RSpec.describe "AIへの送信と待機表示", type: :system do
       expect(reflection.reflection_messages.count).to eq(3)
       expect(ai_client).to have_received(:call).once
     end
+  end
+
+  # CIで入力が反映されない原因を調べるための一時的な観測
+  def with_reply_input_probe
+    page.execute_script(<<~JS)
+      const original = document.querySelector("#reflection-reply")
+      const events = []
+      const startedAt = performance.now()
+      const listeners = new AbortController()
+      const record = (type, event = null) => {
+        const current = document.querySelector("#reflection-reply")
+        events.push({
+          ms: Math.round(performance.now() - startedAt),
+          type,
+          value: current?.value ?? null,
+          sameElement: current === original,
+          focused: document.activeElement === current,
+          readOnly: current?.readOnly ?? null,
+          disabled: current?.disabled ?? null,
+          key: event?.key ?? null,
+          inputType: event?.inputType ?? null
+        })
+      }
+      const probe = { original, events, record }
+      window.__replyInputProbe = probe
+      const types = ["focus", "blur", "keydown", "keyup", "beforeinput",
+                     "input", "change", "compositionstart", "compositionend"]
+      types.forEach((type) => {
+        document.addEventListener(type, (event) => {
+          if (event.target.id === "reflection-reply") record(type, event)
+        }, { capture: true, signal: listeners.signal })
+      })
+      document.addEventListener("reset", (event) => {
+        if (event.target === original?.form) record("form reset")
+      }, { capture: true, signal: listeners.signal })
+      let previous = original
+      const observer = new MutationObserver(() => {
+        const current = document.querySelector("#reflection-reply")
+        if (current !== previous) {
+          record("element changed")
+          previous = current
+        }
+      })
+      observer.observe(document.body, { childList: true, subtree: true })
+      probe.stop = () => { observer.disconnect(); listeners.abort() }
+      record("before fill")
+    JS
+
+    yield
+  ensure
+    log_reply_input_probe
+  end
+
+  def log_reply_input_probe
+    snapshot = page.evaluate_script(<<~JS)
+      (() => {
+        const probe = window.__replyInputProbe
+        if (!probe) return { probeMissing: true }
+        probe.record("after fill check")
+        const current = document.querySelector("#reflection-reply")
+        const result = {
+          sameElement: current === probe.original,
+          originalConnected: probe.original?.isConnected ?? false,
+          currentValue: current?.value ?? null,
+          events: probe.events
+        }
+        probe.stop()
+        delete window.__replyInputProbe
+        return result
+      })()
+    JS
+
+    warn "REPLY_INPUT_PROBE=#{snapshot.to_json}"
+  rescue StandardError => error
+    warn "REPLY_INPUT_PROBE_ERROR=#{error.class.name}"
   end
 
   def with_pending_reply
