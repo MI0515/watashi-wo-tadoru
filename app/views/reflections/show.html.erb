@@ -1,6 +1,9 @@
 <% content_for :title, "振り返り | わたしを辿る" %>
 
-<div id="watashi-dialogue-response-states" data-screen="chat">
+<div id="watashi-dialogue-response-states"
+     data-screen="chat"
+     data-controller="ai-submission"
+     data-action="turbo:before-cache@document->ai-submission#reset">
   <header class="header wtc-header">
     <%= link_to "わたしを辿る", home_path, class: "brand" %>
     <%= button_to "ログアウト", destroy_user_session_path,
@@ -61,7 +64,13 @@
                           method: :post,
                           params: { last_message_id: @messages.last&.id },
                           class: "primary",
-                          form: { class: "retry-form" } %>
+                          data: { turbo_submits_with: "再試行中…" },
+                          form: {
+                            class: "retry-form",
+                            data: {
+                              action: "turbo:submit-start->ai-submission#start turbo:submit-end->ai-submission#finish"
+                            }
+                          } %>
           </div>
         <% elsif @messages.last&.assistant? %>
           <%= render "devise/shared/error_messages",
@@ -70,7 +79,10 @@
 
           <%= form_with model: @reply,
                         url: reflection_messages_path(@reflection),
-                        class: "composer" do |form| %>
+                        class: "composer",
+                        data: {
+                          action: "turbo:submit-start->ai-submission#start turbo:submit-end->ai-submission#finish"
+                        } do |form| %>
             <%= hidden_field_tag "reflection_message[reply_to_id]", @messages.last&.id %>
             <div>
               <%= form.label :content, "ミツメイトへの返答",
@@ -81,13 +93,21 @@
                                  maxlength: 400,
                                  required: true,
                                  placeholder: "うまくまとまっていなくても大丈夫",
-                                 aria: { describedby: "reply-help" } %>
+                                 aria: { describedby: "reply-help" },
+                                 data: { ai_submission_target: "input" } %>
               <p id="reply-help" class="enter-note">Enterで改行。送信はボタンから。（400文字まで）</p>
             </div>
-            <%= form.submit "送信", class: "primary" %>
+            <%= form.submit "送信",
+                            class: "primary",
+                            data: { turbo_submits_with: "送信中…" } %>
           <% end %>
         <% end %>
       <% end %>
+
+      <p class="submission-status"
+         role="status"
+         data-ai-submission-target="status"
+         hidden></p>
 
       <div class="actions">
         <%= link_to "ホームへ戻る", home_path, class: "secondary" %>

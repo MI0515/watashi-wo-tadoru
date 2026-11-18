@@ -1,6 +1,9 @@
 <% content_for :title, "振り返りを始める | わたしを辿る" %>
 
-<div id="watashi-dialogue-response-states" data-screen="entry">
+<div id="watashi-dialogue-response-states"
+     data-screen="entry"
+     data-controller="ai-submission"
+     data-action="turbo:before-cache@document->ai-submission#reset">
   <header class="header wtc-header">
     <%= link_to "わたしを辿る", home_path, class: "brand" %>
     <%= button_to "ログアウト", destroy_user_session_path,
@@ -23,7 +26,10 @@
                  resource: @reflection,
                  heading: "入力内容を確認してください。" %>
 
-      <%= form_with model: @reflection do |form| %>
+      <%= form_with model: @reflection,
+                    data: {
+                      action: "turbo:submit-start->ai-submission#start turbo:submit-end->ai-submission#finish"
+                    } do |form| %>
         <fieldset class="emotion-field">
           <legend>どんな気持ちがある？</legend>
           <p class="helper">複数選択可・選ばずに進んでも大丈夫です。</p>
@@ -45,7 +51,8 @@
                              rows: 4,
                              maxlength: 400,
                              required: true,
-                             aria: { describedby: "entry-input-help entry-ai-note" } %>
+                             aria: { describedby: "entry-input-help entry-ai-note" },
+                             data: { ai_submission_target: "input" } %>
           <p id="entry-input-help" class="helper">
             うまくまとまっていなくても大丈夫。
             「何も浮かばない」「何も感じない」でも、そのまま書いてね。（400文字まで）
@@ -56,6 +63,11 @@
           入力内容や選んだ感情は、対話・まとめ生成のために外部のAIサービス（OpenAI）へ送信されます。
           氏名・住所・連絡先など、個人を特定できる情報は入力しないでください。
         </p>
+
+        <p class="submission-status"
+           role="status"
+           data-ai-submission-target="status"
+           hidden></p>
 
         <div class="actions">
           <%= link_to "ホームへ戻る", home_path, class: "secondary" %>

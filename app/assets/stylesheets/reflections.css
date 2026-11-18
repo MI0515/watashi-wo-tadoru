@@ -320,7 +320,7 @@
   font-size: 14px;
 }
 
-#watashi-dialogue-response-states[data-screen="chat"] :is(button, textarea):disabled {
+#watashi-dialogue-response-states[data-screen="chat"] :is(button, input[type="submit"], textarea):disabled {
   opacity: .65;
   cursor: not-allowed;
 }
@@ -387,4 +387,16 @@
   text-align: center;
   text-decoration: none;
   cursor: pointer;
+}
+
+#watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"]) .submission-status {
+  flex-shrink: 0;
+  margin: 12px 0;
+  padding: 10px 14px;
+  border: 1px solid rgba(47, 54, 82, .22);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .85);
+  color: var(--wt-sub);
+  font-size: 14px;
+  line-height: 1.7;
 }
