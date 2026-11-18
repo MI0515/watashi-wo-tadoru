@@ -1,6 +1,9 @@
 <% content_for :title, "振り返り | わたしを辿る" %>
 
-<div id="watashi-dialogue-response-states" data-screen="chat">
+<div id="watashi-dialogue-response-states"
+     data-screen="chat"
+     data-controller="ai-submission"
+     data-action="turbo:before-cache@document->ai-submission#reset">
   <header class="header wtc-header">
     <%= link_to "わたしを辿る", home_path, class: "brand" %>
     <%= button_to "ログアウト", destroy_user_session_path,
@@ -45,27 +48,66 @@
         <% end %>
       </div>
 
-      <%= render "devise/shared/error_messages",
-                 resource: @reply,
-                 heading: "入力内容を確認してください。" %>
+      <% if @reflection.in_progress? %>
+        <% if @reflection.ai_response_processing? %>
+          <div class="response-state" role="status">
+            <p>ミツメイトが返答を考えています。</p>
+            <%= link_to "状態を確認する",
+                        reflection_path(@reflection),
+                        class: "secondary" %>
+          </div>
+        <% elsif @reflection.ai_response_failed? %>
+          <div class="response-state" role="alert">
+            <p>返答を取得できませんでした。入力内容は会話に保存されています。</p>
+            <%= button_to "もう一度返答を受け取る",
+                          reflection_retry_path(@reflection),
+                          method: :post,
+                          params: { last_message_id: @messages.last&.id },
+                          class: "primary",
+                          data: { turbo_submits_with: "再試行中…" },
+                          form: {
+                            class: "retry-form",
+                            data: {
+                              action: "turbo:submit-start->ai-submission#start turbo:submit-end->ai-submission#finish"
+                            }
+                          } %>
+          </div>
+        <% elsif @messages.last&.assistant? %>
+          <%= render "devise/shared/error_messages",
+                     resource: @reply,
+                     heading: "入力内容を確認してください。" %>
 
-      <%= form_with model: @reply,
-                    url: reflection_messages_path(@reflection),
-                    class: "composer" do |form| %>
-        <div>
-          <%= form.label :content, "ミツメイトへの返答",
-                         for: "reflection-reply", class: "sr-only" %>
-          <%= form.text_area :content,
-                             id: "reflection-reply",
-                             rows: 2,
-                             maxlength: 400,
-                             required: true,
-                             placeholder: "うまくまとまっていなくても大丈夫",
-                             aria: { describedby: "reply-help" } %>
-          <p id="reply-help" class="enter-note">Enterで改行。送信はボタンから。（400文字まで）</p>
-        </div>
-        <%= form.submit "送信", class: "primary" %>
+          <%= form_with model: @reply,
+                        url: reflection_messages_path(@reflection),
+                        class: "composer",
+                        data: {
+                          action: "turbo:submit-start->ai-submission#start turbo:submit-end->ai-submission#finish"
+                        } do |form| %>
+            <%= hidden_field_tag "reflection_message[reply_to_id]", @messages.last&.id %>
+            <div>
+              <%= form.label :content, "ミツメイトへの返答",
+                             for: "reflection-reply", class: "sr-only" %>
+              <%= form.text_area :content,
+                                 id: "reflection-reply",
+                                 rows: 2,
+                                 maxlength: 400,
+                                 required: true,
+                                 placeholder: "うまくまとまっていなくても大丈夫",
+                                 aria: { describedby: "reply-help" },
+                                 data: { ai_submission_target: "input" } %>
+              <p id="reply-help" class="enter-note">Enterで改行。送信はボタンから。（400文字まで）</p>
+            </div>
+            <%= form.submit "送信",
+                            class: "primary",
+                            data: { turbo_submits_with: "送信中…" } %>
+          <% end %>
+        <% end %>
       <% end %>
+
+      <p class="submission-status"
+         role="status"
+         data-ai-submission-target="status"
+         hidden></p>
 
       <div class="actions">
         <%= link_to "ホームへ戻る", home_path, class: "secondary" %>
