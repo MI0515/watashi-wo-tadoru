@@ -9,18 +9,31 @@ class ReflectionsController < ApplicationController
 
   def create
     attributes = reflection_params
+    created = false
 
-    # 本人と開始時のミツメイトは、送信されたIDではなくログイン情報から決める
-    @reflection = current_user.reflections.build(
-      initial_text: attributes[:initial_text],
-      companion: @companion
-    )
+    # 同じ利用者からの同時送信で、確認と作成がすれ違わないようにする
+    current_user.with_lock do
+      @reflection = current_user.reflections.find_by(
+        submission_token: attributes[:submission_token]
+      )
 
-    selected_ids = Array(attributes[:emotion_ids]).reject(&:blank?)
-    @reflection.emotions = Emotion.find(selected_ids).uniq
+      unless @reflection
+        # 本人とミツメイトは、送信されたIDではなくログイン情報から決める
+        @reflection = current_user.reflections.build(
+          initial_text: attributes[:initial_text],
+          submission_token: attributes[:submission_token],
+          companion: @companion
+        )
 
-    if @reflection.save
-      ReflectionInitialReply.new(reflection: @reflection).call
+        selected_ids = Array(attributes[:emotion_ids]).reject(&:blank?)
+        @reflection.emotions = Emotion.find(selected_ids).uniq
+        created = @reflection.save
+      end
+    end
+
+    if @reflection.persisted?
+      # 再送時は既存の会話へ戻し、自動でAIを再呼び出ししない
+      ReflectionInitialReply.new(reflection: @reflection).call if created
 
       redirect_to reflection_path(@reflection), status: :see_other
     else
@@ -56,6 +69,10 @@ class ReflectionsController < ApplicationController
   end
 
   def reflection_params
-    params.require(:reflection).permit(:initial_text, emotion_ids: [])
+    params.require(:reflection).permit(
+      :initial_text,
+      :submission_token,
+      emotion_ids: []
+    )
   end
 end

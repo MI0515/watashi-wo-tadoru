@@ -30,6 +30,8 @@
                     data: {
                       action: "turbo:submit-start->ai-submission#start turbo:submit-end->ai-submission#finish"
                     } do |form| %>
+        <%= form.hidden_field :submission_token %>
+
         <fieldset class="emotion-field">
           <legend>どんな気持ちがある？</legend>
           <p class="helper">複数選択可・選ばずに進んでも大丈夫です。</p>

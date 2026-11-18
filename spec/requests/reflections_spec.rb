@@ -12,6 +12,7 @@ RSpec.describe "振り返りの開始", type: :request do
   end
 
   let(:ai_client) { instance_double(OpenaiClient) }
+  let(:submission_token) { SecureRandom.uuid }
   let(:ai_response) do
     instance_double(
       OpenAI::Models::Responses::Response,
@@ -53,7 +54,7 @@ RSpec.describe "振り返りの開始", type: :request do
 
     expect {
       post reflections_path, params: {
-        reflection: {
+        reflection: { submission_token: submission_token,
           initial_text: initial_text,
           emotion_ids: emotions.map(&:id)
         }
@@ -79,7 +80,7 @@ RSpec.describe "振り返りの開始", type: :request do
   it "感情未選択でも振り返りを開始できる" do
     expect {
       post reflections_path, params: {
-        reflection: {
+        reflection: { submission_token: submission_token,
           initial_text: "何も感じない",
           emotion_ids: [ "" ]
         }
@@ -97,7 +98,7 @@ RSpec.describe "振り返りの開始", type: :request do
 
     expect {
       post reflections_path, params: {
-        reflection: {
+        reflection: { submission_token: submission_token,
           initial_text: "   ",
           emotion_ids: [ emotion.id ]
         }
@@ -118,7 +119,7 @@ RSpec.describe "振り返りの開始", type: :request do
 
     expect {
       post reflections_path, params: {
-        reflection: {
+        reflection: { submission_token: submission_token,
           initial_text: initial_text,
           emotion_ids: [ emotion.id ]
         }
@@ -140,7 +141,7 @@ RSpec.describe "振り返りの開始", type: :request do
 
     expect {
       post reflections_path, params: {
-        reflection: {
+        reflection: { submission_token: submission_token,
           initial_text: "少し気になっている。",
           emotion_ids: [ emotion.id, missing_id ]
         }
@@ -159,7 +160,7 @@ RSpec.describe "振り返りの開始", type: :request do
 
     expect {
       post reflections_path, params: {
-        reflection: { initial_text: "少し話したい。" }
+        reflection: { submission_token: submission_token, initial_text: "少し話したい。" }
       }
     }.not_to change(Reflection, :count)
     expect(response).to redirect_to(new_user_session_path)
@@ -193,7 +194,7 @@ RSpec.describe "振り返りの開始", type: :request do
 
     expect {
       post reflections_path, params: {
-        reflection: { initial_text: "少し話したい。" }
+        reflection: { submission_token: submission_token, initial_text: "少し話したい。" }
       }
     }.not_to change(Reflection, :count)
     expect(response).to redirect_to(edit_onboarding_companion_path)
@@ -208,7 +209,7 @@ RSpec.describe "振り返りの開始", type: :request do
     )
 
     post reflections_path, params: {
-      reflection: {
+      reflection: { submission_token: submission_token,
         initial_text: "少し話したい。",
         user_id: other_user.id,
         companion_id: other_companion.id,
@@ -226,7 +227,7 @@ RSpec.describe "振り返りの開始", type: :request do
 
   it "ミツメイトを変更したあとも、開始時のミツメイトを表示する" do
     post reflections_path, params: {
-      reflection: { initial_text: "今日の気持ちを残したい。" }
+      reflection: { submission_token: submission_token, initial_text: "今日の気持ちを残したい。" }
     }
     reflection = user.reflections.last
 
@@ -251,7 +252,7 @@ RSpec.describe "振り返りの開始", type: :request do
 
     expect {
       post reflections_path, params: {
-        reflection: {
+        reflection: { submission_token: submission_token,
           initial_text: "少し気になっている。",
           emotion_ids: [ "", emotion.id.to_s, emotion.id.to_s ]
         }
@@ -324,7 +325,7 @@ RSpec.describe "振り返りの開始", type: :request do
 
     expect {
       post reflections_path, params: {
-        reflection: { initial_text: initial_text }
+        reflection: { submission_token: submission_token, initial_text: initial_text }
       }
     }.to change(ReflectionMessage, :count).by(1)
 
@@ -364,7 +365,7 @@ RSpec.describe "振り返りの開始", type: :request do
 
       expect {
         post reflections_path, params: {
-          reflection: {
+          reflection: { submission_token: submission_token,
             initial_text: "何が嫌だったのか分からない",
             emotion_ids: []
           }
@@ -390,5 +391,57 @@ RSpec.describe "振り返りの開始", type: :request do
         .to eq(reflection_retry_path(reflection))
       expect(response.parsed_body.at_css("#reflection-reply")).to be_nil
     end
+  end
+
+  it "同じ初回送信が届いても、振り返り・感情・AI返信を重複保存しない" do
+    emotion = create(:emotion)
+    sent_params = {
+      reflection: {
+        submission_token: submission_token,
+        initial_text: "何が嫌だったのか分からない",
+        emotion_ids: [ emotion.id ]
+      }
+    }
+    expect(ai_client).to receive(:call).once.and_return(ai_response)
+
+    post reflections_path, params: sent_params
+    original = user.reflections.sole
+
+    expect {
+      post reflections_path, params: sent_params
+    }.not_to change {
+      [ Reflection.count, ReflectionEmotion.count, ReflectionMessage.count ]
+    }
+
+    expect(response).to have_http_status(:see_other)
+    expect(response).to redirect_to(reflection_path(original))
+    expect(original.submission_token).to eq(submission_token)
+  end
+
+  it "初回返信の失敗後に元のフォームを再送しても、自動で再試行しない" do
+    sent_params = {
+      reflection: {
+        submission_token: submission_token,
+        initial_text: "何が嫌だったのか分からない",
+        emotion_ids: []
+      }
+    }
+    error = OpenAI::Errors::APITimeoutError.new(
+      url: URI("https://api.openai.com/v1/responses")
+    )
+    expect(ai_client).to receive(:call).once.and_raise(error)
+
+    post reflections_path, params: sent_params
+    original = user.reflections.sole
+
+    expect {
+      post reflections_path, params: sent_params
+    }.not_to change {
+      [ Reflection.count, ReflectionMessage.count ]
+    }
+
+    expect(response).to have_http_status(:see_other)
+    expect(response).to redirect_to(reflection_path(original))
+    expect(original.reload).to be_ai_response_failed
   end
 end
