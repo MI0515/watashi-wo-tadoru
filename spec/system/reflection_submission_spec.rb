@@ -38,9 +38,18 @@ RSpec.describe "AIへの送信と待機表示", type: :system do
   it "追加送信中は入力を保持して待機案内を出し、返信後に入力欄へ戻る" do
     create(:reflection_message, reflection: reflection, position: 1)
     visit reflection_path(reflection)
-    fill_in "ミツメイトへの返答", with: "相談してほしかった"
 
     with_pending_reply do |finish_reply|
+      # JavaScriptの接続後に入力し、入力結果を確認してから送信する
+      fill_in "ミツメイトへの返答",
+              with: "相談してほしかった",
+              fill_options: { clear: :backspace }
+
+      expect(page).to have_field(
+        "ミツメイトへの返答",
+        with: "相談してほしかった"
+      )
+
       click_button "送信"
 
       expect(page).to have_button("送信中…", disabled: true)
