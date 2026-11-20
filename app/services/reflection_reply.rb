@@ -2,6 +2,9 @@ class ReflectionReply
   class NotReadyError < StandardError
   end
 
+  class LimitReachedError < NotReadyError
+  end
+
   class InProgressError < NotReadyError
   end
 
@@ -10,9 +13,10 @@ class ReflectionReply
     @dialogue = dialogue
   end
 
-  def call(content:, reply_to_id:, final_reply: false)
+  def call(content:, reply_to_id:)
     generation_started = false
     user_message = nil
+    final_reply = false
 
     # 発言の保存と生成開始をまとめ、同時に追加送信を受け付けないようにする
     @reflection.with_lock do
@@ -31,11 +35,17 @@ class ReflectionReply
         raise NotReadyError, "表示中の会話が更新されています。"
       end
 
+      if @reflection.additional_reply_limit_reached?
+        raise LimitReachedError, "今回の対話は終了しました。ここまでの気持ちをまとめましょう。"
+      end
+
       user_message = @reflection.reflection_messages.create!(
         role: :user,
         content: content,
         position: last_message.position + 1
       )
+
+      final_reply = @reflection.additional_reply_limit_reached?
 
       @reflection.update!(
         ai_response_status: :processing,

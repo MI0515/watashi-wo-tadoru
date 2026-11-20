@@ -120,14 +120,22 @@ RSpec.describe ReflectionReply do
     expect(reflection.ai_response_started_at).not_to be_nil
   end
 
-  it "最終返信の指定を対話サービスへ渡す" do
-    create(:reflection_message, reflection: reflection, position: 1)
+  it "3回目の追加返信では最終返信を指定する" do
+    %w[assistant user assistant user assistant].each_with_index do |role, index|
+      create(
+        :reflection_message,
+        reflection: reflection,
+        role: role,
+        position: index + 1
+      )
+    end
+    last_message = reflection.reflection_messages.order(:position).last
 
     expect(dialogue).to receive(:call)
       .with(final_reply: true)
       .and_return(response)
 
-    service.call(reply_to_id: reply_to_id, content: "少し整理できた", final_reply: true)
+    service.call(reply_to_id: last_message.id, content: "少し整理できた")
   end
 
   it "生成中の追加送信を拒否し、発言とAPI呼び出しを重複させない" do
@@ -192,6 +200,25 @@ RSpec.describe ReflectionReply do
       expect {
         service.call(content: "少し話したい", reply_to_id: nil)
       }.to raise_error(described_class::NotReadyError)
+    }.not_to change(ReflectionMessage, :count)
+  end
+
+  it "4回目の追加返信は保存もAPI送信もしない" do
+    %w[assistant user assistant user assistant user assistant].each_with_index do |role, index|
+      create(
+        :reflection_message,
+        reflection: reflection,
+        role: role,
+        position: index + 1
+      )
+    end
+    last_message = reflection.reflection_messages.order(:position).last
+    expect(dialogue).not_to receive(:call)
+
+    expect {
+      expect {
+        service.call(reply_to_id: last_message.id, content: "もうひとこと")
+      }.to raise_error(described_class::LimitReachedError)
     }.not_to change(ReflectionMessage, :count)
   end
 end
