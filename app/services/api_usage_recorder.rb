@@ -7,12 +7,7 @@ class ApiUsageRecorder
   end
 
   def call
-    log = @reflection.api_usage_logs.create!(
-      user: @reflection.user,
-      request_kind: @request_kind,
-      initial_reply: @initial_reply,
-      retry: @retrying
-    )
+    log = reserve_request
 
     begin
       response = yield
@@ -33,6 +28,24 @@ class ApiUsageRecorder
   end
 
   private
+
+  def reserve_request
+    user = @reflection.user
+
+    # 上限確認と枠の確保を直列化し、別の振り返りの同時開始でも超過させない
+    user.with_lock do
+      policy = AiUsagePolicy.new(user: user)
+      policy.ensure_enabled!
+      policy.ensure_start_available! if @initial_reply
+
+      @reflection.api_usage_logs.create!(
+        user: user,
+        request_kind: @request_kind,
+        initial_reply: @initial_reply,
+        retry: @retrying
+      )
+    end
+  end
 
   def save_response(log, response, status)
     log.update!(
