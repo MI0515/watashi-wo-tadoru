@@ -144,4 +144,64 @@ RSpec.describe ApiUsageRecorder do
     expect(log.input_tokens).to be_nil
     expect(log.output_tokens).to be_nil
   end
+
+  it "開始上限に達していれば通信も履歴作成もしない" do
+    create_list(:api_usage_log, 3, user: reflection.user, reflection: reflection)
+
+    expect {
+      expect {
+        service.call { raise "通信処理が呼ばれています" }
+      }.to raise_error(AiUsagePolicy::LimitError, /翌日0時/)
+    }.not_to change(ApiUsageLog, :count)
+  end
+
+  it "初回返信の生成中は残りの枠を確保し、別の開始を拒否する" do
+    create_list(:api_usage_log, 2, user: reflection.user, reflection: reflection)
+    other_reflection = create(
+      :reflection,
+      user: reflection.user,
+      companion: reflection.companion
+    )
+    other_service = described_class.new(
+      reflection: other_reflection,
+      request_kind: :dialogue,
+      initial_reply: true
+    )
+
+    service.call do
+      expect {
+        expect {
+          other_service.call { raise "通信処理が呼ばれています" }
+        }.to raise_error(AiUsagePolicy::LimitError, /生成中/)
+      }.not_to change(ApiUsageLog, :count)
+
+      response
+    end
+
+    expect(reflection.user.api_usage_logs.status_succeeded.count).to eq(3)
+  end
+
+  it "開始上限に達しても追加返信は利用できる" do
+    create_list(:api_usage_log, 3, user: reflection.user, reflection: reflection)
+    additional_service = described_class.new(
+      reflection: reflection,
+      request_kind: :dialogue,
+      initial_reply: false
+    )
+
+    expect {
+      additional_service.call { response }
+    }.to change(ApiUsageLog, :count).by(1)
+  end
+
+  it "全体停止中は通信も履歴作成もしない" do
+    allow(ENV).to receive(:fetch).and_call_original
+    allow(ENV).to receive(:fetch).with("AI_ENABLED", "true").and_return("false")
+
+    expect {
+      expect {
+        service.call { raise "通信処理が呼ばれています" }
+      }.to raise_error(AiUsagePolicy::StoppedError)
+    }.not_to change(ApiUsageLog, :count)
+  end
 end

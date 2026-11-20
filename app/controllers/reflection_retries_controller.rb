@@ -17,6 +17,10 @@ class ReflectionRetriesController < ApplicationController
     redirect_to reflection_path(@reflection),
                 alert: "今は再試行できません。現在の会話を確認してください。",
                 status: :see_other
+  rescue AiUsagePolicy::StoppedError, AiUsagePolicy::LimitError => error
+    redirect_to reflection_path(@reflection),
+                alert: error.message,
+                status: :see_other
   rescue OpenAI::Errors::APITimeoutError
     redirect_to reflection_path(@reflection),
                 alert: "返答の生成に時間がかかり、再試行を完了できませんでした。",

@@ -39,6 +39,11 @@ class ReflectionsController < ApplicationController
     else
       render :new, status: :unprocessable_content
     end
+
+  rescue AiUsagePolicy::StoppedError, AiUsagePolicy::LimitError => error
+    redirect_to reflection_path(@reflection),
+                alert: error.message,
+                status: :see_other
   rescue OpenAI::Errors::APITimeoutError
     redirect_to reflection_path(@reflection),
                 alert: "返答の生成に時間がかかり、完了できませんでした。入力内容は保存されています。",

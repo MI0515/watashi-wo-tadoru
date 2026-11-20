@@ -54,6 +54,22 @@ RSpec.describe AiUsagePolicy do
     expect(policy.start_limit_reached?).to be true
   end
 
+  it "AIが有効なら利用を拒否しない" do
+    allow(ENV).to receive(:fetch).and_call_original
+    allow(ENV).to receive(:fetch).with("AI_ENABLED", "true").and_return("true")
+
+    expect { policy.ensure_enabled! }.not_to raise_error
+  end
+
+  it "AIが停止中なら停止理由を返す" do
+    allow(ENV).to receive(:fetch).and_call_original
+    allow(ENV).to receive(:fetch).with("AI_ENABLED", "true").and_return("false")
+
+    expect {
+      policy.ensure_enabled!
+    }.to raise_error(AiUsagePolicy::StoppedError, /一時停止/)
+  end
+
   def record_usage(**attributes)
     create(
       :api_usage_log,
