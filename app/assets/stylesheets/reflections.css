@@ -1,4 +1,4 @@
-#watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"]) {
+#watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"], [data-screen="summary"]) {
   --wt-scene-height: 56.28vw;
   position: relative;
   isolation: isolate;
@@ -11,7 +11,7 @@
   background-repeat: no-repeat;
 }
 
-#watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"]) .stage {
+#watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"], [data-screen="summary"]) .stage {
   display: grid;
   grid-template-columns: minmax(0, 37fr) minmax(0, 63fr);
   align-items: center;
@@ -24,14 +24,14 @@
   padding: 20px 22px 18px 0;
 }
 
-#watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"]) .character {
+#watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"], [data-screen="summary"]) .character {
   position: relative;
   min-width: 0;
   min-height: 512px;
   overflow: hidden;
 }
 
-#watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"]) .full-mate {
+#watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"], [data-screen="summary"]) .full-mate {
   position: absolute;
   top: 5px;
   left: 50%;
@@ -44,47 +44,47 @@
   filter: drop-shadow(0 12px 20px rgba(43, 32, 50, .22));
 }
 
-#watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"]) :is(.entry-panel, .chat-panel) {
+#watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"], [data-screen="summary"]) :is(.entry-panel, .chat-panel, .summary-panel) {
   min-width: 0;
   padding: 28px;
   border-radius: 22px;
   overflow-wrap: anywhere;
 }
 
-#watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"]) h1 {
+#watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"], [data-screen="summary"]) h1 {
   margin: 0 0 12px;
   font-size: 25px;
   line-height: 1.5;
 }
 
 @media (max-width: 600px) {
-  #watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"]) {
+  #watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"], [data-screen="summary"]) {
     --wt-scene-height: max(440px, 56.28vw);
     background-size: auto var(--wt-scene-height) !important;
   }
 
-  #watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"]) .stage {
+  #watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"], [data-screen="summary"]) .stage {
     grid-template-columns: minmax(0, 1fr);
     min-height: 0;
     padding: 12px;
   }
 
-  #watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"]) .character {
+  #watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"], [data-screen="summary"]) .character {
     height: 220px;
     min-height: 0;
   }
 
-  #watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"]) .full-mate {
+  #watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"], [data-screen="summary"]) .full-mate {
     top: 0;
     width: 360px;
     height: 540px;
   }
 
-  #watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"]) :is(.entry-panel, .chat-panel) {
+  #watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"], [data-screen="summary"]) :is(.entry-panel, .chat-panel, .summary-panel) {
     padding: 20px;
   }
 
-  #watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"]) h1 {
+  #watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"], [data-screen="summary"]) h1 {
     font-size: 21px;
   }
 }
@@ -389,7 +389,7 @@
   cursor: pointer;
 }
 
-#watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"]) .submission-status {
+#watashi-dialogue-response-states:is([data-screen="entry"], [data-screen="chat"], [data-screen="summary"]) .submission-status {
   flex-shrink: 0;
   margin: 12px 0;
   padding: 10px 14px;
@@ -399,4 +399,133 @@
   color: var(--wt-sub);
   font-size: 14px;
   line-height: 1.7;
+}
+
+#watashi-dialogue-response-states[data-screen="summary"] .summary-fields {
+  margin-bottom: 20px;
+  padding: 18px;
+  border-radius: 12px;
+}
+
+#watashi-dialogue-response-states[data-screen="summary"] .summary-label {
+  margin: 18px 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+#watashi-dialogue-response-states[data-screen="summary"] .summary-fields .summary-label:first-child {
+  margin-top: 0;
+}
+
+#watashi-dialogue-response-states[data-screen="summary"] .summary-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+#watashi-dialogue-response-states[data-screen="summary"] .summary-content {
+  margin: 0;
+  white-space: pre-wrap;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+#watashi-dialogue-response-states[data-screen="summary"] .feeling-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#watashi-dialogue-response-states[data-screen="summary"] .feeling-tags li {
+  padding: 4px 12px;
+  border: 1px solid var(--wt-accent);
+  border-radius: 999px;
+  color: var(--wt-text);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+#watashi-dialogue-response-states[data-screen="summary"] .summary-save-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+#watashi-dialogue-response-states[data-screen="summary"] textarea {
+  display: block;
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  resize: vertical;
+  border: 1px solid;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+#watashi-dialogue-response-states[data-screen="summary"] .helper {
+  margin: 7px 0 18px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+#watashi-dialogue-response-states[data-screen="summary"] .actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+#watashi-dialogue-response-states[data-screen="summary"] :is(.primary, .secondary) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#watashi-dialogue-response-states[data-screen="summary"] :is(button, input[type="submit"]):disabled {
+  opacity: .65;
+  cursor: wait;
+}
+
+#watashi-dialogue-response-states[data-screen="summary"] .summary-state p {
+  margin: 0 0 16px;
+  line-height: 1.8;
+}
+
+#watashi-dialogue-response-states[data-screen="summary"] .summary-state form {
+  margin-bottom: 12px;
+}
+
+@media (max-width: 600px) {
+  #watashi-dialogue-response-states[data-screen="summary"] .summary-fields {
+    padding: 14px;
+  }
+
+  #watashi-dialogue-response-states[data-screen="summary"] .actions {
+    flex-direction: column;
+  }
+
+  #watashi-dialogue-response-states[data-screen="summary"] .actions .primary {
+    order: -1;
+  }
 }

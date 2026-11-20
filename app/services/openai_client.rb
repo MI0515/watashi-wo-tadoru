@@ -13,8 +13,8 @@ class OpenaiClient
     @client = client || OpenAI::Client.new(max_retries: 0, timeout: 60)
   end
 
-  def call(instructions:, input:)
-    response = @client.responses.create(
+  def call(instructions:, input:, text_format: nil)
+    parameters = {
       model: "gpt-6.1-sol",
       instructions: instructions,
       input: input,
@@ -22,7 +22,15 @@ class OpenaiClient
       max_output_tokens: 4096,
       service_tier: :default,
       store: false
-    )
+    }
+
+    if text_format
+      parameters[:text] = OpenAI::Models::Responses::ResponseTextConfig.new(
+        format_: text_format
+      )
+    end
+
+    response = @client.responses.create(**parameters)
 
     unless response.status.to_s == "completed"
       raise ResponseError.new(

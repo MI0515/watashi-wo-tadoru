@@ -1,0 +1,113 @@
+<% content_for :title, "今日の振り返り | わたしを辿る" %>
+
+<div id="watashi-dialogue-response-states" data-screen="summary">
+  <header class="header wtc-header">
+    <%= link_to "わたしを辿る", home_path, class: "brand" %>
+    <%= button_to "ログアウト", destroy_user_session_path,
+                  method: :delete, class: "wtc-link" %>
+  </header>
+
+  <div class="stage">
+    <div class="character">
+      <%= image_tag @companion.full_image_path,
+                    alt: "この振り返りのミツメイト", class: "full-mate" %>
+    </div>
+
+    <section class="panel summary-panel" aria-labelledby="summary-heading">
+      <h1 id="summary-heading">今日の振り返り</h1>
+
+      <% if @reflection.summary_available? %>
+        <div class="summary-fields">
+          <h2 class="summary-label">タイトル</h2>
+          <p class="summary-title"><%= @reflection.title %></p>
+
+          <h2 class="summary-label">最初の入力</h2>
+          <p class="summary-content"><%= @reflection.initial_text %></p>
+
+          <h2 class="summary-label">選択感情</h2>
+          <% emotions = @reflection.emotions.order(:display_order) %>
+          <% if emotions.any? %>
+            <ul class="feeling-tags" aria-label="最初に選んだ感情">
+              <% emotions.each do |emotion| %>
+                <li><%= emotion.name %></li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="muted">選択なし</p>
+          <% end %>
+
+          <h2 class="summary-label">今回見えてきたこと</h2>
+          <p class="summary-content"><%= @reflection.insight %></p>
+        </div>
+
+        <% if @reflection.in_progress? %>
+          <%= render "devise/shared/error_messages",
+                     resource: @reflection,
+                     heading: "入力内容を確認してください。" %>
+
+          <%= form_with model: @reflection,
+                        url: reflection_summary_path(@reflection),
+                        method: :patch,
+                        class: "summary-save-form" do |form| %>
+            <%= form.label :personal_note,
+                           "自分の言葉で残しておきたいこと（任意）",
+                           for: "reflection-personal-note" %>
+            <%= form.text_area :personal_note,
+                               id: "reflection-personal-note",
+                               rows: 3,
+                               maxlength: 400,
+                               aria: { describedby: "personal-note-help" },
+                               placeholder: "気づいたことや、まだしっくりこないことなど。" %>
+
+            <p id="personal-note-help" class="helper">
+              400文字まで書けます。空欄のままでも保存できるよ。
+            </p>
+
+            <div class="actions">
+              <%= link_to "対話に戻る", reflection_path(@reflection),
+                          class: "secondary" %>
+              <%= form.submit "保存してホームへ",
+                              class: "primary",
+                              data: { turbo_submits_with: "保存しています…" } %>
+            </div>
+          <% end %>
+        <% else %>
+          <% if @reflection.personal_note.present? %>
+            <h2 class="summary-label">自分の言葉で残しておきたいこと</h2>
+            <p class="summary-content"><%= @reflection.personal_note %></p>
+          <% end %>
+
+          <div class="actions">
+            <%= link_to "ホームへ戻る", home_path, class: "secondary" %>
+          </div>
+        <% end %>
+      <% elsif @reflection.ai_response_processing? %>
+        <div class="summary-state" role="status">
+          <p>ここまで話したことをまとめています。</p>
+          <%= link_to "状態を確認する",
+                      reflection_summary_path(@reflection),
+                      class: "secondary" %>
+        </div>
+      <% else %>
+        <div class="summary-state">
+          <% if @reflection.ai_response_failed? %>
+            <p>まとめを作れませんでした。対話の内容は保存されています。</p>
+          <% else %>
+            <p>ここまで話したことを、まとめてみる？</p>
+          <% end %>
+
+          <%= button_to(@reflection.ai_response_failed? ? "もう一度まとめる" : "まとめる",
+                        reflection_summary_path(@reflection),
+                        method: :post,
+                        class: "primary",
+                        data: { turbo_submits_with: "まとめています…" }) %>
+
+          <%= link_to "対話に戻る", reflection_path(@reflection),
+                      class: "secondary" %>
+        </div>
+      <% end %>
+    </section>
+  </div>
+
+  <%= render "shared/footer" %>
+</div>

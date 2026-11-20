@@ -152,4 +152,25 @@ RSpec.describe ReflectionRetry do
       }.to raise_error(described_class::NotReadyError)
     }.not_to change(ReflectionMessage, :count)
   end
+
+  it "3回目の追加返信への再試行でも最終返信を指定する" do
+    %w[assistant user assistant user assistant user].each_with_index do |role, index|
+      create(
+        :reflection_message,
+        reflection: reflection,
+        role: role,
+        position: index + 1
+      )
+    end
+    last_message = reflection.reflection_messages.order(:position).last
+
+    expect(dialogue).to receive(:call)
+      .with(final_reply: true, retrying: true)
+      .and_return(response)
+
+    service.call(last_message_id: last_message.id)
+
+    expect(reflection.reflection_messages.where(role: :user).count).to eq(3)
+    expect(reflection.reflection_messages.order(:position).last.position).to eq(7)
+  end
 end

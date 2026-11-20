@@ -16,6 +16,7 @@ ja:
         reset_password_token: "再設定用リンク"
       reflection:
         initial_text: "入力内容"
+        personal_note: "メモ"
       reflection_message:
         content: "返答"
     errors:

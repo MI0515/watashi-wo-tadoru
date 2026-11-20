@@ -1,4 +1,6 @@
 class Reflection < ApplicationRecord
+  MAX_ADDITIONAL_REPLIES = 3
+
   belongs_to :user
   belongs_to :companion
   has_many :reflection_emotions, dependent: :destroy
@@ -18,4 +20,14 @@ class Reflection < ApplicationRecord
 
   validates :initial_text, presence: true, length: { maximum: 400 }
   validates :submission_token, presence: true
+  validates :personal_note, length: { maximum: 400 }, allow_blank: true
+
+  # 初回入力は別に保存しているため、追加の利用者発言だけを数える
+  def additional_reply_limit_reached?
+    reflection_messages.where(role: :user).count >= MAX_ADDITIONAL_REPLIES
+  end
+
+  def summary_available?
+    title.present? && insight.present?
+  end
 end

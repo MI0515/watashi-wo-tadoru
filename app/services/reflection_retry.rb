@@ -10,9 +10,10 @@ class ReflectionRetry
     @dialogue = dialogue
   end
 
-  def call(last_message_id:, final_reply: false)
+  def call(last_message_id:)
     generation_started = false
     reply_position = nil
+    final_reply = false
 
     @reflection.with_lock do
       if @reflection.ai_response_processing?
@@ -27,6 +28,7 @@ class ReflectionRetry
         raise NotReadyError, "今は再試行できません。"
       end
 
+      final_reply = @reflection.additional_reply_limit_reached?
       reply_position = last_message ? last_message.position + 1 : 1
 
       @reflection.update!(
