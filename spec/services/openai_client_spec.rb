@@ -93,4 +93,28 @@ RSpec.describe OpenaiClient do
       expect(raised).to equal(error)
     }
   end
+
+  it "指定された出力形式をSDKへ渡す" do
+    text_format = {
+      type: :json_schema,
+      name: "test_summary",
+      strict: true,
+      schema: {
+        type: "object",
+        properties: { title: { type: "string" } },
+        required: [ "title" ],
+        additionalProperties: false
+      }
+    }
+
+    expect(responses_api).to receive(:create) do |**parameters|
+      text = JSON.parse(parameters.fetch(:text).to_json)
+      expect(text.fetch("format")).to eq(JSON.parse(text_format.to_json))
+      response
+    end
+
+    expect(
+      service.call(instructions: instructions, input: input, text_format: text_format)
+    ).to equal(response)
+  end
 end
