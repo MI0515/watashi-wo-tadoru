@@ -20,6 +20,7 @@ class Reflection < ApplicationRecord
 
   validates :initial_text, presence: true, length: { maximum: 400 }
   validates :submission_token, presence: true
+  validates :personal_note, length: { maximum: 400 }, allow_blank: true
 
   # 初回入力は別に保存しているため、追加の利用者発言だけを数える
   def additional_reply_limit_reached?

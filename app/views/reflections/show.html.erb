@@ -49,7 +49,36 @@
       </div>
 
       <% if @reflection.in_progress? %>
-        <% if @reflection.ai_response_processing? %>
+        <% if @reflection.summary_available? %>
+          <div class="response-state">
+            <p>ここまでの振り返りをまとめたよ。</p>
+            <%= link_to "まとめを確認する",
+                        reflection_summary_path(@reflection),
+                        class: "primary" %>
+          </div>
+        <% elsif @reflection.additional_reply_limit_reached? && @messages.last&.assistant? %>
+          <div class="response-state" role="status">
+            <% if @reflection.ai_response_processing? %>
+              <p>ここまで話したことをまとめています。</p>
+              <%= link_to "状態を確認する",
+                          reflection_summary_path(@reflection),
+                          class: "secondary" %>
+            <% else %>
+              <% if @reflection.ai_response_failed? %>
+                <p>まとめを作れませんでした。対話の内容は保存されています。</p>
+              <% else %>
+                <p>ここまでの気持ちをまとめてみる？</p>
+              <% end %>
+
+              <%= button_to(@reflection.ai_response_failed? ? "もう一度まとめる" : "まとめる",
+                            reflection_summary_path(@reflection),
+                            method: :post,
+                            class: "primary",
+                            data: { turbo_submits_with: "まとめています…" },
+                            form: { class: "retry-form" }) %>
+            <% end %>
+          </div>
+        <% elsif @reflection.ai_response_processing? %>
           <div class="response-state" role="status">
             <p>ミツメイトが返答を考えています。</p>
             <%= link_to "状態を確認する",
