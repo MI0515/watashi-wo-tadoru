@@ -27,6 +27,6 @@ class Reflection < ApplicationRecord
   end
 
   def summary_available?
-    title.present? && valued_thing.present? && insight.present?
+    title.present? && insight.present?
   end
 end

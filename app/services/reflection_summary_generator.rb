@@ -1,5 +1,5 @@
 class ReflectionSummaryGenerator
-  FIELDS = %w[title valued_thing insight].freeze
+  FIELDS = %w[title insight].freeze
 
   OUTPUT_FORMAT = {
     type: :json_schema,
@@ -9,7 +9,6 @@ class ReflectionSummaryGenerator
       type: "object",
       properties: {
         title: { type: "string" },
-        valued_thing: { type: "string" },
         insight: { type: "string" }
       },
       required: FIELDS,

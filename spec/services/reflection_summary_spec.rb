@@ -7,7 +7,6 @@ RSpec.describe ReflectionSummary do
   let(:summary) do
     {
       "title" => "会話のあとに残った気持ち",
-      "valued_thing" => "自分の話も聞いてほしかった",
       "insight" => "話の聞かれ方が気になっていたのかもしれない"
     }
   end

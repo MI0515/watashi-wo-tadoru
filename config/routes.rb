@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   resources :reflections, only: [ :new, :create, :show ] do
     resources :messages, only: [ :create ], controller: "reflection_messages"
     resource :retry, only: [ :create ], controller: "reflection_retries"
+    resource :summary, only: [ :show, :create ], controller: "reflection_summaries"
   end
 
   # 未ログインでも閲覧できる利用規約・プライバシーポリシー

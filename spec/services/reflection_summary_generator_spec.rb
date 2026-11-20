@@ -7,7 +7,6 @@ RSpec.describe ReflectionSummaryGenerator do
   let(:summary) do
     {
       "title" => "友達との会話で残った気持ち",
-      "valued_thing" => "自分の話も聞いてほしかった",
       "insight" => "言葉の内容より、話の聞かれ方が気になっていたのかもしれない"
     }
   end
@@ -31,7 +30,7 @@ RSpec.describe ReflectionSummaryGenerator do
     allow(client).to receive(:call).and_return(response)
   end
 
-  it "対話記録と文体を渡して3項目を取得し、まとめの使用量を記録する" do
+  it "対話記録と文体を渡して2項目を取得し、まとめの使用量を記録する" do
     create(:reflection_message, reflection: reflection, position: 1)
     create(
       :reflection_message,
@@ -50,7 +49,7 @@ RSpec.describe ReflectionSummaryGenerator do
       expect(record.fetch("messages").last.fetch("content"))
         .to eq("話を聞いてほしかった")
       expect(text_format.fetch(:schema).fetch(:required))
-        .to eq(%w[title valued_thing insight])
+        .to eq(%w[title insight])
       response
     end
 
@@ -67,7 +66,7 @@ RSpec.describe ReflectionSummaryGenerator do
   [
     "JSONではない",
     '{"title":"項目不足"}',
-    '{"title":"題","valued_thing":1,"insight":"気づき"}'
+    '{"title":"題","insight":1}'
   ].each do |text|
     it "不正なまとめ形式を失敗として記録する（#{text}）" do
       allow(response).to receive(:output_text).and_return(text)
