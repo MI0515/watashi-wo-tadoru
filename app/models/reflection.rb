@@ -25,4 +25,8 @@ class Reflection < ApplicationRecord
   def additional_reply_limit_reached?
     reflection_messages.where(role: :user).count >= MAX_ADDITIONAL_REPLIES
   end
+
+  def summary_available?
+    title.present? && valued_thing.present? && insight.present?
+  end
 end
