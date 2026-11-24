@@ -1,0 +1,56 @@
+<% content_for :title, "メールアドレスの変更 | わたしを辿る" %>
+
+<div id="watashi-dialogue-response-states" data-screen="settings">
+  <%= render "shared/signed_in_header" %>
+
+  <div class="stage">
+    <div class="character">
+      <%= image_tag @companion.full_image_path,
+                    alt: "選択中のミツメイト", class: "full-mate" %>
+    </div>
+
+    <section class="panel settings-panel" aria-labelledby="email-settings-title">
+      <h1 id="email-settings-title">メールアドレスを変更</h1>
+      <p class="intro muted">
+        ログインに使うメールアドレスを変更できます。
+      </p>
+
+      <%= form_with model: @user,
+                    url: settings_email_path,
+                    method: :patch,
+                    class: "settings-block" do |f| %>
+        <%= render "devise/shared/error_messages",
+                   resource: @user,
+                   heading: "入力内容を確認してください。" %>
+
+        <div class="field">
+          <%= f.label :email, "新しいメールアドレス" %>
+          <%= f.email_field :email,
+                            required: true,
+                            autofocus: true,
+                            autocomplete: "email" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :current_password, "現在のパスワード" %>
+          <%= f.password_field :current_password,
+                               required: true,
+                               autocomplete: "current-password",
+                               aria: { describedby: "current-password-help" } %>
+          <p id="current-password-help" class="hint">
+            本人確認のため、現在のパスワードを入力してください。
+          </p>
+        </div>
+
+        <div class="actions">
+          <%= link_to "設定へ戻る", settings_path, class: "secondary" %>
+          <%= f.submit "変更する",
+                       class: "primary",
+                       data: { turbo_submits_with: "変更しています…" } %>
+        </div>
+      <% end %>
+    </section>
+  </div>
+
+  <%= render "shared/footer" %>
+</div>

@@ -23,6 +23,10 @@ Rails.application.routes.draw do
 
   resource :settings, only: [ :show, :update ]
 
+  namespace :settings do
+    resource :email, only: [ :edit, :update ]
+  end
+
   resources :reflections, only: [ :new, :create, :show ] do
     resources :messages, only: [ :create ], controller: "reflection_messages"
     resource :retry, only: [ :create ], controller: "reflection_retries"
