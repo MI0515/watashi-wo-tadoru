@@ -1,0 +1,75 @@
+<% content_for :title, "設定 | わたしを辿る" %>
+
+<div id="watashi-dialogue-response-states" data-screen="settings">
+  <%= render "shared/signed_in_header" %>
+
+  <div class="stage">
+    <div class="character">
+      <%= image_tag @companion.full_image_path,
+                    alt: "選択中のミツメイト", class: "full-mate" %>
+    </div>
+
+    <section class="panel settings-panel" aria-labelledby="settings-title">
+      <h1 id="settings-title">設定</h1>
+      <p class="intro muted">
+        呼ばれ方と、自分の16タイプを変更できます。
+      </p>
+
+      <div class="settings-columns">
+        <%= form_with model: @user,
+                      url: settings_path,
+                      method: :patch,
+                      class: "settings-block",
+                      data: { controller: "nickname-preview" } do |f| %>
+          <h2>あなたについて</h2>
+
+          <%= render "devise/shared/error_messages",
+                     resource: @user,
+                     heading: "入力内容を確認してください。" %>
+
+          <%= render "shared/nickname_fields", f: f %>
+
+          <div class="field">
+            <%= f.label :personality_type_id, "自分の16タイプ" %>
+            <%= f.collection_select :personality_type_id,
+                                    @personality_types,
+                                    :id,
+                                    :code,
+                                    { include_blank: "選択してください" },
+                                    { required: true } %>
+            <p class="hint">
+              自分のタイプを変更しても、ミツメイトや過去の記録は変わりません。
+            </p>
+          </div>
+
+          <%= link_to "タイプが分からない・診断し直したい方はこちら（外部サイト）",
+                      "https://mentuzzle.com/shindan/report/16type",
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                      class: "type-help" %>
+
+          <div class="actions">
+            <%= f.submit "変更を保存",
+                         class: "primary",
+                         data: { turbo_submits_with: "保存しています…" } %>
+          </div>
+        <% end %>
+
+        <section class="settings-block" aria-labelledby="current-companion-title">
+          <h2 id="current-companion-title">現在のミツメイト</h2>
+          <div class="current-mate">
+            <%= image_tag @companion.icon_image_path,
+                          alt: "", class: "mate-thumb" %>
+            <p><%= @companion.personality_type.code %></p>
+          </div>
+        </section>
+      </div>
+
+      <div class="settings-footer">
+        <%= link_to "ホームへ戻る", home_path, class: "secondary" %>
+      </div>
+    </section>
+  </div>
+
+  <%= render "shared/footer" %>
+</div>

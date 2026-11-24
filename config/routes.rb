@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   # ログイン後のホーム
   get "home", to: "homes#show", as: :home
 
+  resource :settings, only: [ :show, :update ]
+
   resources :reflections, only: [ :new, :create, :show ] do
     resources :messages, only: [ :create ], controller: "reflection_messages"
     resource :retry, only: [ :create ], controller: "reflection_retries"

@@ -32,46 +32,7 @@
             </div>
           <% end %>
 
-          <div class="field">
-            <%= f.label :nickname, "ニックネーム" %>
-            <%= f.text_field :nickname,
-                  autofocus: true,
-                  required: true,
-                  maxlength: 20,
-                  autocomplete: "nickname",
-                  placeholder: "例：かわいこ",
-                  data: {
-                    nickname_preview_target: "nickname",
-                    action: "input->nickname-preview#update"
-                  } %>
-            <p class="hint">20文字以内で入力してください</p>
-          </div>
-
-          <div class="field">
-            <%= f.label :honorific, "呼び方（敬称など）" %>
-            <%= f.text_field :honorific,
-                  maxlength: 10,
-                  placeholder: "例：さん／くん／ちゃん",
-                  data: {
-                    nickname_preview_target: "honorific",
-                    action: "input->nickname-preview#update"
-                  } %>
-            <p class="hint">
-              10文字以内。ニックネームだけで呼ばれたい場合は空欄にしてください
-            </p>
-          </div>
-
-          <div class="preview-box" aria-live="polite">
-            <span class="preview-label">ミツメイトからは、こう呼ばれます</span>
-            <span class="preview-name">
-              「<span data-nickname-preview-target="preview"><%= @user.nickname.presence || "ニックネーム" %><%= @user.honorific %></span>」
-            </span>
-          </div>
-
-          <p class="hint setup-note">
-            入力したニックネームと呼び方は、そのまま続けて表示されます。
-            「さん」などを付けて呼ばれたい場合は、呼び方の欄へ入力してください。
-          </p>
+          <%= render "shared/nickname_fields", f: f %>
 
           <%= f.submit "次へ：16タイプを選ぶ", class: "submit" %>
         <% end %>
