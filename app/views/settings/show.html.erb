@@ -27,7 +27,9 @@
                      resource: @user,
                      heading: "入力内容を確認してください。" %>
 
-          <%= render "shared/nickname_fields", f: f %>
+          <div class="settings-name-fields">
+            <%= render "shared/nickname_fields", f: f %>
+          </div>
 
           <div class="field">
             <%= f.label :personality_type_id, "自分の16タイプ" %>
@@ -55,14 +57,25 @@
           </div>
         <% end %>
 
-        <section class="settings-block" aria-labelledby="current-companion-title">
-          <h2 id="current-companion-title">現在のミツメイト</h2>
-          <div class="current-mate">
-            <%= image_tag @companion.icon_image_path,
-                          alt: "", class: "mate-thumb" %>
-            <p><%= @companion.personality_type.code %></p>
-          </div>
-        </section>
+        <div class="settings-side">
+          <section class="settings-block" aria-labelledby="current-companion-title">
+            <h2 id="current-companion-title">現在のミツメイト</h2>
+            <div class="current-mate">
+              <%= image_tag @companion.icon_image_path,
+                            alt: "", class: "mate-thumb" %>
+              <p><%= @companion.personality_type.code %></p>
+            </div>
+          </section>
+
+          <section class="settings-block" aria-labelledby="account-settings-title">
+            <h2 id="account-settings-title">アカウント</h2>
+            <div class="actions">
+              <%= link_to "メールアドレスを変更",
+                          edit_settings_email_path,
+                          class: "secondary" %>
+            </div>
+          </section>
+        </div>
       </div>
 
       <div class="settings-footer">

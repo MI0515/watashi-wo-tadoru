@@ -6,8 +6,7 @@
 
 #watashi-dialogue-response-states[data-screen="settings"] .settings-columns {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
 }
 
@@ -35,7 +34,7 @@
   font-weight: 700;
 }
 
-#watashi-dialogue-response-states[data-screen="settings"] :is(input[type="text"], select) {
+#watashi-dialogue-response-states[data-screen="settings"] :is(input[type="text"], input[type="email"], input[type="password"], select) {
   width: 100%;
   min-height: 46px;
   padding: 10px 12px;
@@ -100,6 +99,8 @@
 #watashi-dialogue-response-states[data-screen="settings"] :is(.actions, .settings-footer) {
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-top: 20px;
 }
 
@@ -124,8 +125,31 @@
   cursor: wait;
 }
 
+#watashi-dialogue-response-states[data-screen="settings"] .settings-side {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 18px;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .settings-name-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .settings-name-fields .field {
+  margin-bottom: 0;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .settings-name-fields :is(.preview-box, .setup-note) {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
 @media (max-width: 900px) {
-  #watashi-dialogue-response-states[data-screen="settings"] .settings-columns {
+  #watashi-dialogue-response-states[data-screen="settings"] :is(.settings-side, .settings-name-fields) {
     grid-template-columns: minmax(0, 1fr);
   }
 }
