@@ -133,3 +133,70 @@ button:disabled {
   font-weight: 700;
   line-height: 1.7;
 }
+
+/* 開いたメニューが、ぼかし付きパネルの裏に隠れないようにする */
+.wtc-header:has(.account-menu) {
+  position: relative;
+  z-index: 40;
+}
+
+.account-menu {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.account-menu summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.account-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.account-menu summary::after {
+  content: "▾";
+  margin-left: 8px;
+}
+
+.account-menu[open] summary::after {
+  transform: rotate(180deg);
+}
+
+.account-menu-items {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 180px;
+  padding: 6px;
+  border: 1px solid var(--wt-accent);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(47, 54, 82, .2);
+}
+
+.account-menu-items form {
+  margin: 0;
+}
+
+.account-menu-items :is(a, button) {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--wt-navy);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.account-menu-items :is(a, button):hover {
+  background: rgba(47, 54, 82, .08);
+}

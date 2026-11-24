@@ -1,11 +1,7 @@
 <% content_for :title, "ホーム | わたしを辿る" %>
 
 <div id="watashi-dialogue-response-states" data-screen="home">
-  <header class="header wtc-header">
-    <%= link_to "わたしを辿る", home_path, class: "brand" %>
-    <%= button_to "ログアウト", destroy_user_session_path,
-                  method: :delete, class: "wtc-link" %>
-  </header>
+  <%= render "shared/signed_in_header" %>
 
   <% if current_user.onboarding_completed_at.nil? %>
     <%= render "guide" %>

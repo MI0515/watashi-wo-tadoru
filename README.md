@@ -556,7 +556,7 @@ dbdiagram.io：<https://dbdiagram.io/d/わたしを辿る-ER図-6ac60e0ca5ab2804
 
 ## 開発環境
 
-- Ruby 3.4.11
+- Ruby 3.4.13
 - Ruby on Rails 8.1.4
 - PostgreSQL 17系
 - Docker / Docker Compose

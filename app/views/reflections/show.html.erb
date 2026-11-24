@@ -4,11 +4,7 @@
      data-screen="chat"
      data-controller="ai-submission"
      data-action="turbo:before-cache@document->ai-submission#reset">
-  <header class="header wtc-header">
-    <%= link_to "わたしを辿る", home_path, class: "brand" %>
-    <%= button_to "ログアウト", destroy_user_session_path,
-                  method: :delete, class: "wtc-link" %>
-  </header>
+  <%= render "shared/signed_in_header" %>
 
   <div class="stage">
     <div class="character">

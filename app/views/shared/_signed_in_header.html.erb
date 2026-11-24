@@ -1,0 +1,15 @@
+<header class="header wtc-header">
+  <%= link_to "わたしを辿る", home_path, class: "brand" %>
+
+  <details class="account-menu">
+    <summary class="wtc-link">メニュー</summary>
+
+    <nav class="account-menu-items" aria-label="アカウントメニュー">
+      <%= link_to "ホーム", home_path %>
+      <%= link_to "設定", settings_path %>
+      <%= button_to "ログアウト",
+                    destroy_user_session_path,
+                    method: :delete %>
+    </nav>
+  </details>
+</header>

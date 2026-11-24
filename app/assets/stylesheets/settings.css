@@ -1,0 +1,131 @@
+#watashi-dialogue-response-states[data-screen="settings"] .intro {
+  margin: 0 0 18px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .settings-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 18px;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .settings-block {
+  min-width: 0;
+  padding: 18px;
+  border-radius: 12px;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .settings-block h2 {
+  margin: 0 0 18px;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .field {
+  margin-bottom: 18px;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .field label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] :is(input[type="text"], select) {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 16px;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .hint {
+  margin: 7px 0 0;
+  color: var(--wt-sub);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .preview-box {
+  margin-bottom: 14px;
+  padding: 14px;
+  border: 1px solid rgba(47, 54, 82, .22);
+  border-radius: 12px;
+  text-align: center;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .preview-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .preview-name {
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .setup-note {
+  margin-bottom: 18px;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .type-help {
+  display: inline-block;
+  font-size: 12px;
+  line-height: 1.8;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .current-mate {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .mate-thumb {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] :is(.actions, .settings-footer) {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] :is(.primary, .secondary) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#watashi-dialogue-response-states[data-screen="settings"] .primary:disabled {
+  opacity: .65;
+  cursor: wait;
+}
+
+@media (max-width: 900px) {
+  #watashi-dialogue-response-states[data-screen="settings"] .settings-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
