@@ -1,0 +1,378 @@
+#watashi-dialogue-response-states:is([data-screen="records"], [data-screen="detail"]) {
+  --wt-scene-height: 56.28vw;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  overflow: clip;
+  background-color: #66585a;
+  background-image: url("home-winter-v2.webp");
+  background-repeat: no-repeat;
+}
+
+#watashi-dialogue-response-states:is([data-screen="records"], [data-screen="detail"]) .stage {
+  flex: 1;
+  width: 100%;
+  min-height: 550px;
+  padding: 22px;
+}
+
+#watashi-dialogue-response-states :is(.records-panel, .detail-panel) {
+  width: 100%;
+  max-width: 850px;
+  margin-inline: auto;
+  padding: 24px 28px;
+  border-radius: 22px;
+  overflow-wrap: anywhere;
+}
+
+#watashi-dialogue-response-states :is(.records-panel, .detail-panel) h1 {
+  margin: 0 0 12px;
+  font-size: 25px;
+  line-height: 1.5;
+}
+
+#watashi-dialogue-response-states .records-panel .intro {
+  margin: 0 0 18px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+#watashi-dialogue-response-states .record-count {
+  margin: 0;
+  font-size: 12px;
+}
+
+#watashi-dialogue-response-states .record-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+#watashi-dialogue-response-states .record-item {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  min-height: 110px;
+  padding: 12px;
+  border: 1px solid rgba(47, 54, 82, .22);
+  border-radius: 12px;
+  color: var(--wt-text);
+  text-decoration: none;
+}
+
+#watashi-dialogue-response-states .record-item:hover {
+  border-color: var(--wt-navy);
+  box-shadow: 0 4px 14px rgba(47, 54, 82, .1);
+}
+
+#watashi-dialogue-response-states .record-avatar {
+  width: 88px;
+  height: 88px;
+  overflow: hidden;
+  border: 1px solid rgba(47, 54, 82, .18);
+  border-radius: 14px;
+}
+
+#watashi-dialogue-response-states .record-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#watashi-dialogue-response-states .record-copy {
+  min-width: 0;
+  padding-top: 28px;
+}
+
+#watashi-dialogue-response-states .record-date {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+#watashi-dialogue-response-states .record-title {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+#watashi-dialogue-response-states .record-copy > .muted {
+  font-size: 12px;
+}
+
+#watashi-dialogue-response-states .record-mate-badge {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  padding: 4px 10px;
+  border: 1px solid var(--wt-accent);
+  border-radius: 999px;
+  background: #f2f3f5;
+  color: var(--wt-navy);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+#watashi-dialogue-response-states .records-empty {
+  margin-top: 20px;
+  line-height: 1.8;
+}
+
+#watashi-dialogue-response-states .records-empty p {
+  margin: 0 0 12px;
+}
+
+#watashi-dialogue-response-states .detail-content {
+  margin: 18px 0;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+#watashi-dialogue-response-states .detail-content h2 {
+  margin: 26px 0 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #e5e9f5;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.6;
+  text-align: center;
+}
+
+#watashi-dialogue-response-states .detail-content h2:first-child {
+  margin-top: 0;
+}
+
+#watashi-dialogue-response-states .record-content {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.9;
+}
+
+#watashi-dialogue-response-states .detail-content .feeling-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#watashi-dialogue-response-states .detail-content .feeling-tags li {
+  padding: 4px 12px;
+  border: 1px solid var(--wt-accent);
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+#watashi-dialogue-response-states .record-mate-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(47, 54, 82, .18);
+  border-radius: 12px;
+  background: #fff;
+}
+
+#watashi-dialogue-response-states .record-mate-figure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 150px;
+  height: 176px;
+}
+
+#watashi-dialogue-response-states .record-mate-figure img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+#watashi-dialogue-response-states .record-mate-copy {
+  min-width: 0;
+}
+
+#watashi-dialogue-response-states .record-mate-copy h2 {
+  margin: 0 0 10px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #e5e9f5;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.6;
+  text-align: center;
+}
+
+#watashi-dialogue-response-states .record-mate-copy strong {
+  font-size: 19px;
+}
+
+#watashi-dialogue-response-states .record-mate-copy p {
+  margin: 6px 0 0;
+  font-size: 12px;
+}
+
+#watashi-dialogue-response-states :is(.records-panel, .detail-panel) .actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+#watashi-dialogue-response-states :is(.records-panel, .detail-panel) :is(.primary, .secondary) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+}
+
+@media (max-width: 600px) {
+  #watashi-dialogue-response-states:is([data-screen="records"], [data-screen="detail"]) {
+    --wt-scene-height: max(440px, 56.28vw);
+    background-size: auto var(--wt-scene-height) !important;
+  }
+
+  #watashi-dialogue-response-states:is([data-screen="records"], [data-screen="detail"]) .stage {
+    min-height: 0;
+    padding: 12px;
+  }
+
+  #watashi-dialogue-response-states :is(.records-panel, .detail-panel) {
+    padding: 20px 16px;
+  }
+
+  #watashi-dialogue-response-states :is(.records-panel, .detail-panel) h1 {
+    font-size: 21px;
+  }
+
+  #watashi-dialogue-response-states .record-item {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  #watashi-dialogue-response-states .record-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+  }
+
+  #watashi-dialogue-response-states .record-title {
+    font-size: 16px;
+  }
+
+  #watashi-dialogue-response-states .record-mate-badge {
+    font-size: 11px;
+  }
+
+  #watashi-dialogue-response-states .detail-content {
+    padding: 16px;
+  }
+
+  #watashi-dialogue-response-states .record-mate-card {
+    gap: 12px;
+    padding: 16px 14px;
+  }
+
+  #watashi-dialogue-response-states .record-mate-figure {
+    flex-basis: 104px;
+    height: 130px;
+  }
+
+  #watashi-dialogue-response-states .record-mate-copy strong {
+    font-size: 16px;
+  }
+}
+
+#watashi-dialogue-response-states .delete-action {
+  border-color: #eda4b8;
+  background: #fceef2;
+  color: #cf4469;
+}
+
+#watashi-dialogue-response-states .delete-dialog {
+  width: min(440px, calc(100% - 32px));
+  max-height: calc(100svh - 32px);
+  margin: auto;
+  padding: 28px 24px 22px;
+  overflow-y: auto;
+  border: 0;
+  border-radius: 28px;
+  color: var(--wt-text);
+  box-shadow: 0 24px 70px rgba(25, 19, 30, .35);
+}
+
+#watashi-dialogue-response-states .delete-dialog::backdrop {
+  background: rgba(28, 24, 36, .48);
+  backdrop-filter: blur(3px);
+}
+
+#watashi-dialogue-response-states .delete-dialog h2 {
+  margin: 0 0 12px;
+  overflow-wrap: anywhere;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+#watashi-dialogue-response-states .delete-dialog p {
+  margin: 0;
+  color: var(--wt-sub);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+#watashi-dialogue-response-states .delete-buttons {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+#watashi-dialogue-response-states .delete-buttons form {
+  margin: 0;
+}
+
+#watashi-dialogue-response-states .delete-cancel {
+  border-color: rgba(47, 54, 82, .22);
+  background: #fff;
+  color: var(--wt-navy);
+}
+
+#watashi-dialogue-response-states .delete-confirm {
+  border-color: #eda4b8;
+  background: #fceef2;
+  color: #cf4469;
+  font-weight: 700;
+}
+
+#watashi-dialogue-response-states :is(.delete-action, .delete-confirm):hover {
+  background: #f9dfe8;
+}
+
+#watashi-dialogue-response-states .delete-confirm:disabled {
+  opacity: .65;
+  cursor: wait;
+}

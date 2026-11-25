@@ -1,0 +1,95 @@
+<% content_for :title, "#{@record.title} | わたしを辿る" %>
+
+<div id="watashi-dialogue-response-states" data-screen="detail">
+  <%= render "shared/signed_in_header" %>
+
+  <div class="stage">
+    <section class="panel detail-panel"
+             aria-labelledby="record-title"
+             data-controller="record-delete"
+             data-action="turbo:before-cache@document->record-delete#close">
+      <%= tag.time @record.completed_at.strftime("%Y年%-m月%-d日 %H:%M"),
+                   datetime: @record.completed_at.iso8601,
+                   class: "record-date" %>
+      <h1 id="record-title"><%= @record.title %></h1>
+
+      <div class="detail-content">
+        <h2>最初の入力</h2>
+        <p class="record-content"><%= @record.initial_text %></p>
+
+        <h2>選択感情</h2>
+        <% emotions = @record.emotions.sort_by { |emotion| [emotion.display_order, emotion.id] } %>
+        <% if emotions.any? %>
+          <ul class="feeling-tags" aria-label="最初に選んだ感情">
+            <% emotions.each do |emotion| %>
+              <li><%= emotion.name %></li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="muted">選択なし</p>
+        <% end %>
+
+        <h2>今回見えてきたこと</h2>
+        <p class="record-content"><%= @record.insight %></p>
+
+        <% if @record.personal_note.present? %>
+          <h2>自分の言葉で残しておきたいこと</h2>
+          <p class="record-content"><%= @record.personal_note %></p>
+        <% end %>
+      </div>
+
+      <% appearance_labels = {
+        "male" => "男の子",
+        "female" => "女の子",
+        "animal" => "動物"
+      } %>
+      <% mate_label = "#{@companion.personality_type.code}・#{appearance_labels.fetch(@companion.appearance_type)}" %>
+
+      <section class="record-mate-card" aria-labelledby="record-mate-title">
+        <div class="record-mate-figure">
+          <%= image_tag @companion.sd_image_path, alt: "" %>
+        </div>
+        <div class="record-mate-copy">
+          <h2 id="record-mate-title">この日のミツメイト</h2>
+          <strong><%= mate_label %></strong>
+          <p>と振り返りました</p>
+        </div>
+      </section>
+
+      <div class="actions">
+        <%= link_to "一覧へ戻る", records_path, class: "secondary" %>
+        <button type="button"
+                class="secondary delete-action"
+                data-action="record-delete#open">
+          この記録を削除
+        </button>
+      </div>
+
+      <dialog class="delete-dialog"
+              aria-labelledby="delete-heading"
+              aria-describedby="delete-warning"
+              data-record-delete-target="dialog">
+        <h2 id="delete-heading">「<%= @record.title %>」を削除しますか？</h2>
+        <p id="delete-warning">
+          削除した内容は元に戻せません。
+        </p>
+
+        <div class="delete-buttons">
+          <button type="button"
+                  class="secondary delete-cancel"
+                  data-action="record-delete#close"
+                  autofocus>
+            キャンセル
+          </button>
+          <%= button_to "削除する",
+                        record_path(@record),
+                        method: :delete,
+                        class: "secondary delete-confirm",
+                        data: { turbo_submits_with: "削除しています…" } %>
+        </div>
+      </dialog>
+    </section>
+  </div>
+
+  <%= render "shared/footer" %>
+</div>

@@ -1,0 +1,63 @@
+<% content_for :title, "振り返り記録 | わたしを辿る" %>
+
+<div id="watashi-dialogue-response-states" data-screen="records">
+  <%= render "shared/signed_in_header" %>
+
+  <div class="stage">
+    <section class="panel records-panel" aria-labelledby="records-title">
+      <h1 id="records-title">振り返り記録</h1>
+      <p class="intro muted">
+        そのときの気持ちや、見えてきたことを、いつでも読み返せます。
+      </p>
+
+      <% if @records.any? %>
+        <p class="record-count">保存日時の新しい順</p>
+
+        <% appearance_labels = {
+          "male" => "男の子",
+          "female" => "女の子",
+          "animal" => "動物"
+        } %>
+
+        <div class="record-list">
+          <% @records.each do |record| %>
+            <% companion = record.companion %>
+            <% mate_label = "#{companion.personality_type.code}・#{appearance_labels.fetch(companion.appearance_type)}" %>
+
+            <%= link_to record_path(record), class: "record-item" do %>
+              <span class="record-avatar">
+                <%= image_tag companion.icon_image_path, alt: "" %>
+              </span>
+
+              <span class="record-copy">
+                <%= tag.time record.completed_at.strftime("%Y年%-m月%-d日 %H:%M"),
+                             datetime: record.completed_at.iso8601,
+                             class: "record-date" %>
+                <span class="record-title"><%= record.title %></span>
+                <span class="muted">記録を読む →</span>
+              </span>
+
+              <span class="record-mate-badge"><%= mate_label %></span>
+            <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="records-empty">
+          <p>保存した記録はまだありません。</p>
+          <p class="muted">
+            今の気持ちを少し話して、振り返りを残してみませんか。
+          </p>
+          <%= link_to "振り返りを始める",
+                      new_reflection_path,
+                      class: "primary" %>
+        </div>
+      <% end %>
+
+      <div class="actions">
+        <%= link_to "ホームへ戻る", home_path, class: "secondary" %>
+      </div>
+    </section>
+  </div>
+
+  <%= render "shared/footer" %>
+</div>
