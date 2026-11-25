@@ -85,7 +85,7 @@ RSpec.describe "保存済みの振り返り記録", type: :request do
       record.insight,
       record.personal_note
     ])
-        expect(doc.css(".feeling-tags li").map(&:text)).to eq([ emotion.name ])
+    expect(doc.css(".feeling-tags li").map(&:text)).to eq([ emotion.name ])
   end
 
   it "感情が未選択なら選択なしと表示し、空の任意メモ欄は表示しない" do
@@ -148,5 +148,85 @@ RSpec.describe "保存済みの振り返り記録", type: :request do
 
     get record_path(record)
     expect(response).to redirect_to(new_user_session_path)
+  end
+
+  it "本人の記録と関連データを削除し、感情マスターとAPI利用履歴は残す" do
+    emotion = create(:emotion)
+    record = create(
+      :reflection,
+      **record_attributes,
+      emotions: [ emotion ]
+    )
+    message = create(:reflection_message, reflection: record)
+    relation = record.reflection_emotions.first
+    usage_log = create(:api_usage_log, reflection: record)
+    original_response_id = usage_log.response_id
+
+    expect {
+      delete record_path(record)
+    }.to change(Reflection, :count).by(-1)
+      .and change(ReflectionMessage, :count).by(-1)
+      .and change(ReflectionEmotion, :count).by(-1)
+      .and change(Emotion, :count).by(0)
+      .and change(ApiUsageLog, :count).by(0)
+
+    expect(response).to have_http_status(:see_other)
+    expect(response).to redirect_to(records_path)
+    expect(flash[:notice]).to eq("記録を削除しました。")
+    expect(Reflection.exists?(record.id)).to be(false)
+    expect(ReflectionMessage.exists?(message.id)).to be(false)
+    expect(ReflectionEmotion.exists?(relation.id)).to be(false)
+    expect(Emotion.exists?(emotion.id)).to be(true)
+
+    usage_log.reload
+    expect(usage_log.reflection_id).to be_nil
+    expect(usage_log.user_id).to eq(user.id)
+    expect(usage_log.response_id).to eq(original_response_id)
+    expect(usage_log.status).to eq("succeeded")
+    expect(usage_log.initial_reply).to be(true)
+
+    follow_redirect!
+    expect(response.body).to include("保存した記録はまだありません。")
+  end
+
+  it "他人の記録や対話中の振り返りは削除できない" do
+    other_record = create(
+      :reflection,
+      **record_attributes,
+      user: create(:user)
+    )
+    ongoing = create(:reflection, user: user, companion: companion)
+
+    expect {
+      delete record_path(other_record)
+    }.not_to change(Reflection, :count)
+    expect(response).to have_http_status(:not_found)
+
+    expect {
+      delete record_path(ongoing)
+    }.not_to change(Reflection, :count)
+    expect(response).to have_http_status(:not_found)
+  end
+
+  it "未ログインでは記録を削除できない" do
+    record = create(:reflection, **record_attributes)
+    delete destroy_user_session_path
+
+    expect {
+      delete record_path(record)
+    }.not_to change(Reflection, :count)
+
+    expect(response).to redirect_to(new_user_session_path)
+  end
+
+  it "初期設定が未完了なら記録を削除できない" do
+    record = create(:reflection, **record_attributes)
+    user.update!(companion: nil)
+
+    expect {
+      delete record_path(record)
+    }.not_to change(Reflection, :count)
+
+    expect(response).to redirect_to(edit_onboarding_companion_path)
   end
 end

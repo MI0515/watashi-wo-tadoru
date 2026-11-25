@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   # ログイン後のホーム
   get "home", to: "homes#show", as: :home
 
-  resources :records, only: [ :index, :show ]
+  resources :records, only: [ :index, :show, :destroy ]
   resource :settings, only: [ :show, :update ]
 
   namespace :settings do

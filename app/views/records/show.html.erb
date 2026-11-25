@@ -4,7 +4,10 @@
   <%= render "shared/signed_in_header" %>
 
   <div class="stage">
-    <section class="panel detail-panel" aria-labelledby="record-title">
+    <section class="panel detail-panel"
+             aria-labelledby="record-title"
+             data-controller="record-delete"
+             data-action="turbo:before-cache@document->record-delete#close">
       <%= tag.time @record.completed_at.strftime("%Y年%-m月%-d日 %H:%M"),
                    datetime: @record.completed_at.iso8601,
                    class: "record-date" %>
@@ -55,7 +58,36 @@
 
       <div class="actions">
         <%= link_to "一覧へ戻る", records_path, class: "secondary" %>
+        <button type="button"
+                class="secondary delete-action"
+                data-action="record-delete#open">
+          この記録を削除
+        </button>
       </div>
+
+      <dialog class="delete-dialog"
+              aria-labelledby="delete-heading"
+              aria-describedby="delete-warning"
+              data-record-delete-target="dialog">
+        <h2 id="delete-heading">「<%= @record.title %>」を削除しますか？</h2>
+        <p id="delete-warning">
+          削除した内容は元に戻せません。
+        </p>
+
+        <div class="delete-buttons">
+          <button type="button"
+                  class="secondary delete-cancel"
+                  data-action="record-delete#close"
+                  autofocus>
+            キャンセル
+          </button>
+          <%= button_to "削除する",
+                        record_path(@record),
+                        method: :delete,
+                        class: "secondary delete-confirm",
+                        data: { turbo_submits_with: "削除しています…" } %>
+        </div>
+      </dialog>
     </section>
   </div>
 

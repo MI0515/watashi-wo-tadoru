@@ -17,6 +17,16 @@ class RecordsController < ApplicationController
     @companion = @record.companion
   end
 
+  def destroy
+    # 本人の保存済み記録に限定し、他人の記録や対話中の振り返りは削除しない
+    record = current_user.reflections.completed.find(params[:id])
+    record.destroy!
+
+    redirect_to records_path,
+                notice: "記録を削除しました。",
+                status: :see_other
+  end
+
   private
 
   def redirect_to_pending_onboarding

@@ -304,3 +304,75 @@
     font-size: 16px;
   }
 }
+
+#watashi-dialogue-response-states .delete-action {
+  border-color: #eda4b8;
+  background: #fceef2;
+  color: #cf4469;
+}
+
+#watashi-dialogue-response-states .delete-dialog {
+  width: min(440px, calc(100% - 32px));
+  max-height: calc(100svh - 32px);
+  margin: auto;
+  padding: 28px 24px 22px;
+  overflow-y: auto;
+  border: 0;
+  border-radius: 28px;
+  color: var(--wt-text);
+  box-shadow: 0 24px 70px rgba(25, 19, 30, .35);
+}
+
+#watashi-dialogue-response-states .delete-dialog::backdrop {
+  background: rgba(28, 24, 36, .48);
+  backdrop-filter: blur(3px);
+}
+
+#watashi-dialogue-response-states .delete-dialog h2 {
+  margin: 0 0 12px;
+  overflow-wrap: anywhere;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+#watashi-dialogue-response-states .delete-dialog p {
+  margin: 0;
+  color: var(--wt-sub);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+#watashi-dialogue-response-states .delete-buttons {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+#watashi-dialogue-response-states .delete-buttons form {
+  margin: 0;
+}
+
+#watashi-dialogue-response-states .delete-cancel {
+  border-color: rgba(47, 54, 82, .22);
+  background: #fff;
+  color: var(--wt-navy);
+}
+
+#watashi-dialogue-response-states .delete-confirm {
+  border-color: #eda4b8;
+  background: #fceef2;
+  color: #cf4469;
+  font-weight: 700;
+}
+
+#watashi-dialogue-response-states :is(.delete-action, .delete-confirm):hover {
+  background: #f9dfe8;
+}
+
+#watashi-dialogue-response-states .delete-confirm:disabled {
+  opacity: .65;
+  cursor: wait;
+}
