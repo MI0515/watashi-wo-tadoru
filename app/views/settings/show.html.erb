@@ -65,6 +65,12 @@
                             alt: "", class: "mate-thumb" %>
               <p><%= @companion.personality_type.code %></p>
             </div>
+
+            <div class="actions">
+              <%= link_to "ミツメイトを変更",
+                          edit_settings_companion_path,
+                          class: "secondary" %>
+            </div>
           </section>
 
           <section class="settings-block" aria-labelledby="account-settings-title">
