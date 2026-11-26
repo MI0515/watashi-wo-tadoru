@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   namespace :settings do
     resource :email, only: [ :edit, :update ]
     resource :companion, only: [ :edit, :update ]
+    resource :password, only: [ :edit, :update ]
   end
 
   resources :reflections, only: [ :new, :create, :show ] do

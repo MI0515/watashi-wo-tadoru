@@ -1,0 +1,65 @@
+<% content_for :title, "パスワードの変更 | わたしを辿る" %>
+
+<div id="watashi-dialogue-response-states" data-screen="settings">
+  <%= render "shared/signed_in_header" %>
+
+  <div class="stage">
+    <div class="character">
+      <%= image_tag @companion.full_image_path,
+                    alt: "選択中のミツメイト", class: "full-mate" %>
+    </div>
+
+    <section class="panel settings-panel" aria-labelledby="password-settings-title">
+      <h1 id="password-settings-title">パスワードを変更</h1>
+      <p class="intro muted">
+        ログインに使うパスワードを変更できます。
+      </p>
+
+      <%= form_with model: @user,
+                    url: settings_password_path,
+                    method: :patch,
+                    class: "settings-block" do |f| %>
+        <%= render "devise/shared/error_messages",
+                   resource: @user,
+                   heading: "入力内容を確認してください。" %>
+
+        <div class="field">
+          <%= f.label :current_password, "現在のパスワード" %>
+          <%= f.password_field :current_password,
+                               required: true,
+                               autofocus: true,
+                               autocomplete: "current-password" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :password, "新しいパスワード" %>
+          <%= f.password_field :password,
+                               required: true,
+                               minlength: User.password_length.min,
+                               maxlength: User.password_length.max,
+                               autocomplete: "new-password",
+                               aria: { describedby: "new-password-help" } %>
+          <p id="new-password-help" class="hint">
+            <%= User.password_length.min %>文字以上で入力してください
+          </p>
+        </div>
+
+        <div class="field">
+          <%= f.label :password_confirmation, "新しいパスワード（確認）" %>
+          <%= f.password_field :password_confirmation,
+                               required: true,
+                               autocomplete: "new-password" %>
+        </div>
+
+        <div class="actions">
+          <%= link_to "設定へ戻る", settings_path, class: "secondary" %>
+          <%= f.submit "変更する",
+                       class: "primary",
+                       data: { turbo_submits_with: "変更しています…" } %>
+        </div>
+      <% end %>
+    </section>
+  </div>
+
+  <%= render "shared/footer" %>
+</div>
