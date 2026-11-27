@@ -81,6 +81,27 @@ RSpec.describe ReflectionSummaryGenerator do
     end
   end
 
+  [ false, true ].each do |retrying|
+    it "開始上限に達してもまとめを生成できる（再試行：#{retrying}）" do
+      create_list(
+        :api_usage_log, 3,
+        user: reflection.user,
+        reflection: reflection
+      )
+
+      expect {
+        expect(service.call(retrying: retrying)).to eq(summary)
+      }.to change(ApiUsageLog, :count).by(1)
+
+      log = reflection.api_usage_logs.request_kind_summary.sole
+      expect(log).to be_status_succeeded
+      expect(log.initial_reply).to be false
+      expect(log[:retry]).to eq(retrying)
+      expect(client).to have_received(:call).once
+      expect(AiUsagePolicy.new(user: reflection.user).daily_start_count).to eq(3)
+    end
+  end
+
   it "全体停止中はまとめ生成でも通信と履歴作成をしない" do
     allow(ENV).to receive(:fetch).and_call_original
     allow(ENV).to receive(:fetch).with("AI_ENABLED", "true").and_return("false")
