@@ -83,7 +83,8 @@ RSpec.describe "登録から初期設定まで", type: :system do
     expect(page).to have_css(".hello", text: "おかえり、七海さん。")
     expect(page).to have_no_css("dialog.guide-card")
 
-    find(".account-menu summary").click
+    find(".account-menu summary").send_keys(:enter)
+    expect(page).to have_css(".account-menu[open]")
     click_button "ログアウト"
 
     expect(page).to have_current_path(root_path)
