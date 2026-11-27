@@ -65,9 +65,6 @@ RSpec.describe "登録から初期設定まで", type: :system do
   end
 
   it "ログアウト後に再ログインすると、初期設定済みのホームに戻る" do
-    # CIでメニューが開かない原因が未解決のため、この1件だけ保留し、ローカルでは実行する
-    skip "CIでのメニュー展開が未解決。ローカル・手動では確認済み" if ENV["CI"] == "true"
-
     user = create(
       :user,
       nickname: "七海",
