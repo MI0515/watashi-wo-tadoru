@@ -54,6 +54,23 @@ RSpec.describe AiUsagePolicy do
     expect(policy.start_limit_reached?).to be true
   end
 
+  it "振り返りを削除しても、当日の開始回数と上限到達状態を維持する" do
+    3.times { record_usage }
+
+    expect(policy.daily_start_count).to eq(3)
+
+    reflection.destroy!
+
+    expect(policy.daily_start_count).to eq(3)
+    expect(policy.start_limit_reached?).to be true
+    expect(user.api_usage_logs.count).to eq(3)
+    expect(user.api_usage_logs.where.not(reflection_id: nil)).to be_empty
+
+    expect {
+      policy.ensure_start_available!
+    }.to raise_error(AiUsagePolicy::LimitError, /翌日0時/)
+  end
+
   it "AIが有効なら利用を拒否しない" do
     allow(ENV).to receive(:fetch).and_call_original
     allow(ENV).to receive(:fetch).with("AI_ENABLED", "true").and_return("true")

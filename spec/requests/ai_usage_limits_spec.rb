@@ -60,6 +60,22 @@ RSpec.describe "AI利用制限の案内", type: :request do
     end
   end
 
+  it "開始上限に達した後は、失敗していた初回返信を再試行できない" do
+    create_list(:api_usage_log, 3, user: user, reflection: reflection)
+    failed_reflection = create(
+      :reflection,
+      user: user,
+      companion: companion,
+      ai_response_status: :failed
+    )
+
+    expect {
+      post reflection_retry_path(failed_reflection)
+    }.not_to change { [ ApiUsageLog.count, ReflectionMessage.count ] }
+
+    expect_denied("日本時間の翌日0時")
+  end
+
   context "AI機能が全体停止中" do
     before do
       allow(ENV).to receive(:fetch).with("AI_ENABLED", "true").and_return("false")
@@ -96,6 +112,30 @@ RSpec.describe "AI利用制限の案内", type: :request do
       }.not_to change(ApiUsageLog, :count)
 
       expect_denied("一時停止")
+    end
+
+    it "保存済み記録の一覧・詳細はAPIを呼ばずに表示できる" do
+      reflection.update!(
+        status: :completed,
+        completed_at: Time.current,
+        title: "保存済みの振り返り",
+        insight: "自分の話を聞いてほしかった。"
+      )
+      create_list(:api_usage_log, 3, user: user, reflection: reflection)
+
+      get records_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body.at_css(".record-title").text)
+        .to eq(reflection.title)
+
+      get record_path(reflection)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body.at_css("#record-title").text)
+        .to eq(reflection.title)
+      expect(response.body).to include(reflection.insight)
+      expect(ai_client).not_to have_received(:call)
     end
 
     it "開始上限にも達していても、ホーム・独り言・保存した内容を表示できる" do
