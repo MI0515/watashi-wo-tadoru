@@ -122,3 +122,12 @@ jobs:
           CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
           CHROMEDRIVER_PATH: ${{ steps.chrome.outputs.chromedriver-path }}
         run: bundle exec rspec
+
+      - name: Upload failed system spec screenshots
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: system-spec-failures
+          path: tmp/capybara/
+          if-no-files-found: ignore
+          retention-days: 3
